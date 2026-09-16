@@ -1,0 +1,1659 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson Studio — Demo Flow Đồng Bộ Bài Giảng & Học Thích Ứng</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Màu sáng kem ấm áp, sang trọng, tương phản cao dễ đọc */
+      --bg-main: #fbf9f4;
+      --bg-card: #ffffff;
+      --bg-cream-accent: #f4eee2;
+      --border-color: #e5ded0;
+      --border-active: #2563eb;
+      
+      --text-title: #0f172a;
+      --text-body: #334155;
+      --text-muted: #64748b;
+      
+      --blue-primary: #2563eb;
+      --blue-light: #eff6ff;
+      --amber: #d97706;
+      --amber-light: #fef3c7;
+      --emerald: #059669;
+      --emerald-light: #ecfdf5;
+      --rose: #e11d48;
+      --rose-light: #fff1f2;
+      
+      --radius: 12px;
+      --shadow: 0 4px 16px rgba(100, 80, 60, 0.06);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background-color: var(--bg-main);
+      color: var(--text-body);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Bar */
+    header {
+      background: #ffffff;
+      border-bottom: 1px solid var(--border-color);
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+
+    .brand-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text-title);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-badge {
+      font-size: 11px;
+      background: var(--blue-light);
+      color: var(--blue-primary);
+      border: 1px solid #bfdbfe;
+      padding: 3px 9px;
+      border-radius: 16px;
+      font-weight: 600;
+    }
+
+    .team-info {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      display: flex;
+      gap: 10px;
+    }
+
+    .team-info span {
+      background: var(--bg-cream-accent);
+      padding: 3px 8px;
+      border-radius: 6px;
+      color: var(--text-title);
+      font-weight: 500;
+    }
+
+    /* Hướng dẫn từng bước của Flow (STEPPER) */
+    .flow-stepper-bar {
+      background: #ffffff;
+      border-bottom: 2px solid #ded6c8;
+      padding: 14px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .stepper-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .stepper-title {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--blue-primary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .steps-container {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+    }
+
+    .step-card {
+      background: var(--bg-cream-accent);
+      border: 1.5px solid var(--border-color);
+      padding: 10px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      transition: all 0.2s;
+    }
+
+    .step-card:hover {
+      border-color: var(--blue-primary);
+      background: #ffffff;
+    }
+
+    .step-card.active {
+      background: var(--blue-light);
+      border-color: var(--blue-primary);
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.15);
+    }
+
+    .step-number {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--blue-primary);
+    }
+
+    .step-name {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-title);
+      line-height: 1.3;
+    }
+
+    /* Giải thích hành động hiện tại */
+    .current-action-banner {
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-radius: 8px;
+      padding: 10px 16px;
+      font-size: 13px;
+      color: #92400e;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .action-text strong {
+      color: #78350f;
+    }
+
+    .btn-tour-nav {
+      background: #ffffff;
+      border: 1px solid #d97706;
+      color: #b45309;
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .btn-tour-nav:hover {
+      background: #d97706;
+      color: #ffffff;
+    }
+
+    /* Split Screen Workspace */
+    .workspace {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      padding: 20px 24px;
+    }
+
+    @media (max-width: 1050px) {
+      .workspace {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Card Panels */
+    .panel {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .panel-header {
+      background: var(--bg-cream-accent);
+      border-bottom: 1px solid var(--border-color);
+      padding: 12px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .panel-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-title);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* BÊN TRÁI: Slide Viewer */
+    .slide-box {
+      background: #fffdf9;
+      border-bottom: 1px solid var(--border-color);
+      padding: 24px 28px;
+      min-height: 290px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .slide-topline {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+    }
+
+    .slide-badge {
+      background: #e0f2fe;
+      color: #0369a1;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    .slide-page-indicator {
+      font-family: 'Fira Code', monospace;
+      font-weight: 600;
+      color: var(--text-muted);
+      background: #f1ebd9;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+
+    .slide-heading {
+      font-family: 'Outfit', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text-title);
+      margin: 10px 0 6px 0;
+    }
+
+    .slide-content-card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin-top: 10px;
+    }
+
+    .slide-formula {
+      font-family: 'Fira Code', monospace;
+      font-size: 14px;
+      color: #1d4ed8;
+      background: var(--blue-light);
+      border-left: 4px solid var(--blue-primary);
+      padding: 8px 12px;
+      border-radius: 4px;
+      display: inline-block;
+      margin-bottom: 8px;
+    }
+
+    .slide-desc {
+      font-size: 13px;
+      color: var(--text-body);
+      line-height: 1.6;
+    }
+
+    .slide-nav-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 14px;
+      border-top: 1px dashed var(--border-color);
+    }
+
+    .btn-slide-step {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      color: var(--text-title);
+      font-weight: 600;
+      font-size: 12px;
+      padding: 6px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-slide-step:hover {
+      background: var(--bg-cream-accent);
+      border-color: #b0a390;
+    }
+
+    /* Video Player Timeline */
+    .video-unit {
+      padding: 16px 20px;
+      background: #ffffff;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    /* 5 Thanh Giai Đoạn Video Trực Quan */
+    .timeline-segments-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .timeline-segments-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .segment-block {
+      background: var(--bg-cream-accent);
+      border: 1.5px solid var(--border-color);
+      border-radius: 8px;
+      padding: 6px 8px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-align: left;
+    }
+
+    .segment-block:hover {
+      border-color: #94a3b8;
+      background: #f1ebd8;
+    }
+
+    .segment-block.active {
+      background: #ffffff;
+      border-color: var(--blue-primary);
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+    }
+
+    .seg-badge {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .segment-block.active .seg-badge {
+      color: var(--blue-primary);
+    }
+
+    .seg-name {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-title);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-top: 2px;
+    }
+
+    .seg-time {
+      font-size: 9.5px;
+      font-family: 'Fira Code', monospace;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .video-timeline-wrap {
+      position: relative;
+      height: 18px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .video-rail {
+      width: 100%;
+      height: 8px;
+      background: #e2d8c5;
+      border-radius: 4px;
+      position: relative;
+    }
+
+    .video-fill {
+      height: 100%;
+      background: var(--blue-primary);
+      border-radius: 4px;
+      width: 0%;
+      position: relative;
+      transition: width 0.08s linear;
+    }
+
+    .video-fill::after {
+      content: '';
+      position: absolute;
+      right: -6px;
+      top: -4px;
+      width: 16px;
+      height: 16px;
+      background: #ffffff;
+      border: 3.5px solid var(--blue-primary);
+      border-radius: 50%;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+
+    /* Vạch mốc chia 5 giai đoạn trên rail */
+    .timeline-tick {
+      position: absolute;
+      top: 0;
+      width: 2px;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.9);
+      transform: translateX(-50%);
+      pointer-events: none;
+    }
+
+    .video-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+    }
+
+    .btn-play {
+      background: var(--bg-cream-accent);
+      border: 1px solid var(--border-color);
+      color: var(--text-title);
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .btn-play:hover {
+      background: var(--blue-primary);
+      color: #fff;
+      border-color: var(--blue-primary);
+    }
+
+    .video-time-text {
+      font-family: 'Fira Code', monospace;
+      font-size: 12.5px;
+      color: var(--text-title);
+      font-weight: 600;
+      margin-left: 10px;
+    }
+
+    /* Speed Toggles */
+    .speed-pills {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+    }
+
+    .speed-btn {
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-cream-accent);
+      color: var(--text-muted);
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .speed-btn.active {
+      background: var(--blue-primary);
+      color: #fff;
+      border-color: var(--blue-primary);
+    }
+
+    .realtime-sync-banner {
+      margin-top: 8px;
+      font-size: 11.5px;
+      color: #1e40af;
+      background: var(--blue-light);
+      padding: 4px 10px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Live Transcript */
+    .transcript-container {
+      flex: 1;
+      padding: 12px 18px;
+      overflow-y: auto;
+      max-height: 180px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .transcript-item {
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 12.5px;
+      color: var(--text-muted);
+      cursor: pointer;
+      border-left: 3px solid transparent;
+      transition: all 0.15s;
+    }
+
+    .transcript-item:hover {
+      background: var(--bg-cream-accent);
+      color: var(--text-title);
+    }
+
+    .transcript-item.active {
+      background: var(--blue-light);
+      border-left-color: var(--blue-primary);
+      color: #1e3a8a;
+      font-weight: 500;
+    }
+
+    .tr-time {
+      font-family: 'Fira Code', monospace;
+      font-size: 11px;
+      color: var(--blue-primary);
+      font-weight: 600;
+      margin-right: 6px;
+    }
+
+    /* BÊN PHẢI: Knowledge Graph chuẩn Graph Semantic Map */
+    .graph-stage {
+      flex: 1;
+      min-height: 440px;
+      background: #0d131f;
+      border-radius: 8px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 10px;
+      box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.45);
+    }
+
+    #svg-knowledge-graph {
+      width: 100%;
+      height: 100%;
+      max-height: 460px;
+      overflow: visible;
+    }
+
+    /* Node & Edge chuẩn Đồ thị */
+    .graph-node {
+      cursor: pointer;
+      transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .graph-node:hover .node-circle {
+      filter: drop-shadow(0 0 8px currentColor);
+      stroke-width: 3.2px;
+    }
+
+    .graph-node:hover .node-label {
+      fill: #ffffff;
+      font-weight: 700;
+    }
+
+    .node-circle {
+      transition: all 0.25s ease;
+    }
+
+    .node-val {
+      font-family: 'Outfit', -apple-system, sans-serif;
+      font-size: 12.5px;
+      font-weight: 700;
+      text-anchor: middle;
+      dominant-baseline: central;
+      user-select: none;
+    }
+
+    .node-label {
+      font-family: 'Outfit', -apple-system, sans-serif;
+      font-size: 12.5px;
+      font-weight: 500;
+      fill: #cbd5e1;
+      text-anchor: middle;
+      user-select: none;
+      transition: fill 0.2s, font-weight 0.2s;
+    }
+
+    /* Halo Ring cho Active Node - Giống hệt ảnh đính kèm */
+    .node-halo-ring {
+      stroke: #f59e0b;
+      stroke-width: 2.2px;
+      fill: none;
+      transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      filter: drop-shadow(0 0 6px rgba(245, 158, 11, 0.6));
+    }
+
+    .graph-edge-path {
+      stroke: #e59a35;
+      stroke-width: 2.2px;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .active-node .node-label {
+      fill: #ffffff !important;
+      font-weight: 700 !important;
+    }
+
+    /* Legend nhỏ ở góc Knowledge Graph */
+    .graph-legend-overlay {
+      position: absolute;
+      bottom: 8px;
+      left: 12px;
+      display: flex;
+      gap: 12px;
+      font-size: 10px;
+      color: #94a3b8;
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(4px);
+      padding: 4px 10px;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      user-select: none;
+      pointer-events: none;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .legend-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+    }
+
+    /* Card Chi tiết Concept & Adaptive Alert */
+    .concept-detail-footer {
+      padding: 16px 20px;
+      background: #ffffff;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .concept-headline {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .concept-name-tag {
+      font-family: 'Outfit', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-title);
+    }
+
+    .mastery-score-pill {
+      font-size: 13px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 20px;
+    }
+
+    .score-good { background: var(--emerald-light); color: var(--emerald); border: 1px solid #a7f3d0; }
+    .score-warning { background: var(--amber-light); color: var(--amber); border: 1px solid #fde68a; }
+    .score-danger { background: var(--rose-light); color: var(--rose); border: 1px solid #fecdd3; }
+
+    /* Alert học tập thích ứng (Prerequisite Weakness) */
+    .prerequisite-card {
+      background: #fff1f2;
+      border: 1.5px solid #fecdd3;
+      border-radius: 8px;
+      padding: 12px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .prerequisite-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #9f1239;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .prerequisite-body {
+      font-size: 12px;
+      color: #4c0519;
+      line-height: 1.5;
+    }
+
+    .prerequisite-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 2px;
+    }
+
+    .btn-remedy {
+      background: #ffffff;
+      border: 1px solid #e11d48;
+      color: #e11d48;
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 5px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .btn-remedy:hover {
+      background: #e11d48;
+      color: #ffffff;
+    }
+
+    /* Grounded Quiz Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(15, 23, 42, 0.5);
+      backdrop-filter: blur(4px);
+      z-index: 999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-overlay.show {
+      display: flex;
+    }
+
+    .quiz-modal {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      max-width: 580px;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    .modal-header {
+      background: var(--bg-cream-accent);
+      border-bottom: 1px solid var(--border-color);
+      padding: 14px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .citation-box {
+      background: var(--blue-light);
+      border: 1px solid #bfdbfe;
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 12px;
+      color: #1e40af;
+      margin-bottom: 12px;
+    }
+
+    .quiz-content {
+      padding: 20px;
+    }
+
+    .quiz-question-text {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-title);
+      margin-bottom: 14px;
+      line-height: 1.4;
+    }
+
+    .options-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .quiz-option {
+      border: 1px solid var(--border-color);
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .quiz-option:hover {
+      background: var(--bg-cream-accent);
+    }
+
+    .quiz-option.selected {
+      border-color: var(--blue-primary);
+      background: var(--blue-light);
+      color: var(--blue-primary);
+      font-weight: 600;
+    }
+
+    .quiz-option.correct {
+      background: var(--emerald-light) !important;
+      border-color: var(--emerald) !important;
+      color: var(--emerald) !important;
+    }
+
+    .modal-footer {
+      padding: 12px 20px;
+      background: var(--bg-cream-accent);
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .btn-submit-quiz {
+      background: var(--emerald);
+      color: #ffffff;
+      border: none;
+      padding: 8px 18px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header -->
+  <header>
+    <div class="brand-title">
+      <span>Lesson Studio</span>
+      <span class="brand-badge">Bản Mẫu Kiểm Chứng Flow · Track C</span>
+    </div>
+    <div class="team-info">
+      <span>Đức Anh (Product/AI)</span>
+      <span>Như Tài (Backend/Data)</span>
+      <span>Văn Long (Frontend/UX)</span>
+      <span>Công Vinh (Eval/Fullstack)</span>
+    </div>
+  </header>
+
+  <!-- STEPPER HƯỚNG DẪN FLOW 5 BƯỚC ĐỂ NGƯỜI XEM HIỂU NGAY -->
+  <div class="flow-stepper-bar">
+    <div class="stepper-header">
+      <div class="stepper-title">
+        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+        <span>KỊCH BẢN 5 BƯỚC CỦA SẢN PHẨM (Click từng bước để chạy thử):</span>
+      </div>
+      <div>
+        <button class="btn-tour-nav" onclick="nextTourStep()">Bước tiếp theo ➔</button>
+      </div>
+    </div>
+
+    <!-- 5 bước chuẩn -->
+    <div class="steps-container">
+      <div class="step-card active" id="step-tab-1" onclick="runTourStep(1)">
+        <span class="step-number">BƯỚC 1</span>
+        <span class="step-name">1. Đồng bộ Slide & Video</span>
+      </div>
+      <div class="step-card" id="step-tab-2" onclick="runTourStep(2)">
+        <span class="step-number">BƯỚC 2</span>
+        <span class="step-name">2. Click Graph Điều Hướng</span>
+      </div>
+      <div class="step-card" id="step-tab-3" onclick="runTourStep(3)">
+        <span class="step-number">BƯỚC 3</span>
+        <span class="step-name">3. AI Tạo Quiz Có Nguồn</span>
+      </div>
+      <div class="step-card" id="step-tab-4" onclick="runTourStep(4)">
+        <span class="step-number">BƯỚC 4</span>
+        <span class="step-name">4. Cập Nhật Điểm Mastery</span>
+      </div>
+      <div class="step-card" id="step-tab-5" onclick="runTourStep(5)">
+        <span class="step-number">BƯỚC 5</span>
+        <span class="step-name">5. Phân Tích Lỗ Hổng Kiến Thức</span>
+      </div>
+    </div>
+
+    <!-- Hộp giải thích Flow đang diễn ra cái gì -->
+    <div class="current-action-banner" id="tour-explanation-banner">
+      <div class="action-text" id="tour-explanation-text">
+        👉 <strong>Bước 1:</strong> Bạn bấm nút <strong>"▶ Play"</strong> ở bên trái: Video chạy thời gian thật đến đâu, Slide và Knowledge Graph bên phải sẽ <strong>tự động đồng bộ lật trang và đổi concept</strong> đến đó!
+      </div>
+    </div>
+  </div>
+
+  <!-- Workspace chia đôi màn hình (Split Screen) -->
+  <main class="workspace">
+
+    <!-- BÊN TRÁI: Slide & Video Viewer -->
+    <section class="panel">
+      <div class="panel-header">
+        <div class="panel-title">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/></svg>
+          Slide & Video Viewer
+        </div>
+        <div style="font-size: 12px; color: var(--text-muted);">
+          Đồng bộ bài giảng thời gian thực
+        </div>
+      </div>
+
+      <!-- Slide Canvas: Lật từng trang 1, 2, 3, 4, 5 chuẩn xác -->
+      <div class="slide-box">
+        <div>
+          <div class="slide-topline">
+            <span class="slide-badge" id="slide-concept-badge">Concept: Machine Learning</span>
+            <span class="slide-page-indicator" id="slide-page-indicator">Trang 1 / 5</span>
+          </div>
+
+          <h3 class="slide-heading" id="slide-title">1. Tổng quan Machine Learning</h3>
+
+          <div class="slide-content-card">
+            <div class="slide-formula" id="slide-formula">y = f(x; θ)</div>
+            <p class="slide-desc" id="slide-description">
+              Hệ thống học các quy luật từ dữ liệu để đưa ra dự đoán cho dữ liệu mới chưa từng thấy.
+            </p>
+          </div>
+        </div>
+
+        <!-- Nút chuyển Slide đúng từng trang 1 -->
+        <div class="slide-nav-bar">
+          <button class="btn-slide-step" onclick="changeSlideByOne(-1)">
+            ◀ Trang trước
+          </button>
+          <span style="font-size: 11.5px; color: var(--text-muted);" id="slide-step-status">
+            Click lật trang hoặc bấm Play video bên dưới
+          </span>
+          <button class="btn-slide-step" onclick="changeSlideByOne(1)">
+            Trang sau ▶
+          </button>
+        </div>
+      </div>
+
+      <!-- Video Player Timeline -->
+      <div class="video-unit">
+        <div class="timeline-segments-header">
+          <span style="font-size: 11.5px; font-weight: 700; color: var(--text-title); text-transform: uppercase; letter-spacing: 0.5px;">
+            5 Thanh Giai Đoạn (Đồng bộ Real-time theo tiến trình Video)
+          </span>
+          <span style="font-size: 11px; color: var(--text-muted);">
+            Click giai đoạn hoặc bấm ▶ Play
+          </span>
+        </div>
+
+        <!-- 5 Khối Thanh Giai Đoạn trực quan -->
+        <div class="timeline-segments-grid">
+          <div class="segment-block active" id="seg-btn-1" onclick="seekToSegment(1)">
+            <div class="seg-badge">Đoạn 1</div>
+            <div class="seg-name">1. Machine Learning</div>
+            <div class="seg-time">00:00 - 03:00</div>
+          </div>
+          <div class="segment-block" id="seg-btn-2" onclick="seekToSegment(2)">
+            <div class="seg-badge">Đoạn 2</div>
+            <div class="seg-name">2. Supervised Learning</div>
+            <div class="seg-time">03:00 - 06:00</div>
+          </div>
+          <div class="segment-block" id="seg-btn-3" onclick="seekToSegment(3)">
+            <div class="seg-badge">Đoạn 3</div>
+            <div class="seg-name">3. Regression</div>
+            <div class="seg-time">06:00 - 09:00</div>
+          </div>
+          <div class="segment-block" id="seg-btn-4" onclick="seekToSegment(4)">
+            <div class="seg-badge">Đoạn 4</div>
+            <div class="seg-name">4. Loss Function</div>
+            <div class="seg-time">09:00 - 12:00</div>
+          </div>
+          <div class="segment-block" id="seg-btn-5" onclick="seekToSegment(5)">
+            <div class="seg-badge">Đoạn 5</div>
+            <div class="seg-name">5. Gradient Descent</div>
+            <div class="seg-time">12:00 - 15:00</div>
+          </div>
+        </div>
+
+        <div class="video-timeline-wrap" onclick="clickTimeline(event)">
+          <div class="video-rail">
+            <div class="video-fill" id="video-progress-bar" style="width: 0%;"></div>
+            <div class="timeline-tick" style="left: 20%;" title="Đoạn 2 (03:00)"></div>
+            <div class="timeline-tick" style="left: 40%;" title="Đoạn 3 (06:00)"></div>
+            <div class="timeline-tick" style="left: 60%;" title="Đoạn 4 (09:00)"></div>
+            <div class="timeline-tick" style="left: 80%;" title="Đoạn 5 (12:00)"></div>
+          </div>
+        </div>
+
+        <div class="video-controls">
+          <div style="display: flex; align-items: center;">
+            <button class="btn-play" id="btn-play-pause" onclick="togglePlayVideo()">
+              ▶
+            </button>
+            <span class="video-time-text" id="video-time-readout">00:00 / 15:00</span>
+          </div>
+
+          <!-- Bộ chọn tốc độ để demo nhanh -->
+          <div class="speed-pills">
+            <span style="font-size: 11px; color: var(--text-muted); margin-right: 4px;">Tốc độ demo:</span>
+            <button class="speed-btn active" id="spd-1" onclick="setPlaySpeed(1)">1x</button>
+            <button class="speed-btn" id="spd-3" onclick="setPlaySpeed(4)">4x</button>
+            <button class="speed-btn" id="spd-10" onclick="setPlaySpeed(12)">12x Siêu tốc</button>
+          </div>
+        </div>
+
+        <div class="realtime-sync-banner" id="sync-banner-text">
+          <span>⚡ Real-time Sync:</span>
+          <span id="sync-stage-desc">Đang ở 00:00 → Đang phát Đoạn 1: 1. Tổng quan Machine Learning</span>
+        </div>
+      </div>
+
+      <!-- Transcript live -->
+      <div class="transcript-container">
+        <div class="transcript-item active" id="tr-1" onclick="seekToSegment(1)">
+          <span class="tr-time">00:00</span>
+          <strong>Đoạn 1:</strong> Giới thiệu tổng quan Machine Learning, định nghĩa bài toán học quy luật từ dữ liệu...
+        </div>
+        <div class="transcript-item" id="tr-2" onclick="seekToSegment(2)">
+          <span class="tr-time">03:00</span>
+          <strong>Đoạn 2:</strong> Bản chất Học có giám sát (Supervised Learning), phân nhánh thành Regression và Classification...
+        </div>
+        <div class="transcript-item" id="tr-3" onclick="seekToSegment(3)">
+          <span class="tr-time">06:00</span>
+          <strong>Đoạn 3:</strong> Bài toán Hồi quy tuyến tính (Linear Regression), tìm hàm giả thuyết liên tục ŷ = wx + b...
+        </div>
+        <div class="transcript-item" id="tr-4" onclick="seekToSegment(4)">
+          <span class="tr-time">09:00</span>
+          <strong>Đoạn 4:</strong> Thiết lập Hàm mất mát (Loss Function - MSE), định lượng sai số tổng thể cần tối ưu...
+        </div>
+        <div class="transcript-item" id="tr-5" onclick="seekToSegment(5)">
+          <span class="tr-time">12:00</span>
+          <strong>Đoạn 5:</strong> Thuật toán Gradient Descent cập nhật trọng số w bằng cách đi ngược hướng gradient của Loss...
+        </div>
+      </div>
+    </section>
+
+    <!-- BÊN PHẢI: Knowledge Graph Tĩnh & Dễ Click -->
+    <section class="panel">
+      <div class="panel-header">
+        <div class="panel-title">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"/><circle cx="18" cy="18" r="3"/><line x1="8.5" y1="7.5" x2="15.5" y2="16.5"/></svg>
+          Knowledge Graph (Semantic Map)
+        </div>
+        <button class="btn-tour-nav" style="background: var(--blue-primary); color: #fff; border-color: var(--blue-primary);" onclick="openQuizModal()">
+          Làm Quiz Kiểm Tra ➔
+        </button>
+      </div>
+
+      <!-- SVG Graph dạng Semantic Map giống ảnh mẫu -->
+      <div class="graph-stage">
+        <svg id="svg-knowledge-graph" viewBox="0 0 380 505">
+          <!-- 1. CÁC ĐƯỜNG NỐI (EDGES) MÀU CAM AMBER THEO ĐÚNG ẢNH MẪU -->
+          <!-- Đường nối 1: Machine Learning -> Supervised Learning (thẳng đứng) -->
+          <line class="graph-edge-path" x1="190" y1="40" x2="190" y2="138" />
+
+          <!-- Đường nhánh 2a: Supervised Learning -> Regression (uốn cong sang trái) -->
+          <path class="graph-edge-path" d="M 190 138 C 190 190, 95 185, 95 242" />
+
+          <!-- Đường nhánh 2b: Supervised Learning -> Classification (uốn cong sang phải) -->
+          <path class="graph-edge-path" d="M 190 138 C 190 190, 285 185, 285 242" />
+
+          <!-- Đường nối 3: Regression -> Loss Function (thẳng đứng) -->
+          <line class="graph-edge-path" x1="95" y1="242" x2="95" y2="344" />
+
+          <!-- Đường nối 4: Loss Function -> Gradient Descent (thẳng đứng) -->
+          <line class="graph-edge-path" x1="95" y1="344" x2="95" y2="446" />
+
+          <!-- 2. VÒNG HALO DÀNH CHO ACTIVE NODE (DI CHUYỂN THEO SLIDE ĐANG CHỌN) -->
+          <circle id="graph-active-halo" class="node-halo-ring" cx="190" cy="40" r="31" />
+
+          <!-- 3. CÁC NODE TRÒN (GRAPH NODES) VÀ NHÃN CHỮ -->
+
+          <!-- Node 1: Machine Learning (Slide 1) -->
+          <g class="graph-node active-node" id="node-1" onclick="seekToSegment(1)">
+            <circle class="node-circle" id="circle-1" cx="190" cy="40" r="23" stroke="#10b981" stroke-width="2.5" fill="#091b19" />
+            <text class="node-val" id="val-1" x="190" y="40" fill="#34d399">92%</text>
+            <text class="node-label" x="190" y="78">Machine Learning</text>
+          </g>
+
+          <!-- Node 2: Supervised Learning (Slide 2) -->
+          <g class="graph-node" id="node-2" onclick="seekToSegment(2)">
+            <circle class="node-circle" id="circle-2" cx="190" cy="138" r="23" stroke="#10b981" stroke-width="2.5" fill="#091b19" />
+            <text class="node-val" id="val-2" x="190" y="138" fill="#34d399">86%</text>
+            <text class="node-label" x="190" y="176">Supervised Learning</text>
+          </g>
+
+          <!-- Node 3: Regression (Slide 3) -->
+          <g class="graph-node" id="node-3" onclick="seekToSegment(3)">
+            <circle class="node-circle" id="circle-3" cx="95" cy="242" r="23" stroke="#f59e0b" stroke-width="2.5" fill="#1c1608" />
+            <text class="node-val" id="val-3" x="95" y="242" fill="#fbbf24">74%</text>
+            <text class="node-label" x="95" y="280">Regression</text>
+          </g>
+
+          <!-- Node Nhánh Phụ: Classification (Chưa học trong bài này) -->
+          <g class="graph-node" id="node-classification" onclick="clickClassificationNode()">
+            <circle class="node-circle" id="circle-cls" cx="285" cy="242" r="23" stroke="#334155" stroke-width="2.2" fill="#141c2b" />
+            <text class="node-val" id="val-cls" x="285" y="242" fill="#64748b">—</text>
+            <text class="node-label" x="285" y="280">Classification</text>
+          </g>
+
+          <!-- Node 4: Loss Function (Slide 4) -->
+          <g class="graph-node" id="node-4" onclick="seekToSegment(4)">
+            <circle class="node-circle" id="circle-4" cx="95" cy="344" r="23" stroke="#ef4444" stroke-width="2.5" fill="#220e12" />
+            <text class="node-val" id="val-4" x="95" y="344" fill="#f87171">43%</text>
+            <text class="node-label" x="95" y="382">Loss Function</text>
+          </g>
+
+          <!-- Node 5: Gradient Descent (Slide 5) -->
+          <g class="graph-node" id="node-5" onclick="seekToSegment(5)">
+            <circle class="node-circle" id="circle-5" cx="95" cy="446" r="23" stroke="#ef4444" stroke-width="2.5" fill="#220e12" />
+            <text class="node-val" id="val-5" x="95" y="446" fill="#f87171">31%</text>
+            <text class="node-label" x="95" y="490">Gradient Descent</text>
+          </g>
+        </svg>
+
+        <!-- Legend Chú Thích Mức Độ Hiểu -->
+        <div class="graph-legend-overlay">
+          <div class="legend-item"><div class="legend-dot" style="background:#10b981;"></div>Vững (≥80%)</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#f59e0b;"></div>Khá (70-79%)</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#ef4444;"></div>Yếu (&lt;50%)</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#475569;"></div>Chưa học (—)</div>
+        </div>
+      </div>
+
+      <!-- Chi tiết Concept & Phân tích Lỗ Hổng -->
+      <div class="concept-detail-footer">
+        <div class="concept-headline">
+          <div class="concept-name-tag" id="active-concept-label">
+            Khái niệm: <strong>1. Tổng quan Machine Learning</strong>
+          </div>
+          <span class="mastery-score-pill score-good" id="active-score-badge">Độ hiểu: 92%</span>
+        </div>
+
+        <div style="font-size: 12px; color: var(--text-muted);">
+          📌 <strong>Semantic Navigation:</strong> Click vào bất kỳ ô nào ở đồ thị trên để điều hướng Video và Slide tương ứng.
+        </div>
+
+        <!-- Hộp phân tích lỗ hổng kiến thức tiên quyết -->
+        <div class="prerequisite-card" id="alert-prerequisite-box" style="display: none;">
+          <div class="prerequisite-title">
+            ⚠️ Phát hiện Lỗ hổng Kiến thức Tiên quyết (Prerequisite Gap)
+          </div>
+          <div class="prerequisite-body">
+            Học viên làm bài <strong>Gradient Descent đạt điểm kém (31%)</strong> vì chưa nắm vững công thức nền tảng của <strong>Loss Function (43%)</strong>.
+          </div>
+          <div class="prerequisite-actions">
+            <button class="btn-remedy" onclick="seekToSegment(4)">
+              1. Xem lại Slide 4 (Loss Function)
+            </button>
+            <button class="btn-remedy" onclick="openQuizModal()">
+              2. Làm Quiz chẩn đoán lại
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL QUIZ: AI Sinh câu hỏi có trích dẫn nguồn (Grounded Quiz) -->
+  <div class="modal-overlay" id="quiz-modal">
+    <div class="quiz-modal">
+      <div class="modal-header">
+        <strong style="font-size: 15px; color: var(--text-title);">Grounded Quiz Generation (AI Quyết định)</strong>
+        <button style="border:none; background:transparent; font-size:18px; cursor:pointer;" onclick="closeQuizModal()">✕</button>
+      </div>
+
+      <div class="quiz-content">
+        <!-- Trích dẫn nguồn kiểm chứng -->
+        <div class="citation-box">
+          <strong>Nguồn xác thực (Grounding):</strong> Slide 4 & Video Lecture 04 (09:41) · <em>AI cam kết 100% không bịa đặt ngoài tài liệu</em>.
+        </div>
+
+        <div class="quiz-question-text">
+          Nếu đạo hàm của Loss Function theo trọng số bằng 0 (Gradient = 0), thuật toán Gradient Descent sẽ thế nào?
+        </div>
+
+        <div class="options-group">
+          <div class="quiz-option" onclick="chooseOption(this, false)">
+            <span>A.</span> Bước nhảy đạt cực đại và nhảy vọt khỏi hàm.
+          </div>
+          <div class="quiz-option" id="opt-correct" onclick="chooseOption(this, true)">
+            <span>B.</span> Trọng số dừng cập nhật vì đã đạt điểm cực trị (Cực tiểu hoặc điểm yên ngựa).
+          </div>
+          <div class="quiz-option" onclick="chooseOption(this, false)">
+            <span>C.</span> Learning rate tự động nhân đôi.
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button style="background:transparent; border:1px solid var(--border-color); padding:6px 14px; border-radius:6px; cursor:pointer;" onclick="closeQuizModal()">Đóng</button>
+        <button class="btn-submit-quiz" onclick="submitQuizAnswer()">Nộp bài kiểm tra</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 5 Slide tuần tự từ 1 đến 5 tương ứng đúng 5 giai đoạn thời gian 15 phút (900s)
+    // Mỗi đoạn = đúng 180 giây (3 phút)
+    const slideData = [
+      {
+        page: 1,
+        conceptBadge: 'Concept 1: Machine Learning',
+        title: '1. Tổng quan Machine Learning',
+        formula: 'y = f(x; θ)',
+        description: 'Hệ thống học các quy luật từ dữ liệu để đưa ra dự đoán cho dữ liệu mới chưa từng thấy.',
+        startTime: 0,
+        endTime: 180,
+        timeLabel: '00:00 - 03:00',
+        mastery: '92%',
+        masteryClass: 'score-good'
+      },
+      {
+        page: 2,
+        conceptBadge: 'Concept 2: Supervised Learning',
+        title: '2. Học Có Giám Sát (Supervised Learning)',
+        formula: 'D = {(x₁, y₁), (x₂, y₂), ..., (xₙ, yₙ)}',
+        description: 'Mô hình học từ tập dữ liệu có gán nhãn, phân nhánh thành 2 bài toán cốt lõi: Hồi quy (Regression) và Phân loại (Classification).',
+        startTime: 180,
+        endTime: 360,
+        timeLabel: '03:00 - 06:00',
+        mastery: '86%',
+        masteryClass: 'score-good'
+      },
+      {
+        page: 3,
+        conceptBadge: 'Concept 3: Regression',
+        title: '3. Hồi Quy Tuyến Tính (Linear Regression)',
+        formula: 'ŷ = w·x + b',
+        description: 'Mô hình ước lượng giá trị liên tục bằng cách tìm trọng số w và độ lệch b tối ưu, tách biệt với bài toán phân loại nhãn rời rạc.',
+        startTime: 360,
+        endTime: 540,
+        timeLabel: '06:00 - 09:00',
+        mastery: '74%',
+        masteryClass: 'score-warning'
+      },
+      {
+        page: 4,
+        conceptBadge: 'Concept 4: Loss Function',
+        title: '4. Hàm Mất Mát (Loss Function & MSE)',
+        formula: 'J(w, b) = 1/2m * Σ(ŷ - y)²',
+        description: 'Đo lường tổng bình phương sai số. Mục tiêu huấn luyện là tìm w, b để cực tiểu hóa hàm J(w,b). Đây là tiền đề của Gradient Descent.',
+        startTime: 540,
+        endTime: 720,
+        timeLabel: '09:00 - 12:00',
+        mastery: '43%',
+        masteryClass: 'score-danger'
+      },
+      {
+        page: 5,
+        conceptBadge: 'Concept 5: Gradient Descent',
+        title: '5. Thuật toán Gradient Descent',
+        formula: 'w := w - α * ∇J(w)',
+        description: 'Thuật toán tối ưu hóa lặp đi lặp lại để cập nhật w theo hướng giảm nhanh nhất của hàm Loss Function.',
+        startTime: 720,
+        endTime: 900,
+        timeLabel: '12:00 - 15:00',
+        mastery: '31%',
+        masteryClass: 'score-danger'
+      }
+    ];
+
+    let currentSlide = 1;
+    let isVideoPlaying = false;
+    let videoTimer = null;
+    let currentVideoSec = 0; // Bắt đầu từ 00:00
+    let playSpeed = 1; // 1x, 4x, 12x
+    let currentTourStep = 1;
+    let selectedOption = null;
+
+    // Tính chính xác slide dựa trên giây video
+    function getSlideFromTime(sec) {
+      if (sec >= 720) return 5;
+      if (sec >= 540) return 4;
+      if (sec >= 360) return 3;
+      if (sec >= 180) return 2;
+      return 1;
+    }
+
+    function formatTime(totalSec) {
+      const m = Math.floor(totalSec / 60);
+      const s = Math.floor(totalSec % 60);
+      return `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
+    }
+
+    function updateVideoProgressBar(seconds) {
+      const pct = Math.min(100, (seconds / 900) * 100);
+      document.getElementById('video-progress-bar').style.width = `${pct}%`;
+      document.getElementById('video-time-readout').textContent = `${formatTime(seconds)} / 15:00`;
+    }
+
+    function updateSyncBanner(seconds, pageNumber) {
+      const data = slideData[pageNumber - 1];
+      const banner = document.getElementById('sync-stage-desc');
+      if (banner && data) {
+        banner.textContent = `Đang ở ${formatTime(seconds)} → Đang phát Đoạn ${pageNumber}: ${data.title}`;
+      }
+    }
+
+    // LẬT SLIDE TỪNG TRANG 1 (-1 hoặc +1)
+    function changeSlideByOne(delta) {
+      let nextSlide = currentSlide + delta;
+      if (nextSlide < 1) nextSlide = 1;
+      if (nextSlide > 5) nextSlide = 5;
+      seekToSegment(nextSlide);
+    }
+
+    // Click chọn trực tiếp 1 trong 5 Thanh Giai Đoạn
+    function seekToSegment(segNum) {
+      const data = slideData[segNum - 1];
+      currentVideoSec = data.startTime;
+      updateVideoProgressBar(currentVideoSec);
+      goToSlide(segNum, false);
+      updateSyncBanner(currentVideoSec, segNum);
+    }
+
+    // Chuyển trực tiếp đến Slide cụ thể
+    function goToSlide(pageNumber, updateVideo = true) {
+      currentSlide = pageNumber;
+      const data = slideData[pageNumber - 1];
+
+      // 1. Cập nhật nội dung Slide
+      document.getElementById('slide-page-indicator').textContent = `Trang ${data.page} / 5`;
+      document.getElementById('slide-concept-badge').textContent = data.conceptBadge;
+      document.getElementById('slide-title').textContent = data.title;
+      document.getElementById('slide-formula').textContent = data.formula;
+      document.getElementById('slide-description').textContent = data.description;
+
+      // 2. Cập nhật Video nếu do click slide
+      if (updateVideo) {
+        currentVideoSec = data.startTime;
+        updateVideoProgressBar(currentVideoSec);
+      }
+
+      // 3. Highlight Thanh 5 Giai Đoạn
+      for (let i = 1; i <= 5; i++) {
+        const segEl = document.getElementById(`seg-btn-${i}`);
+        if (segEl) segEl.classList.toggle('active', i === pageNumber);
+      }
+
+      // 4. Highlight Transcript
+      for (let i = 1; i <= 5; i++) {
+        const trEl = document.getElementById(`tr-${i}`);
+        if (trEl) trEl.classList.toggle('active', i === pageNumber);
+      }
+
+      // 5. Highlight Node & Vòng Halo trên Knowledge Graph
+      const haloPositions = {
+        1: { cx: 190, cy: 40 },
+        2: { cx: 190, cy: 138 },
+        3: { cx: 95, cy: 242 },
+        4: { cx: 95, cy: 344 },
+        5: { cx: 95, cy: 446 }
+      };
+
+      for (let i = 1; i <= 5; i++) {
+        const nodeEl = document.getElementById(`node-${i}`);
+        if (nodeEl) nodeEl.classList.toggle('active-node', i === pageNumber);
+      }
+      const clsEl = document.getElementById('node-classification');
+      if (clsEl) clsEl.classList.remove('active-node');
+
+      const halo = document.getElementById('graph-active-halo');
+      if (halo && haloPositions[pageNumber]) {
+        halo.setAttribute('cx', haloPositions[pageNumber].cx);
+        halo.setAttribute('cy', haloPositions[pageNumber].cy);
+        halo.style.display = 'block';
+      }
+
+      // 6. Cập nhật Card Chi Tiết Concept
+      document.getElementById('active-concept-label').innerHTML = `Khái niệm: <strong>${data.title}</strong>`;
+      const badge = document.getElementById('active-score-badge');
+      badge.textContent = `Độ hiểu: ${data.mastery}`;
+      badge.className = `mastery-score-pill ${data.masteryClass}`;
+
+      // 7. Cập nhật Banner Đồng bộ
+      updateSyncBanner(currentVideoSec, pageNumber);
+
+      // 8. Ẩn/Hiện Prerequisite Alert (chỉ hiện khi ở Slide 4 hoặc Slide 5)
+      const alertBox = document.getElementById('alert-prerequisite-box');
+      if (pageNumber === 4 || pageNumber === 5) {
+        alertBox.style.display = 'flex';
+      } else {
+        alertBox.style.display = 'none';
+      }
+    }
+
+    // Click vào nhánh Classification trên đồ thị Knowledge Graph
+    function clickClassificationNode() {
+      for (let i = 1; i <= 5; i++) {
+        const nodeEl = document.getElementById(`node-${i}`);
+        if (nodeEl) nodeEl.classList.remove('active-node');
+      }
+      const clsEl = document.getElementById('node-classification');
+      if (clsEl) clsEl.classList.add('active-node');
+
+      const halo = document.getElementById('graph-active-halo');
+      if (halo) {
+        halo.setAttribute('cx', 285);
+        halo.setAttribute('cy', 242);
+        halo.style.display = 'block';
+      }
+
+      document.getElementById('active-concept-label').innerHTML = `Khái niệm: <strong>Phân Loại (Classification)</strong>`;
+      const badge = document.getElementById('active-score-badge');
+      badge.textContent = `Độ hiểu: — (Chưa học)`;
+      badge.className = `mastery-score-pill`;
+      badge.style.background = '#334155';
+      badge.style.color = '#cbd5e1';
+
+      const alertBox = document.getElementById('alert-prerequisite-box');
+      alertBox.style.display = 'flex';
+      alertBox.innerHTML = `
+        <div class="prerequisite-title" style="color: #0284c7;">
+          ℹ️ Nhánh Kiến Thức: Phân Loại (Classification)
+        </div>
+        <div class="prerequisite-body" style="color: #0c4a6e;">
+          Trong Supervised Learning, bài toán được chia làm 2 nhánh: <strong>Hồi quy (Regression - giá trị liên tục)</strong> và <strong>Phân loại (Classification - nhãn rời rạc)</strong>. Bài giảng này đi sâu vào Hồi quy & Gradient Descent. Nhánh Phân loại sẽ được học ở bài tiếp theo.
+        </div>
+      `;
+    }
+
+    // Play/Pause Video với REAL-TIME SYNCHRONIZATION hoàn hảo
+    function togglePlayVideo() {
+      isVideoPlaying = !isVideoPlaying;
+      const btn = document.getElementById('btn-play-pause');
+      if (isVideoPlaying) {
+        btn.textContent = '❚❚';
+        if (currentVideoSec >= 900) currentVideoSec = 0;
+        
+        videoTimer = setInterval(() => {
+          if (currentVideoSec >= 900) {
+            currentVideoSec = 900;
+            updateVideoProgressBar(900);
+            togglePlayVideo();
+            return;
+          }
+
+          // Mỗi tick (120ms) tăng thời gian video theo tốc độ
+          currentVideoSec += 1 * playSpeed;
+          updateVideoProgressBar(currentVideoSec);
+          
+          // Tính ngay lập tức slide tương ứng theo thời gian video thực tế!
+          const targetSlide = getSlideFromTime(currentVideoSec);
+          if (targetSlide !== currentSlide) {
+            // TỰ ĐỘNG CHUYỂN SLIDE + GRAPH + TRANSCRIPT + THANH GIAI ĐOẠN NGAY LẬP TỨC!
+            goToSlide(targetSlide, false);
+          } else {
+            updateSyncBanner(currentVideoSec, currentSlide);
+          }
+        }, 120);
+      } else {
+        btn.textContent = '▶';
+        if (videoTimer) clearInterval(videoTimer);
+      }
+    }
+
+    function setPlaySpeed(spd) {
+      playSpeed = spd;
+      document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+      if (spd === 1) document.getElementById('spd-1').classList.add('active');
+      if (spd === 4) document.getElementById('spd-3').classList.add('active');
+      if (spd === 12) document.getElementById('spd-10').classList.add('active');
+    }
+
+    // Click tua Timeline Video tại bất kỳ điểm nào
+    function clickTimeline(e) {
+      const rect = e.currentTarget.getBoundingClientRect();
+      const clickX = Math.max(0, Math.min(rect.width, e.clientX - rect.left));
+      const pct = clickX / rect.width;
+      currentVideoSec = Math.floor(pct * 900);
+
+      updateVideoProgressBar(currentVideoSec);
+      const targetSlide = getSlideFromTime(currentVideoSec);
+      goToSlide(targetSlide, false);
+      updateSyncBanner(currentVideoSec, targetSlide);
+    }
+
+    // HƯỚNG DẪN 5 BƯỚC TOUR
+    const tourExplanations = [
+      "👉 <strong>Bước 1 (Đồng bộ Real-time):</strong> Bấm <strong>'▶'</strong> (chọn tốc độ 4x hoặc 12x): Khi timeline chạy qua 03:00, Slide 2 và Node <strong>'Supervised Learning'</strong> tự động đổi theo thời gian thực 100%!",
+      "👉 <strong>Bước 2 (Semantic Navigation):</strong> Thử nhấp chuột vào Node <strong>'Gradient Descent'</strong> (vòng vàng) ở đồ thị: Video sẽ tự tua đến 12:00 và Slide tự lật về Trang 5!",
+      "👉 <strong>Bước 3 (AI Tạo Quiz có nguồn):</strong> Bấm nút <strong>'Làm Quiz Kiểm Tra'</strong>: AI sẽ sinh câu hỏi kèm bằng chứng xác thực từ Slide 4 và Video (không bịa thông tin).",
+      "👉 <strong>Bước 4 (Cập nhật Mastery):</strong> Khi học viên làm đúng câu hỏi, độ hiểu của Gradient Descent sẽ tăng từ 31% lên 82% và đổi màu xanh trên Semantic Map!",
+      "👉 <strong>Bước 5 (Học tập thích ứng):</strong> Nếu điểm Gradient Descent kém, hệ thống chỉ ra lý do do kiến thức nền tảng 'Loss Function' còn yếu, và đề xuất lộ trình ôn tập."
+    ];
+
+    function runTourStep(stepNum) {
+      currentTourStep = stepNum;
+      for (let i = 1; i <= 5; i++) {
+        document.getElementById(`step-tab-${i}`).classList.toggle('active', i === stepNum);
+      }
+
+      document.getElementById('tour-explanation-text').innerHTML = tourExplanations[stepNum - 1];
+
+      if (stepNum === 1) {
+        seekToSegment(1);
+        if (!isVideoPlaying) togglePlayVideo();
+      }
+      if (stepNum === 2) {
+        if (isVideoPlaying) togglePlayVideo();
+        seekToSegment(5);
+      }
+      if (stepNum === 3) {
+        if (isVideoPlaying) togglePlayVideo();
+        openQuizModal();
+      }
+      if (stepNum === 4) {
+        if (isVideoPlaying) togglePlayVideo();
+        seekToSegment(5);
+        slideData[4].mastery = '82%';
+        slideData[4].masteryClass = 'score-good';
+        const gdValEl = document.getElementById('val-5');
+        if (gdValEl) {
+          gdValEl.textContent = '82%';
+          gdValEl.setAttribute('fill', '#34d399');
+        }
+        const gdCircle = document.getElementById('circle-5');
+        if (gdCircle) {
+          gdCircle.setAttribute('stroke', '#10b981');
+          gdCircle.setAttribute('fill', '#091b19');
+        }
+        document.getElementById('active-score-badge').textContent = 'Độ hiểu: 82%';
+        document.getElementById('active-score-badge').className = 'mastery-score-pill score-good';
+        alert('Đã cập nhật: Điểm Mastery của Gradient Descent tăng từ 31% lên 82% và chuyển sang màu xanh trên Knowledge Graph!');
+      }
+      if (stepNum === 5) {
+        if (isVideoPlaying) togglePlayVideo();
+        seekToSegment(5);
+        document.getElementById('alert-prerequisite-box').scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    function nextTourStep() {
+      let next = currentTourStep + 1;
+      if (next > 5) next = 1;
+      runTourStep(next);
+    }
+
+    // Modal Quiz Logic
+    function openQuizModal() {
+      document.getElementById('quiz-modal').classList.add('show');
+    }
+
+    function closeQuizModal() {
+      document.getElementById('quiz-modal').classList.remove('show');
+    }
+
+    function chooseOption(elem, isCorrect) {
+      document.querySelectorAll('.quiz-option').forEach(op => op.classList.remove('selected', 'correct'));
+      elem.classList.add('selected');
+      selectedOption = { elem, isCorrect };
+    }
+
+    function submitQuizAnswer() {
+      if (!selectedOption) {
+        alert('Vui lòng chọn 1 đáp án!');
+        return;
+      }
+      if (selectedOption.isCorrect) {
+        selectedOption.elem.classList.add('correct');
+        // Tăng điểm
+        slideData[4].mastery = '82%';
+        slideData[4].masteryClass = 'score-good';
+        
+        // Cập nhật text điểm & màu sắc trên Node 5 SVG
+        const gdValEl = document.getElementById('val-5');
+        if (gdValEl) {
+          gdValEl.textContent = '82%';
+          gdValEl.setAttribute('fill', '#34d399');
+        }
+        const gdCircle = document.getElementById('circle-5');
+        if (gdCircle) {
+          gdCircle.setAttribute('stroke', '#10b981');
+          gdCircle.setAttribute('fill', '#091b19');
+        }
+        
+        // Cập nhật card chi tiết
+        document.getElementById('active-score-badge').textContent = 'Độ hiểu: 82%';
+        document.getElementById('active-score-badge').className = 'mastery-score-pill score-good';
+
+        const alertBox = document.getElementById('alert-prerequisite-box');
+        if (alertBox) {
+          alertBox.innerHTML = `
+            <div class="prerequisite-title" style="color: #059669;">
+              ✅ Lỗ Hổng Tiên Quyết Đã Được Khắc Phục!
+            </div>
+            <div class="prerequisite-body" style="color: #064e3b;">
+              Học viên vừa hoàn thành xuất sắc Grounded Quiz. Điểm Mastery của <strong>Gradient Descent đã tăng từ 31% lên 82% (Đạt chuẩn)</strong> và chuyển sang trạng thái màu xanh trên Semantic Map!
+            </div>
+          `;
+        }
+        alert('🎉 Chính xác! Độ hiểu (Mastery) của Gradient Descent đã được cập nhật tăng lên 82% trên Knowledge Graph!');
+      } else {
+        alert('⚠️ Chưa chính xác! Lỗ hổng nằm ở điều kiện dừng của Loss Function.');
+      }
+      setTimeout(() => {
+        closeQuizModal();
+        goToSlide(currentSlide, false);
+      }, 800);
+    }
+
+    // Khởi động mặc định ở Đoạn 1 (Slide 1)
+    seekToSegment(1);
+  </script>
+</body>
+</html>
