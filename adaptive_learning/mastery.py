@@ -15,7 +15,7 @@ def compute_mastery(attempts: List[Dict]) -> Optional[float]:
 
 def compute_mastery_state(
     mastery: Optional[float],
-    is_current: bool,
+    is_current: bool = False,
     weak_threshold: float = 0.5,
     mastered_threshold: float = 0.85,
 ) -> str:

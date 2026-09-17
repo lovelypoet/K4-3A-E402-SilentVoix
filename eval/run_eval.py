@@ -11,7 +11,7 @@ from adaptive_learning.api import get_recommendation
 from eval.llm_judge import evaluate_with_llm_mock, PROMPT_GROUNDEDNESS, PROMPT_CITATION, PROMPT_QUIZ_QUALITY
 
 def run_eval():
-    with open(os.path.join(os.path.dirname(__file__), 'golden_set.json'), 'r') as f:
+    with open(os.path.join(os.path.dirname(__file__), 'golden_set.json'), 'r', encoding='utf-8') as f:
         cases = json.load(f)
 
     results = {
