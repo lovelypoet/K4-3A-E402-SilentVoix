@@ -18,6 +18,7 @@ from .mastery import compute_mastery, compute_mastery_state
 from .graph import find_weak_prerequisite
 from .ingestion import DocumentIngestor
 from .storage import db_storage
+from ai.pipeline import build_graph as ai_build_graph
 
 adaptive_router = APIRouter(prefix="/adaptive", tags=["Adaptive Learning"])
 
@@ -529,6 +530,93 @@ def get_knowledge_graph(lesson_id: str):
                 })
 
     return GraphResponse(nodes=nodes, edges=edges)
+
+
+@adaptive_router.post("/lessons/{lesson_id}/generate-graph")
+def generate_graph_from_ai(lesson_id: str):
+    """
+    POST /adaptive/lessons/{lesson_id}/generate-graph
+    Chạy module ai/ (trích xuất concept/quan hệ theo luật, có căn cứ nguồn) trên
+    TOÀN BỘ chunk đã ingest của lesson này, rồi GHI ĐÈ kết quả vào storage —
+    khác với GET /knowledge-graph/{lesson_id} (chỉ ĐỌC dữ liệu đã có sẵn).
+
+    Lưu ý: ai/ hiện nhận diện theo danh sách từ khoá cố định (chủ yếu thuật
+    ngữ ML tiếng Anh: gradient descent, loss function, regression...) — lesson
+    không có chunk nào chứa các từ khoá này sẽ ra graph rỗng, không phải lỗi.
+    """
+    if not db_storage.get_lesson(lesson_id):
+        raise HTTPException(status_code=404, detail=f"Không tìm thấy bài giảng với ID: {lesson_id}")
+
+    raw_chunks = db_storage.get_chunks_by_lesson(lesson_id)
+    if not raw_chunks:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Lesson '{lesson_id}' chưa có chunk nào (chưa ingest video/slide/document) — không có gì để phân tích."
+        )
+
+    # Chunk lưu dạng phẳng (chunk_id/text/slide/start_time/end_time) -> ai.pipeline
+    # cần gói slide/start_time/end_time vào trong 1 field "source".
+    ai_chunks = [
+        {
+            "chunk_id": c.get("chunk_id"),
+            "document_id": lesson_id,
+            "text": c.get("text"),
+            "source": {
+                "slide": c.get("slide"),
+                "start_time": c.get("start_time"),
+                "end_time": c.get("end_time"),
+            },
+        }
+        for c in raw_chunks
+    ]
+
+    graph = ai_build_graph(ai_chunks, lesson_id=lesson_id)
+
+    # QUAN TRỌNG: id do ai.pipeline sinh ra là id CANONICAL DÙNG CHUNG (VD "gradient_descent"
+    # luôn cùng 1 id dù trích từ lesson nào) — nếu ghi thẳng id đó vào storage (dict phẳng,
+    # khoá toàn cục), 2 lesson khác nhau cùng nhắc tới "Gradient Descent" sẽ ĐÈ LÊN NHAU, lesson
+    # sinh sau "cướp" mất node của lesson sinh trước. Phải gắn tiền tố lesson_id vào id khi lưu
+    # (đúng cách Tài đã làm với các concept "c_lesson_XX_..." có sẵn) để mỗi lesson có bộ node
+    # độc lập, không đụng lesson khác dù trùng khái niệm.
+    def scoped_id(raw_id: str) -> str:
+        return f"ai_{lesson_id}_{raw_id}"
+
+    # Ghi kết quả vào đúng 3 chỗ mà GET /knowledge-graph/{lesson_id} đang đọc.
+    for node in graph["nodes"]:
+        cid = scoped_id(node["id"])
+        db_storage.data["concepts"][cid] = {
+            "name": node["label"],
+            "description": node.get("description", ""),
+            "lesson_id": lesson_id,
+        }
+        first_source = node["sources"][0] if node.get("sources") else {}
+        db_storage.data["source_mappings"][cid] = {
+            "slide": first_source.get("slide"),
+            "start_time": first_source.get("start_time"),
+            "end_time": first_source.get("end_time"),
+            "lesson_id": lesson_id,
+        }
+
+    # Schema hiện tại chỉ lưu quan hệ "prerequisite" (không có chỗ cho used_for/type_of/part_of...)
+    # nên chỉ giữ đúng loại "prerequisite_of", các loại quan hệ khác AI trả về sẽ không được lưu.
+    for edge in graph["edges"]:
+        if edge.get("relation") != "prerequisite_of":
+            continue
+        target_id = scoped_id(edge["target"])
+        source_id = scoped_id(edge["source"])
+        db_storage.data["prerequisites"].setdefault(target_id, [])
+        if source_id not in db_storage.data["prerequisites"][target_id]:
+            db_storage.data["prerequisites"][target_id].append(source_id)
+
+    db_storage.save()
+
+    return {
+        "lesson_id": lesson_id,
+        "concepts_generated": len(graph["nodes"]),
+        "edges_generated": len([e for e in graph["edges"] if e.get("relation") == "prerequisite_of"]),
+        "edges_dropped_unsupported_relation": len([e for e in graph["edges"] if e.get("relation") != "prerequisite_of"]),
+        "graph": graph,
+    }
 
 
 @adaptive_router.get("/concepts/by-slide/{slide_number}")
