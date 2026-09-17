@@ -1,0 +1,5 @@
+adaptive-learning-eval-plan.md
+adaptive-learning-eval-plan-v2.md
+__pycache__/
+*.pyc
+.env
