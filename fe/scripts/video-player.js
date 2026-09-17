@@ -192,11 +192,25 @@ function createVideoPlayer({ container, durationSec, videoUrl, onTimeUpdate }) {
 
   renderProgress();
 
+  /**
+   * Dọn dẹp player này hoàn toàn — BẮT BUỘC phải gọi trước khi tạo player mới
+   * (VD đổi link video), nếu không interval polling của YouTube (250ms) vẫn
+   * chạy nền song song với player mới, 2 bên liên tục ghi đè thông tin của
+   * nhau -> tên/nội dung bị nháy qua lại liên tục.
+   */
+  function destroy() {
+    clearInterval(timer);
+    clearInterval(ytPollTimer);
+    if (ytPlayer && typeof ytPlayer.destroy === "function") ytPlayer.destroy();
+    if (videoEl) { videoEl.pause(); videoEl.src = ""; }
+  }
+
   return {
     play,
     pause,
     seekTo,
-    getCurrentSec: () => currentSec
+    getCurrentSec: () => currentSec,
+    destroy
   };
 }
 

@@ -80,6 +80,7 @@
   function loadVideoFromInput() {
     const url = els.videoLinkInput.value.trim();
     if (!url) return;
+    player.destroy(); // tắt hẳn player cũ trước — không thì 2 player chạy song song, gây nháy nội dung
     player = createVideoPlayer({
       container: els.videoContainer,
       durationSec: data.durationSec,
