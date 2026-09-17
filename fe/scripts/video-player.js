@@ -15,6 +15,10 @@
 function createVideoPlayer({ container, durationSec, videoUrl, onTimeUpdate }) {
   container.innerHTML = "";
 
+  // Lesson dạng slide/PDF (không có video) trả duration_seconds = 0 -> tránh chia cho 0
+  // (NaN% thanh tiến trình, tick() auto-pause ngay lập tức vì 0 >= 0 luôn đúng).
+  if (!durationSec) durationSec = 1;
+
   const youtubeId = videoUrl ? extractYouTubeId(videoUrl) : null;
   const mode = youtubeId ? "youtube" : videoUrl ? "file" : "mock";
 
@@ -42,7 +46,16 @@ function createVideoPlayer({ container, durationSec, videoUrl, onTimeUpdate }) {
     loadYouTubeAPI().then(YT => {
       ytPlayer = new YT.Player(ytMount, {
         videoId: youtubeId,
-        playerVars: { controls: 1, modestbranding: 1, rel: 0, playsinline: 1 },
+        playerVars: {
+          controls: 1,
+          modestbranding: 1,
+          rel: 0,
+          playsinline: 1,
+          // Thiếu "origin" khiến YouTube không nhận diện được trang đang nhúng (đặc biệt khi
+          // mở file qua file:// thay vì qua server thật) -> trả lỗi EMBEDDER_IDENTITY_MISSING_REFERRER
+          // và tự hiện 1 video gợi ý khác thay vì video mình yêu cầu, KHÔNG báo lỗi JS nào để bắt được.
+          origin: window.location.origin
+        },
         events: {
           onReady: () => {
             durationSec = ytPlayer.getDuration() || durationSec; // ưu tiên thời lượng thật từ YouTube

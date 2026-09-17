@@ -81,6 +81,14 @@
           </div>
           <div id="node-detail-formula" class="concept-formula"></div>
           <p id="node-detail-desc"></p>
+          <div class="node-detail-block" id="node-detail-evidence-block" hidden>
+            <h4>Trích dẫn thật trong video</h4>
+            <div id="node-detail-evidence" class="node-detail-evidence"></div>
+          </div>
+          <div class="node-detail-block" id="node-detail-links-block" hidden>
+            <h4>Liên hệ với khái niệm khác</h4>
+            <div id="node-detail-links" class="node-detail-links"></div>
+          </div>
           <div id="node-detail-source" class="node-detail-source"></div>
           <span id="node-detail-mastery" class="mastery-pill" hidden></span>
         </div>
@@ -91,6 +99,14 @@
         <span class="legend-item"><span class="legend-dot legend-dot--learning"></span>Đang học</span>
         <span class="legend-item"><span class="legend-dot legend-dot--weak"></span>Yếu</span>
         <span class="legend-item"><span class="legend-dot legend-dot--not_learned"></span>Chưa học</span>
+      </div>
+      <!-- Chú thích loại quan hệ giữa các khái niệm (màu mũi tên trên graph) -->
+      <div class="legend legend--relations">
+        <span class="legend-item"><span class="legend-line legend-line--prerequisite"></span>Cần học trước</span>
+        <span class="legend-item"><span class="legend-line legend-line--part_of"></span>Là thành phần của</span>
+        <span class="legend-item"><span class="legend-line legend-line--leads_to"></span>Dẫn tới</span>
+        <span class="legend-item"><span class="legend-line legend-line--contrast"></span>Đối lập</span>
+        <span class="legend-item"><span class="legend-dot legend-dot--isolated"></span>Chưa rõ liên kết</span>
       </div>
       <div class="recommendation-box" id="recommendation-box" hidden></div>
     </section>
@@ -111,11 +127,11 @@
     </div>
   </div>
 
-  <script src="./data/lesson-mock.js"></script>
-  <script src="./scripts/data-loader.js"></script>
-  <script src="./scripts/graph.js"></script>
-  <script src="./scripts/video-player.js"></script>
-  <script src="./scripts/quiz.js"></script>
-  <script src="./scripts/app.js"></script>
+  <script src="./data/lesson-mock.js?v=20260918f"></script>
+  <script src="./scripts/data-loader.js?v=20260918f"></script>
+  <script src="./scripts/graph.js?v=20260918f"></script>
+  <script src="./scripts/video-player.js?v=20260918f"></script>
+  <script src="./scripts/quiz.js?v=20260918f"></script>
+  <script src="./scripts/app.js?v=20260918f"></script>
 </body>
 </html>

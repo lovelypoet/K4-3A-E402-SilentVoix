@@ -560,3 +560,83 @@ body {
 }
 
 .load-error { padding: 24px; color: var(--rose); font-size: 13px; }
+
+/* ---------- Knowledge Graph: cạnh có hướng theo loại quan hệ ---------- */
+/* Nhãn trên cạnh: không cho bắt chuột, tránh chắn click vào node phía dưới */
+.kg-edge-label { pointer-events: none; }
+
+.legend--relations { border-top: 1px dashed var(--border-color); }
+.legend-line {
+  width: 16px;
+  height: 0;
+  border-top: 2.5px solid var(--slate);
+  display: inline-block;
+}
+.legend-line--prerequisite { border-color: var(--amber); }
+.legend-line--part_of { border-color: var(--blue-primary); }
+.legend-line--leads_to { border-color: var(--emerald); }
+.legend-line--contrast { border-color: var(--rose); }
+
+/* ---------- Thẻ chi tiết khái niệm (nội dung sâu do AI sinh) ---------- */
+
+.node-detail-block { margin-bottom: 12px; }
+.node-detail-block h4 {
+  margin: 0 0 6px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}
+.node-detail-block ul {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-body);
+}
+.node-detail-block li { margin-bottom: 4px; }
+
+.node-detail-links { display: flex; flex-wrap: wrap; gap: 6px; }
+.relation-chip {
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  border-radius: 999px;
+  padding: 4px 11px;
+  font-size: 11.5px;
+  color: var(--text-body);
+  cursor: pointer;
+  font-family: inherit;
+}
+.relation-chip:hover { border-color: var(--blue-primary); color: var(--blue-primary); }
+.relation-chip strong { font-weight: 600; }
+
+.node-detail-evidence { display: flex; flex-direction: column; gap: 6px; }
+.evidence-item {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  text-align: left;
+  border: 1px solid var(--border-color);
+  background: var(--bg-main);
+  border-radius: 8px;
+  padding: 7px 10px;
+  cursor: pointer;
+  font-family: inherit;
+}
+.evidence-item:hover { border-color: var(--blue-primary); background: var(--blue-light); }
+.evidence-time {
+  flex: none;
+  font-family: "Fira Code", monospace;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--blue-primary);
+}
+.evidence-text { font-size: 12.5px; line-height: 1.5; color: var(--text-body); }
+
+.legend-dot--isolated {
+  background: transparent;
+  border: 2px dashed var(--slate);
+  width: 7px;
+  height: 7px;
+}

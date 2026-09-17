@@ -21,23 +21,72 @@
 
 // Để rỗng "" = luôn dùng mock. Điền URL khi muốn nối backend thật đang chạy local.
 const BACKEND_BASE_URL = "http://127.0.0.1:8000/adaptive";
-const LESSON_ID = "lesson_01"; // bài "Machine Learning Core Concepts" — Tài đã có sẵn graph thật
+const LESSON_ID = "lesson_25"; // CHỈ là bài mặc định lần đầu vào trang (chưa từng dán link nào)
 const STUDENT_ID = "demo_student"; // cố định tạm cho demo, chưa có hệ thống tài khoản
+const LESSON_STORAGE_KEY = "lesson_studio_current_lesson_id";
 
-async function loadLessonData() {
+/**
+ * Bài học đang xem phải được GHI NHỚ, không được reset về LESSON_ID mặc định.
+ * Trước đây app không nhớ gì: mỗi lần trang nạp lại (F5, hoặc Live Server tự
+ * refresh khi file thay đổi) là quay về LESSON_ID — mà video của lesson mặc
+ * định lại đúng là link cũ, nên nhìn y hệt "dán link mới xong nó tự nhảy về
+ * link cũ", trong khi thật ra backend đã ingest đúng link mới rồi.
+ */
+function getInitialLessonId() {
+  const fromHash = location.hash.replace(/^#/, "").trim();
+  if (fromHash) return fromHash;
+  try {
+    const saved = localStorage.getItem(LESSON_STORAGE_KEY);
+    if (saved) return saved;
+  } catch (err) {
+    // localStorage bị chặn (chế độ ẩn danh...) -> bỏ qua, dùng mặc định
+  }
+  return LESSON_ID;
+}
+
+/** Gọi sau khi dán link mới thành công -> reload trang vẫn giữ nguyên bài vừa phân tích. */
+function rememberLessonId(lessonId) {
+  try {
+    localStorage.setItem(LESSON_STORAGE_KEY, lessonId);
+  } catch (err) {
+    // như trên
+  }
+  location.hash = lessonId; // đổi hash KHÔNG nạp lại trang, chỉ để copy/chia sẻ được đúng bài
+}
+
+function forgetLessonId() {
+  try {
+    localStorage.removeItem(LESSON_STORAGE_KEY);
+  } catch (err) {
+    // như trên
+  }
+}
+
+/**
+ * allowMockFallback=true (mặc định): lỗi thì âm thầm rơi về mock — hợp cho lúc
+ * mở trang lần đầu (backend có thể chưa bật, vẫn muốn xem được giao diện).
+ * allowMockFallback=false: NÉM LỖI THẬT ra ngoài, không rơi về mock — bắt buộc
+ * dùng khi load 1 lesson_id CỤ THỂ vừa ingest xong (VD sau khi dán link video
+ * mới) — vì nếu lặng lẽ rơi về mock lúc này, người dùng sẽ thấy y hệt data mock
+ * cũ và tưởng nhầm là "link mới không ăn", trong khi thực ra có lỗi thật đang
+ * bị nuốt mất không ai biết.
+ */
+async function loadLessonData(lessonId = LESSON_ID, { allowMockFallback = true } = {}) {
   if (BACKEND_BASE_URL) {
     try {
       const [lessonRes, graphRes, masteryRes] = await Promise.all([
-        fetch(`${BACKEND_BASE_URL}/lessons/${LESSON_ID}`),
-        fetch(`${BACKEND_BASE_URL}/knowledge-graph/${LESSON_ID}`),
+        fetch(`${BACKEND_BASE_URL}/lessons/${lessonId}`),
+        fetch(`${BACKEND_BASE_URL}/knowledge-graph/${lessonId}`),
         fetch(`${BACKEND_BASE_URL}/mastery/${STUDENT_ID}`)
       ]);
-      if (!lessonRes.ok || !graphRes.ok) throw new Error("Backend trả lỗi");
+      if (!lessonRes.ok) throw new Error(`GET /lessons/${lessonId} lỗi ${lessonRes.status}`);
+      if (!graphRes.ok) throw new Error(`GET /knowledge-graph/${lessonId} lỗi ${graphRes.status}`);
       const lesson = await lessonRes.json();
       const graph = await graphRes.json();
       const mastery = masteryRes.ok ? await masteryRes.json() : null;
       return normalizeBackendData(lesson, graph, mastery);
     } catch (err) {
+      if (!allowMockFallback) throw err; // để lỗi lộ ra ngoài cho loadVideoFromInput() bắt và alert
       console.warn("[data-loader] Gọi backend thật thất bại, dùng mock thay thế:", err.message);
     }
   }
@@ -48,6 +97,76 @@ async function loadLessonData() {
     throw new Error('Chưa nạp data/lesson-mock.js — kiểm tra thẻ <script> trong index.html');
   }
   return normalizeMockData(window.__LESSON_MOCK__);
+}
+
+/**
+ * Luồng THẬT, đầu-cuối: đưa 1 link video vào → backend ingest (trích transcript
+ * thật nếu là YouTube) → AI (ai.pipeline) đọc transcript đó sinh graph MỚI, ghi
+ * đè vào lesson vừa tạo → trả về lesson_id mới để load lại toàn bộ app theo data
+ * NÀY (khác hẳn createVideoPlayer() cũ chỉ đổi video, không đụng gì đến Graph).
+ *
+ * Link không phải YouTube (không có transcript) hoặc nội dung không khớp từ
+ * khoá nào trong ai/ -> graph rỗng, ĐÚNG kỳ vọng (không có gì để suy ra thì
+ * không tự bịa ra khái niệm), không phải lỗi.
+ */
+async function ingestVideoAndGenerateGraph(videoUrl) {
+  if (!BACKEND_BASE_URL) {
+    throw new Error("Chưa bật BACKEND_BASE_URL — không thể gọi AI phân tích thật.");
+  }
+
+  const ingestRes = await fetch(`${BACKEND_BASE_URL}/lessons/video`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ video_url: videoUrl })
+  });
+  if (!ingestRes.ok) throw new Error(`Ingest video thất bại (${ingestRes.status})`);
+  const ingestData = await ingestRes.json();
+  const newLessonId = ingestData?.lesson?.lesson_id;
+  if (!newLessonId) throw new Error("Backend không trả về lesson_id sau khi ingest.");
+
+  const generateRes = await fetch(`${BACKEND_BASE_URL}/lessons/${newLessonId}/generate-graph`, {
+    method: "POST"
+  });
+  if (!generateRes.ok) {
+    const errBody = await generateRes.json().catch(() => ({}));
+    throw new Error(errBody.detail || `Sinh graph thất bại (${generateRes.status})`);
+  }
+
+  return newLessonId;
+}
+
+/**
+ * Y hệt ingestVideoAndGenerateGraph() nhưng cho nguồn PDF slide — backend đã
+ * có sẵn cả 2 endpoint (POST /lessons/slide + /generate-graph) từ trước, chỉ
+ * là ô "Dán link PDF" ở giao diện chưa từng gọi tới (trước giờ chỉ nhúng
+ * <iframe> xem trước, không phân tích AI). Đã kiểm bằng curl: backend đọc PDF
+ * thật, tách được chunk theo từng trang, `ai/` build_graph vẫn chạy ra khái
+ * niệm + cạnh y như với transcript video.
+ */
+async function ingestSlideAndGenerateGraph(slideUrl) {
+  if (!BACKEND_BASE_URL) {
+    throw new Error("Chưa bật BACKEND_BASE_URL — không thể gọi AI phân tích thật.");
+  }
+
+  const ingestRes = await fetch(`${BACKEND_BASE_URL}/lessons/slide`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ slide_url: slideUrl })
+  });
+  if (!ingestRes.ok) throw new Error(`Ingest slide thất bại (${ingestRes.status})`);
+  const ingestData = await ingestRes.json();
+  const newLessonId = ingestData?.lesson?.lesson_id;
+  if (!newLessonId) throw new Error("Backend không trả về lesson_id sau khi ingest.");
+
+  const generateRes = await fetch(`${BACKEND_BASE_URL}/lessons/${newLessonId}/generate-graph`, {
+    method: "POST"
+  });
+  if (!generateRes.ok) {
+    const errBody = await generateRes.json().catch(() => ({}));
+    throw new Error(errBody.detail || `Sinh graph thất bại (${generateRes.status})`);
+  }
+
+  return newLessonId;
 }
 
 /** Ghép 3 response thật của backend (lesson + graph + mastery) về đúng 1 hình dạng chung cho app dùng. */
@@ -76,13 +195,18 @@ function normalizeBackendData(lesson, graph, mastery) {
     relation_type: e.type
   }));
 
+  const filteredNodes = filterRawSlideNodes(lesson.lesson_id, nodes);
+  const merged = mergeDuplicateConcepts(lesson.lesson_id, filteredNodes, edges);
+  const transcript = lesson.transcript || [];
+
   return {
     lessonId: lesson.lesson_id,
     title: lesson.title,
     durationSec: lesson.duration_seconds,
     videoUrl: lesson.video_url || null,
-    nodes,
-    edges,
+    transcript,
+    nodes: attachTranscriptEvidence(merged.nodes, transcript),
+    edges: merged.edges,
     // Backend không sinh quiz -> luôn lấy quiz mẫu từ mock, kể cả khi graph là dữ liệu thật.
     quizBank: (window.__LESSON_MOCK__ && window.__LESSON_MOCK__.quiz_bank) || {}
   };
@@ -95,8 +219,147 @@ function normalizeMockData(raw) {
     title: raw.title,
     durationSec: raw.duration_sec,
     videoUrl: raw.video_url || null,
+    transcript: raw.transcript || [],
     nodes: raw.nodes || [],
     edges: raw.edges || [],
     quizBank: raw.quiz_bank || {}
   };
+}
+
+/**
+ * Với lesson nguồn PDF/slide, bộ tự trích xuất của Tài (ingestion.py) không lọc
+ * theo từ khoá như với video — nó tạo THẲNG 1 node CHO MỖI TRANG, lấy nguyên
+ * dòng đầu tiên của trang làm tên (id dạng "c_{lesson_id}_slide_{số trang}"),
+ * kể cả khi dòng đó chỉ là tiêu đề phụ/câu dở dang, không phải khái niệm thật.
+ * PDF nhiều trang -> hàng chục "node" kiểu này chồng lên đúng vài node thật do
+ * ai/ sinh ra, làm graph rối không đọc nổi. Các node này KHÔNG BAO GIỜ có cạnh
+ * (ingestion.py không sinh quan hệ), nên lọc bỏ ở đây không mất liên kết nào,
+ * chỉ bớt nhiễu hiển thị — dữ liệu gốc trong backend vẫn giữ nguyên.
+ */
+function filterRawSlideNodes(lessonId, nodes) {
+  const rawSlidePattern = new RegExp(`^c_${escapeRegExp(lessonId)}_slide_\\d+$`);
+  return nodes.filter(n => !rawSlidePattern.test(n.concept_id));
+}
+
+/**
+ * Backend hiện có 2 bộ trích xuất khái niệm chạy song song trên cùng 1 lesson
+ * (ingestion.py của Tài: id dạng "c_{lesson_id}_{từ khoá}", KHÔNG BAO GIỜ sinh
+ * cạnh; ai/pipeline của Anh: id dạng "ai_{lesson_id}_{từ khoá}", CÓ sinh cạnh
+ * nhưng chỉ cho 8 cặp từ khoá cố định). Khi cả 2 hệ cùng bắt được 1 khái niệm
+ * (ví dụ "gradient descent"), kết quả là 2 NODE RIÊNG cho cùng 1 thứ — một node
+ * có cạnh (của Anh) và một node mồ côi (của Tài), làm graph vừa rối vừa ít cạnh
+ * hơn thực tế.
+ *
+ * Vì 2 hệ ID đều đặt tên theo CÙNG một từ khoá gốc (chỉ khác tiền tố), phần đuôi
+ * sau khi bỏ tiền tố CHÍNH LÀ chìa khoá để nhận ra 2 node là 1 khái niệm — đây
+ * là so khớp chính xác dựa trên dữ liệu có thật, không phải đoán mò hay suy diễn
+ * quan hệ mới. Gộp xong: giữ lại node có cạnh (nếu có) làm id sống sót, nối lại
+ * mọi cạnh trỏ tới node bị gộp, và ghép tên/mô tả để không mất thông tin.
+ */
+function mergeDuplicateConcepts(lessonId, nodes, edges) {
+  const stripPrefix = new RegExp(`^(ai_|c_)${escapeRegExp(lessonId)}_`);
+  const keyOf = node => {
+    const stripped = node.concept_id.replace(stripPrefix, "");
+    return stripped !== node.concept_id ? stripped : node.concept_id; // không khớp mẫu -> coi là khái niệm riêng, không gộp nhầm
+  };
+
+  const groups = new Map();
+  nodes.forEach(n => {
+    const key = keyOf(n);
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(n);
+  });
+
+  const idRemap = new Map(); // id cũ -> id sống sót sau gộp
+  const mergedNodes = [];
+
+  groups.forEach(group => {
+    if (group.length === 1) {
+      mergedNodes.push(group[0]);
+      return;
+    }
+    // Ưu tiên node của Anh (ai_...) làm id sống sót vì chỉ hệ này mới có cạnh.
+    const primary = group.find(n => n.concept_id.startsWith("ai_")) || group[0];
+    group.forEach(n => idRemap.set(n.concept_id, primary.concept_id));
+
+    const names = [...new Set(group.map(n => n.name).filter(Boolean))];
+    const hasVietnamese = s => /[àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ]/i.test(s);
+    const displayName = names.find(hasVietnamese) || names.sort((a, b) => b.length - a.length)[0];
+    const otherNames = names.filter(n => n !== displayName && !displayName.includes(n));
+
+    const descriptions = [...new Set(group.map(n => n.description).filter(Boolean))];
+
+    mergedNodes.push({
+      ...primary,
+      name: otherNames.length ? `${displayName} (${otherNames.join(", ")})` : displayName,
+      description: descriptions.join(" ") || primary.description,
+      start_time: minOrNull(group.map(n => n.start_time)),
+      end_time: maxOrNull(group.map(n => n.end_time)),
+      slide: group.map(n => n.slide).find(s => s != null) ?? null,
+      mastery_score: group.map(n => n.mastery_score).find(s => s != null) ?? null,
+      mastery_state: group.map(n => n.mastery_state).find(s => s && s !== "not_learned") || primary.mastery_state
+    });
+  });
+
+  const remapId = id => idRemap.get(id) || id;
+  const seenEdge = new Set();
+  const mergedEdges = [];
+  edges.forEach(e => {
+    const source = remapId(e.source_concept_id);
+    const target = remapId(e.target_concept_id);
+    if (source === target) return; // 2 node gộp làm 1 -> cạnh giữa chúng biến mất, đúng bản chất
+    const key = `${source}->${target}`;
+    if (seenEdge.has(key)) return;
+    seenEdge.add(key);
+    mergedEdges.push({ ...e, source_concept_id: source, target_concept_id: target });
+  });
+
+  return { nodes: mergedNodes, edges: mergedEdges };
+}
+
+function minOrNull(values) {
+  const nums = values.filter(v => v != null);
+  return nums.length ? Math.min(...nums) : null;
+}
+function maxOrNull(values) {
+  const nums = values.filter(v => v != null);
+  return nums.length ? Math.max(...nums) : null;
+}
+function escapeRegExp(text) {
+  return text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+/**
+ * Mô tả của backend chỉ là 1 câu viết sẵn theo từ khoá (không đọc transcript).
+ * Bù lại bằng cách tìm trong CHÍNH transcript thật những đoạn có nhắc tới khái
+ * niệm này (so khớp cụm từ, không suy diễn) để làm bằng chứng cụ thể, kèm mốc
+ * giây thật — bấm vào là tua video tới đúng chỗ đó.
+ */
+function attachTranscriptEvidence(nodes, transcript) {
+  if (!transcript || !transcript.length) return nodes;
+
+  return nodes.map(node => {
+    const phrases = buildSearchPhrases(node);
+    const matches = [];
+    for (const chunk of transcript) {
+      const text = (chunk.text || "").toLowerCase();
+      if (phrases.some(p => text.includes(p))) {
+        matches.push({ start_time: chunk.start_time, text: (chunk.text || "").trim() });
+      }
+    }
+    matches.sort((a, b) => (a.start_time ?? 0) - (b.start_time ?? 0));
+    return { ...node, evidence: matches.slice(0, 3) };
+  });
+}
+
+function buildSearchPhrases(node) {
+  const raw = [node.name, node.concept_id.replace(/^(ai_|c_)[^_]+_[^_]+_/, "").replace(/_/g, " ")];
+  const phrases = new Set();
+  raw.forEach(s => {
+    if (!s) return;
+    // Bỏ phần trong ngoặc (thường là tên gộp thêm) và dấu câu, chỉ giữ cụm từ chính.
+    const cleaned = s.replace(/\([^)]*\)/g, "").replace(/[^\p{L}\p{N}\s]/gu, "").trim().toLowerCase();
+    if (cleaned.length >= 4) phrases.add(cleaned);
+  });
+  return [...phrases];
 }

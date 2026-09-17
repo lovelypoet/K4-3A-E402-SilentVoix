@@ -39,6 +39,16 @@ function createQuizController({ modalEl, quizBank, onAnswered }) {
     return null;
   }
 
+  /**
+   * quiz_bank hiện chỉ có sẵn cho 5 khái niệm mock (c1-c5) — khái niệm lấy từ
+   * backend thật (ai_lesson_XX_..., c_lesson_XX_...) chưa có câu hỏi nào khớp
+   * id. app.js dùng hàm này để tắt hẳn nút "Làm Quiz" và nói rõ lý do, thay vì
+   * để bấm vào rồi mới biết là không có gì xảy ra.
+   */
+  function hasQuizFor(conceptId) {
+    return !!(quizBank[conceptId] && quizBank[conceptId].length);
+  }
+
   function render() {
     if (!currentQuiz) {
       bodyEl.innerHTML = `
@@ -97,7 +107,7 @@ function createQuizController({ modalEl, quizBank, onAnswered }) {
 
   modalEl.querySelector("[data-quiz-submit]").addEventListener("click", submit);
 
-  return { open, close };
+  return { open, close, hasQuizFor };
 }
 
 function formatTime(totalSec) {

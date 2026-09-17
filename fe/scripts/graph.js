@@ -19,6 +19,22 @@ const MASTERY_COLOR = {
 
 const NODE_R = 34;
 
+/**
+ * Mỗi loại quan hệ có màu + mũi tên riêng. Trước đây mọi cạnh đều là một đường
+ * cong cam mảnh, không mũi tên, không nhãn -> nhìn không biết ai phụ thuộc ai,
+ * mà "phụ thuộc kiến thức" mới chính là thứ Semantic Map cần nói lên.
+ */
+const RELATION_STYLE = {
+  prerequisite: { color: "#d97706", label: "Cần học trước" },
+  part_of:      { color: "#2563eb", label: "Là thành phần của" },
+  leads_to:     { color: "#10b981", label: "Dẫn tới" },
+  contrast:     { color: "#e11d48", label: "Đối lập / phân biệt" }
+};
+
+function relationStyle(type) {
+  return RELATION_STYLE[type] || RELATION_STYLE.prerequisite;
+}
+
 /** BFS theo tầng: node không có cạnh nào trỏ vào là gốc (layer 0). */
 function computeLayout(nodes, edges, width, height) {
   const incoming = new Map(nodes.map(n => [n.concept_id, 0]));
@@ -74,9 +90,18 @@ function computeLayout(nodes, edges, width, height) {
  * (setActiveConcept, updateNodeMastery) để app.js gọi khi video chạy /
  * học viên làm quiz xong.
  */
+// Hệ toạ độ vẽ CỐ ĐỊNH — không phụ thuộc clientWidth/clientHeight thật của khung.
+// Đọc clientWidth ngay lúc script chạy dễ bị sai (DOM/CSS đôi khi chưa "ổn định" kích
+// thước, đặc biệt sau khi thêm nhiều khối mới ở trên như media-tabs/video-link-bar),
+// ra toạ độ méo rồi bị phóng to biến dạng thành 1 khối chữ chồng lên nhau. Dùng khung
+// toạ độ cố định rồi để SVG tự co giãn (viewBox + preserveAspectRatio mặc định) luôn
+// đúng tỉ lệ, không bao giờ méo dù panel to nhỏ thế nào.
+const GRAPH_VIEW_WIDTH = 900;
+const GRAPH_VIEW_HEIGHT = 620;
+
 function renderGraph(svgEl, nodes, edges) {
-  const width = svgEl.clientWidth || 360;
-  const height = svgEl.clientHeight || 480;
+  const width = GRAPH_VIEW_WIDTH;
+  const height = GRAPH_VIEW_HEIGHT;
   svgEl.setAttribute("viewBox", `0 0 ${width} ${height}`);
   svgEl.innerHTML = "";
 
@@ -84,30 +109,82 @@ function renderGraph(svgEl, nodes, edges) {
   const nodeById = new Map(nodes.map(n => [n.concept_id, n]));
 
   const svgNS = "http://www.w3.org/2000/svg";
+  const defs = document.createElementNS(svgNS, "defs");
+  // Mỗi màu quan hệ cần một marker mũi tên riêng (marker SVG không kế thừa màu của path).
+  Object.entries(RELATION_STYLE).forEach(([type, style]) => {
+    const marker = document.createElementNS(svgNS, "marker");
+    marker.setAttribute("id", `kg-arrow-${type}`);
+    marker.setAttribute("viewBox", "0 0 10 10");
+    marker.setAttribute("refX", "9");
+    marker.setAttribute("refY", "5");
+    marker.setAttribute("markerWidth", "6");
+    marker.setAttribute("markerHeight", "6");
+    marker.setAttribute("orient", "auto-start-reverse");
+    const arrowPath = document.createElementNS(svgNS, "path");
+    arrowPath.setAttribute("d", "M 0 0 L 10 5 L 0 10 z");
+    arrowPath.setAttribute("fill", style.color);
+    marker.appendChild(arrowPath);
+    defs.appendChild(marker);
+  });
+
   const edgeLayer = document.createElementNS(svgNS, "g");
+  const edgeLabelLayer = document.createElementNS(svgNS, "g");
   const haloLayer = document.createElementNS(svgNS, "g");
   const nodeLayer = document.createElementNS(svgNS, "g");
-  svgEl.append(edgeLayer, haloLayer, nodeLayer);
+  svgEl.append(defs, edgeLayer, edgeLabelLayer, haloLayer, nodeLayer);
 
-  // --- Cạnh nối (prerequisite) ---
+  // --- Cạnh nối: có hướng (mũi tên), màu theo loại quan hệ, kèm nhãn chữ ---
   const edgeEls = []; // để revealUpTo() biết cạnh nào nối node nào mà ẩn/hiện đúng lúc
   edges.forEach(e => {
     const from = positions[e.source_concept_id];
     const to = positions[e.target_concept_id];
     if (!from || !to) return;
-    const midY = (from.y + to.y) / 2;
+
+    const style = relationStyle(e.relation_type);
+
+    // Lùi hai đầu cạnh ra khỏi hình tròn node, nếu không mũi tên bị khuất dưới node đích.
+    const dx = to.x - from.x;
+    const dy = to.y - from.y;
+    const len = Math.hypot(dx, dy) || 1;
+    const ux = dx / len;
+    const uy = dy / len;
+    const sx = from.x + ux * (NODE_R + 2);
+    const sy = from.y + uy * (NODE_R + 2);
+    const ex = to.x - ux * (NODE_R + 9);
+    const ey = to.y - uy * (NODE_R + 9);
+    const midY = (sy + ey) / 2;
+
     const path = document.createElementNS(svgNS, "path");
-    path.setAttribute(
-      "d",
-      `M ${from.x} ${from.y} C ${from.x} ${midY}, ${to.x} ${midY}, ${to.x} ${to.y}`
-    );
+    path.setAttribute("d", `M ${sx} ${sy} C ${sx} ${midY}, ${ex} ${midY}, ${ex} ${ey}`);
     path.setAttribute("class", "kg-edge kg-edge--hidden"); // ẩn mặc định, revealUpTo() sẽ hiện dần
-    path.setAttribute("stroke", "#d97706");
-    path.setAttribute("stroke-width", "2");
+    path.setAttribute("stroke", style.color);
+    path.setAttribute("stroke-width", "2.2");
     path.setAttribute("fill", "none");
-    path.setAttribute("opacity", "0.55");
+    path.setAttribute("opacity", "0.75");
+    path.setAttribute("marker-end", `url(#kg-arrow-${RELATION_STYLE[e.relation_type] ? e.relation_type : "prerequisite"})`);
     edgeLayer.appendChild(path);
-    edgeEls.push({ path, source: e.source_concept_id, target: e.target_concept_id });
+
+    // Nhãn quan hệ đặt giữa cạnh. Viền trắng (paint-order: stroke) để chữ không
+    // bị đường kẻ xuyên qua, đọc được kể cả khi cạnh chạy phía sau.
+    let labelEl = null;
+    const labelText = (e.label || "").trim();
+    if (labelText) {
+      labelEl = document.createElementNS(svgNS, "text");
+      labelEl.setAttribute("x", (sx + ex) / 2);
+      labelEl.setAttribute("y", (sy + ey) / 2 - 3);
+      labelEl.setAttribute("text-anchor", "middle");
+      labelEl.setAttribute("font-size", "9.5");
+      labelEl.setAttribute("font-weight", "600");
+      labelEl.setAttribute("fill", style.color);
+      labelEl.setAttribute("stroke", "#fffdf7");
+      labelEl.setAttribute("stroke-width", "3.5");
+      labelEl.setAttribute("paint-order", "stroke");
+      labelEl.setAttribute("class", "kg-edge-label kg-edge--hidden");
+      labelEl.textContent = labelText.length > 20 ? labelText.slice(0, 19) + "…" : labelText;
+      edgeLabelLayer.appendChild(labelEl);
+    }
+
+    edgeEls.push({ path, labelEl, source: e.source_concept_id, target: e.target_concept_id });
   });
 
   // --- Halo (viền active), tạo sẵn 1 vòng ẩn để bật/tắt cho gọn ---
@@ -120,13 +197,23 @@ function renderGraph(svgEl, nodes, edges) {
   halo.style.transition = "cx 0.35s ease, cy 0.35s ease, opacity 0.2s ease";
   haloLayer.appendChild(halo);
 
+  // Node không nằm trên cạnh nào (kể cả sau khi đã gộp trùng ở data-loader.js)
+  // -> vẽ khác biệt (viền đứt nét) để KHÔNG đánh lừa là đã có liên kết, thay vì
+  // trộn lẫn với node thật sự thuộc chuỗi phụ thuộc.
+  const connectedIds = new Set();
+  edges.forEach(e => {
+    connectedIds.add(e.source_concept_id);
+    connectedIds.add(e.target_concept_id);
+  });
+
   // --- Node ---
   const nodeEls = {};
   nodes.forEach(n => {
     const pos = positions[n.concept_id];
     if (!pos) return;
+    const isIsolated = !connectedIds.has(n.concept_id);
     const g = document.createElementNS(svgNS, "g");
-    g.setAttribute("class", "kg-node kg-node--hidden"); // ẩn mặc định, revealUpTo() sẽ hiện dần theo video
+    g.setAttribute("class", `kg-node kg-node--hidden${isIsolated ? " kg-node--isolated" : ""}`); // ẩn mặc định, revealUpTo() sẽ hiện dần theo video
     g.style.cursor = "pointer";
     g.dataset.conceptId = n.concept_id;
 
@@ -138,19 +225,38 @@ function renderGraph(svgEl, nodes, edges) {
     circle.setAttribute("fill", palette.fill);
     circle.setAttribute("stroke", palette.stroke);
     circle.setAttribute("stroke-width", "2.5");
+    if (isIsolated) circle.setAttribute("stroke-dasharray", "4 3");
+
+    // Tên khái niệm có thể dài hơn nhiều so với đường kính hình tròn -> xuống
+    // dòng tối đa 3 dòng thay vì để tràn ra ngoài; hết chỗ mà vẫn còn chữ thì
+    // cắt bớt và thêm "…" ở dòng cuối.
+    const LABEL_LINE_HEIGHT = 10;
+    // Tên gộp có dạng "Việt (English)" (xem mergeDuplicateConcepts ở data-loader.js) —
+    // bỏ phần trong ngoặc khi hiển thị rút gọn trong vòng tròn, tên đầy đủ vẫn
+    // còn nguyên ở thẻ chi tiết khi bấm vào node.
+    const compactName = (n.short_label || n.name).replace(/\s*\([^)]*\)\s*$/, "").trim() || n.name;
+    const labelLines = wrapNodeLabel(compactName, 10, 3);
+    const labelBlockOffset = ((labelLines.length - 1) * LABEL_LINE_HEIGHT) / 2;
+    const labelFirstY = pos.y - 4 - labelBlockOffset;
 
     const label = document.createElementNS(svgNS, "text");
     label.setAttribute("x", pos.x);
-    label.setAttribute("y", pos.y - 4);
+    label.setAttribute("y", labelFirstY);
     label.setAttribute("text-anchor", "middle");
-    label.setAttribute("font-size", "10.5");
+    label.setAttribute("font-size", "9.5");
     label.setAttribute("font-weight", "600");
     label.setAttribute("fill", palette.text);
-    label.textContent = wrapShort(n.name);
+    labelLines.forEach((line, i) => {
+      const tspan = document.createElementNS(svgNS, "tspan");
+      tspan.setAttribute("x", pos.x);
+      if (i > 0) tspan.setAttribute("dy", LABEL_LINE_HEIGHT);
+      tspan.textContent = line;
+      label.appendChild(tspan);
+    });
 
     const scoreText = document.createElementNS(svgNS, "text");
     scoreText.setAttribute("x", pos.x);
-    scoreText.setAttribute("y", pos.y + 12);
+    scoreText.setAttribute("y", labelFirstY + labelLines.length * LABEL_LINE_HEIGHT + 2);
     scoreText.setAttribute("text-anchor", "middle");
     scoreText.setAttribute("font-size", "11");
     scoreText.setAttribute("font-weight", "700");
@@ -207,28 +313,63 @@ function renderGraph(svgEl, nodes, edges) {
    * (đoạn đó đã "xem tới") thì hiện; còn lại vẫn ẩn — giống sơ đồ tư duy dựng
    * dần chứ không lộ hết quan hệ kiến thức ngay từ đầu. 1 cạnh chỉ hiện khi
    * CẢ HAI đầu (nguồn + đích) đều đã hiện.
-   * Lưu ý: node không có start_time (VD nhánh phụ "chưa học trong bài") sẽ
-   * không bao giờ tự hiện qua cơ chế này.
+   *
+   * Node KHÔNG có start_time -> LUÔN hiện ngay (không thể "khoá theo video" một
+   * thứ không có mốc thời gian). Quan trọng với lesson nguồn là slide/PDF (AI
+   * sinh graph nhưng không có timeline video) — nếu không có dòng này, graph
+   * sẽ trống trơn mãi mãi vì mọi node đều thiếu start_time.
    */
   function revealUpTo(currentSec) {
     Object.entries(nodeEls).forEach(([conceptId, { g }]) => {
       const node = nodeById.get(conceptId);
-      const revealed = node.start_time != null && currentSec >= node.start_time;
+      const revealed = node.start_time == null || currentSec >= node.start_time;
       g.classList.toggle("kg-node--hidden", !revealed);
     });
-    edgeEls.forEach(({ path, source, target }) => {
+    edgeEls.forEach(({ path, labelEl, source, target }) => {
       const sourceNode = nodeById.get(source);
       const targetNode = nodeById.get(target);
-      const sourceRevealed = !!sourceNode && sourceNode.start_time != null && currentSec >= sourceNode.start_time;
-      const targetRevealed = !!targetNode && targetNode.start_time != null && currentSec >= targetNode.start_time;
-      path.classList.toggle("kg-edge--hidden", !(sourceRevealed && targetRevealed));
+      const sourceRevealed = !!sourceNode && (sourceNode.start_time == null || currentSec >= sourceNode.start_time);
+      const targetRevealed = !!targetNode && (targetNode.start_time == null || currentSec >= targetNode.start_time);
+      const revealed = sourceRevealed && targetRevealed;
+      path.classList.toggle("kg-edge--hidden", !revealed);
+      if (labelEl) labelEl.classList.toggle("kg-edge--hidden", !revealed);
     });
   }
 
   return { setActiveConcept, updateNodeMastery, onNodeClick, revealUpTo, getActiveConcept: () => activeId };
 }
 
-function wrapShort(name) {
-  // Cắt tên dài cho vừa trong node tròn (label đầy đủ vẫn hiện ở panel chi tiết bên dưới)
-  return name.length > 14 ? name.slice(0, 13) + "…" : name;
+/**
+ * Bẻ tên khái niệm thành tối đa `maxLines` dòng, mỗi dòng tối đa `maxCharsPerLine`
+ * ký tự, ưu tiên ngắt ở khoảng trắng giữa các từ (không cắt vỡ từ giữa chừng
+ * trừ khi 1 từ đơn đã dài hơn cả 1 dòng). Hết chỗ mà vẫn còn nội dung thì thêm
+ * "…" vào cuối dòng cuối cùng thay vì để tràn ra ngoài hình tròn.
+ */
+function wrapNodeLabel(text, maxCharsPerLine = 10, maxLines = 3) {
+  const words = String(text).trim().split(/\s+/).filter(Boolean);
+  const lines = [];
+  let current = "";
+
+  for (const word of words) {
+    const candidate = current ? `${current} ${word}` : word;
+    if (candidate.length <= maxCharsPerLine || !current) {
+      current = candidate;
+      continue;
+    }
+    lines.push(current);
+    current = word;
+    if (lines.length === maxLines) return truncateLastLine(lines, maxCharsPerLine);
+  }
+  if (current) lines.push(current);
+
+  if (lines.length > maxLines) return truncateLastLine(lines.slice(0, maxLines), maxCharsPerLine);
+  // Không thiếu chữ nào, nhưng 1 từ đơn tự nó vẫn có thể dài hơn cả 1 dòng.
+  return lines.map(line => (line.length > maxCharsPerLine ? line.slice(0, maxCharsPerLine - 1) + "…" : line));
+}
+
+function truncateLastLine(lines, maxCharsPerLine) {
+  const last = lines[lines.length - 1] || "";
+  const cut = last.length > maxCharsPerLine - 1 ? last.slice(0, maxCharsPerLine - 1) : last;
+  lines[lines.length - 1] = cut.replace(/[.,;:\s]+$/, "") + "…";
+  return lines;
 }
