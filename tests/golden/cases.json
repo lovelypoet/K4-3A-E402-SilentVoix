@@ -1,0 +1,178 @@
+[
+  {
+    "id": "case_01",
+    "input_chunk": "Gradient descent is an optimization algorithm used to minimize a loss function.",
+    "expected_concepts": ["gradient_descent", "loss_function"],
+    "expected_relationships": ["loss_function->gradient_descent:prerequisite_of"],
+    "expected_source": {"document_id": "lecture_04", "slide": 17},
+    "expected_quiz_decision": "GENERATE_QUIZ"
+  },
+  {
+    "id": "case_02",
+    "input_chunk": "Regression is a type of supervised learning used to predict continuous values.",
+    "expected_concepts": ["regression", "supervised_learning"],
+    "expected_relationships": ["regression->supervised_learning:type_of"],
+    "expected_source": {"document_id": "lecture_04", "slide": 19},
+    "expected_quiz_decision": "GENERATE_QUIZ"
+  },
+  {
+    "id": "case_03",
+    "input_chunk": "The loss function measures prediction error.",
+    "expected_concepts": ["loss_function"],
+    "expected_relationships": [],
+    "expected_source": {"document_id": "lecture_04", "slide": 17},
+    "expected_quiz_decision": "GENERATE_QUIZ"
+  },
+  {
+    "id": "case_04",
+    "input_chunk": "Gradient Descent is also called gradient descent or GD.",
+    "expected_concepts": ["gradient_descent"],
+    "expected_relationships": [],
+    "expected_source": {"document_id": "lecture_04", "slide": 21},
+    "expected_quiz_decision": "GENERATE_QUIZ"
+  },
+  {
+    "id": "case_05",
+    "input_chunk": "A decision tree is a type of supervised learning model.",
+    "expected_concepts": ["decision_tree", "supervised_learning"],
+    "expected_relationships": ["decision_tree->supervised_learning:type_of"],
+    "expected_source": {"document_id": "lecture_05", "slide": 4},
+    "expected_quiz_decision": "GENERATE_QUIZ"
+  },
+  {
+    "id": "case_06",
+    "input_chunk": "Classification predicts discrete labels.",
+    "expected_concepts": ["classification"],
+    "expected_relationships": [],
+    "expected_source": {"document_id": "lecture_03", "slide": 12},
+    "expected_quiz_decision": "GENERATE_QUIZ"
+  },
+  {
+    "id": "case_07",
+    "input_chunk": "Clustering groups similar data points without labels.",
+    "expected_concepts": ["clustering"],
+    "expected_relationships": [],
+    "expected_source": {"document_id": "lecture_03", "slide": 13},
+    "expected_quiz_decision": "GENERATE_QUIZ"
+  },
+  {
+    "id": "case_08",
+    "input_chunk": "K-means is a clustering algorithm.",
+    "expected_concepts": ["k_means", "clustering"],
+    "expected_relationships": ["k_means->clustering:type_of"],
+    "expected_source": {"document_id": "lecture_03", "slide": 13},
+    "expected_quiz_decision": "GENERATE_QUIZ"
+  },
+  {
+    "id": "case_09",
+    "input_chunk": "The model uses a feature vector and a weight vector.",
+    "expected_concepts": ["feature_vector", "weight_vector"],
+    "expected_relationships": [],
+    "expected_source": {"document_id": "lecture_06", "slide": 2},
+    "expected_quiz_decision": "GENERATE_QUIZ"
+  },
+  {
+    "id": "case_10",
+    "input_chunk": "The dataset contains training data and testing data.",
+    "expected_concepts": ["training_data", "testing_data"],
+    "expected_relationships": [],
+    "expected_source": {"document_id": "lecture_02", "slide": 5},
+    "expected_quiz_decision": "GENERATE_QUIZ"
+  },
+  {
+    "id": "case_11",
+    "input_chunk": "The gradient descent algorithm is an optimization method; gradient descent is a method.",
+    "expected_concepts": ["gradient_descent"],
+    "expected_relationships": [],
+    "expected_source": {"document_id": "lecture_04", "slide": 21},
+    "expected_quiz_decision": "GENERATE_QUIZ"
+  },
+  {
+    "id": "case_12",
+    "input_chunk": "A neural network is made of layers and neurons.",
+    "expected_concepts": ["neural_network", "layer", "neuron"],
+    "expected_relationships": ["layer->neural_network:part_of"],
+    "expected_source": {"document_id": "lecture_07", "slide": 8},
+    "expected_quiz_decision": "GENERATE_QUIZ"
+  },
+  {
+    "id": "case_13",
+    "input_chunk": "The term overfitting means the model fits training data too closely.",
+    "expected_concepts": ["overfitting"],
+    "expected_relationships": [],
+    "expected_source": {"document_id": "lecture_04", "slide": 30},
+    "expected_quiz_decision": "GENERATE_QUIZ"
+  },
+  {
+    "id": "case_14",
+    "input_chunk": "Underfitting occurs when the model is too simple.",
+    "expected_concepts": ["underfitting"],
+    "expected_relationships": [],
+    "expected_source": {"document_id": "lecture_04", "slide": 31},
+    "expected_quiz_decision": "GENERATE_QUIZ"
+  },
+  {
+    "id": "case_15",
+    "input_chunk": "This section discusses the AdamW optimizer.",
+    "expected_concepts": ["adamw"],
+    "expected_relationships": [],
+    "expected_source": {"document_id": "lecture_08", "slide": 40},
+    "expected_quiz_decision": "REFUSE_UNGROUNDED"
+  },
+  {
+    "id": "case_16",
+    "input_chunk": "A linear regression model uses a linear function.",
+    "expected_concepts": ["linear_regression", "linear_function"],
+    "expected_relationships": ["linear_function->linear_regression:used_for"],
+    "expected_source": {"document_id": "lecture_04", "slide": 25},
+    "expected_quiz_decision": "GENERATE_QUIZ"
+  },
+  {
+    "id": "case_17",
+    "input_chunk": "The lecture mentions both gradient descent and gradient boosting.",
+    "expected_concepts": ["gradient_descent", "gradient_boosting"],
+    "expected_relationships": [],
+    "expected_source": {"document_id": "lecture_09", "slide": 15},
+    "expected_quiz_decision": "DISAMBIGUATE"
+  },
+  {
+    "id": "case_18",
+    "input_chunk": "",
+    "expected_concepts": [],
+    "expected_relationships": [],
+    "expected_source": null,
+    "expected_quiz_decision": "REFUSE_UNGROUNDED"
+  },
+  {
+    "id": "case_19",
+    "input_chunk": "The database stores vectors for embeddings.",
+    "expected_concepts": ["embedding", "vector"],
+    "expected_relationships": [],
+    "expected_source": {"document_id": "lecture_11", "slide": 6},
+    "expected_quiz_decision": "GENERATE_QUIZ"
+  },
+  {
+    "id": "case_20",
+    "input_chunk": "A transformer uses self-attention layers.",
+    "expected_concepts": ["transformer", "self_attention"],
+    "expected_relationships": ["self_attention->transformer:part_of"],
+    "expected_source": {"document_id": "lecture_13", "slide": 18},
+    "expected_quiz_decision": "GENERATE_QUIZ"
+  },
+  {
+    "id": "case_21",
+    "input_chunk": "The loss function is a prerequisite for understanding gradient descent.",
+    "expected_concepts": ["loss_function", "gradient_descent"],
+    "expected_relationships": ["loss_function->gradient_descent:prerequisite_of"],
+    "expected_source": {"document_id": "lecture_04", "slide": 17},
+    "expected_quiz_decision": "GENERATE_QUIZ"
+  },
+  {
+    "id": "case_22",
+    "input_chunk": "The system trains a model with the softmax function.",
+    "expected_concepts": ["softmax"],
+    "expected_relationships": [],
+    "expected_source": {"document_id": "lecture_12", "slide": 10},
+    "expected_quiz_decision": "GENERATE_QUIZ"
+  }
+]

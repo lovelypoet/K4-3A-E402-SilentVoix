@@ -9,9 +9,9 @@
 | Họ và Tên | Mã Học Viên | Vai trò chính | Phần việc đảm nhiệm trong dự án |
 |---|---|---|---|
 | Nguyễn Đức Anh | 2A202602508 | Leader | ... |
-| Nguyễn Như Tài | 2A202602976 | .... | ... |
-| Lò Văn Long | 2A202602541 | ... | ... |
-| Nguyễn Công Vinh | 2A202602519 | ... | ... |
+| Nguyễn Như Tài | 2A202602976 | Backend dev | ... |
+| Lò Văn Long | 2A202602541 | Frontend dev | ... |
+| Nguyễn Công Vinh | 2A202602519 | Fullstack dev | ... |
 
 > Nhóm copy nguyên file README này về repo của mình, rồi điền bảng trên. Cột **Phần việc đảm nhiệm** ghi càng cụ thể càng tốt.
 

@@ -408,6 +408,23 @@ class DocumentIngestor:
         return chunks
 
     @staticmethod
+    def ingest_slides_data(slides_data: List[Dict[str, Any]], lesson_id: str = "lesson_01") -> List[Chunk]:
+        """Convert structured slide records into source-preserving chunks."""
+        chunks = []
+        for index, item in enumerate(slides_data or [], start=1):
+            text = str(item.get("text") or "").strip()
+            if not text:
+                continue
+            slide_number = item.get("slide", index)
+            chunks.append(Chunk(
+                chunk_id=f"chunk_slide_{index:03d}",
+                lesson_id=lesson_id,
+                text=text,
+                slide=int(slide_number) if slide_number is not None else None,
+            ))
+        return chunks
+
+    @staticmethod
     def ingest_transcript_json(transcript_data: List[Dict[str, Any]], lesson_id: str = "lesson_01") -> List[Chunk]:
         """
         Ingests a transcript list with start_time, end_time, and text.
