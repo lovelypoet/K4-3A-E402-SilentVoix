@@ -1,6 +1,8 @@
+import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from adaptive_learning.api import adaptive_router
+from fastapi.staticfiles import StaticFiles
+from adaptive_learning.api import adaptive_router, UPLOAD_DIR
 
 app = FastAPI(
     title="Lesson Studio — Adaptive Learning & Knowledge Mapping API",
@@ -16,6 +18,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Mount thư mục static /uploads để Frontend truy cập trực tiếp các file video/slide/doc
+os.makedirs(UPLOAD_DIR, exist_ok=True)
+app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
 
 # Tích hợp Router
 app.include_router(adaptive_router)

@@ -1,12 +1,52 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional, Dict, List, Any
 
 class Document(BaseModel):
     document_id: str
     title: str
-    file_type: str  # "pdf", "pptx", "transcript"
+    file_type: str  # "pdf", "pptx"
     file_path: Optional[str] = None
+    video_url: Optional[str] = None
+    slide_url: Optional[str] = None
+    lesson_id: Optional[str] = None
     chunks_count: int = 0
+
+class Lesson(BaseModel):
+    lesson_id: str
+    title: str
+    video_url: Optional[str] = None
+    slide_url: Optional[str] = None
+    file_path: Optional[str] = None
+    total_slides: Optional[int] = 0
+    duration_seconds: Optional[float] = 0
+    source_type: Optional[str] = None  # "video" | "slide" | "document"
+
+
+class VideoLinkRequest(BaseModel):
+    """Chỉ dán link VIDEO (YouTube)."""
+    video_url: str = Field(..., description="Link YouTube (bắt buộc)")
+
+    model_config = {
+        "json_schema_extra": {
+            "example": {
+                "video_url": "https://www.youtube.com/watch?v=aircAruvnKk"
+            }
+        }
+    }
+
+
+class SlideLinkRequest(BaseModel):
+    """Link Google Docs / Slides / Drive / file .pdf/.pptx/.docx."""
+    slide_url: str = Field(..., description="Link docs.google / drive / PDF / PPTX / DOCX")
+
+    model_config = {
+        "json_schema_extra": {
+            "example": {
+                "slide_url": "https://docs.google.com/document/d/FILE_ID/edit"
+            }
+        }
+    }
+
 
 class Chunk(BaseModel):
     chunk_id: str
@@ -45,9 +85,9 @@ class Quiz(BaseModel):
     difficulty: float = 1.0
 
 class StudentAnswer(BaseModel):
-    quiz_id: str
-    concept_id: str
-    is_correct: bool
+    quiz_id: Optional[str] = None  # Để trống thì tự động sinh (e.g. quiz_01, quiz_02,...)
+    concept_id: str = "c6"
+    is_correct: bool = True
     difficulty: float = 1.0
 
 class RecommendationResponse(BaseModel):

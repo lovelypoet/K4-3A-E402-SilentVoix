@@ -6,7 +6,7 @@ from adaptive_learning.models import Document, Chunk, StudentAnswer, Recommendat
 from adaptive_learning.ingestion import DocumentIngestor
 from adaptive_learning.source_mapper import SourceMapper
 from adaptive_learning.api import (
-    upload_document, 
+    upload_file_or_link, 
     get_knowledge_graph, 
     get_concepts_by_slide, 
     get_concepts_by_time, 
