@@ -4,6 +4,10 @@ import sys
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
+if __name__ == '__main__':
+    from eval.run_ai_e2e import run
+    sys.exit(run())
+
 from eval.llm_judge import evaluate_with_llm_mock, PROMPT_QUIZ_QUALITY
 
 def run_eval():

@@ -1,0 +1,3497 @@
+{
+  "mode": "merged_ai_component_integration",
+  "golden_file": "tests/golden/cases.json",
+  "total_cases": 22,
+  "metrics": {
+    "concepts": {
+      "PASS": 16,
+      "FAIL": 6,
+      "BLOCKED": 0,
+      "ERROR": 0
+    },
+    "relationships": {
+      "PASS": 19,
+      "FAIL": 3,
+      "BLOCKED": 0,
+      "ERROR": 0
+    },
+    "sources": {
+      "PASS": 22,
+      "FAIL": 0,
+      "BLOCKED": 0,
+      "ERROR": 0
+    },
+    "quiz_decision": {
+      "PASS": 20,
+      "FAIL": 2,
+      "BLOCKED": 0,
+      "ERROR": 0
+    },
+    "unsupported_refusal": {
+      "PASS": 22,
+      "FAIL": 0,
+      "BLOCKED": 0,
+      "ERROR": 0
+    },
+    "quiz_structure": {
+      "PASS": 21,
+      "FAIL": 0,
+      "BLOCKED": 0,
+      "ERROR": 0
+    },
+    "quiz_citations": {
+      "PASS": 21,
+      "FAIL": 0,
+      "BLOCKED": 0,
+      "ERROR": 0
+    },
+    "semantic_groundedness": {
+      "PASS": 0,
+      "FAIL": 0,
+      "BLOCKED": 21,
+      "ERROR": 0
+    },
+    "mastery": {
+      "PASS": 21,
+      "FAIL": 0,
+      "BLOCKED": 0,
+      "ERROR": 0
+    },
+    "weak_state": {
+      "PASS": 21,
+      "FAIL": 0,
+      "BLOCKED": 0,
+      "ERROR": 0
+    },
+    "recommendation_concept": {
+      "PASS": 21,
+      "FAIL": 0,
+      "BLOCKED": 0,
+      "ERROR": 0
+    },
+    "recommendation_source": {
+      "PASS": 21,
+      "FAIL": 0,
+      "BLOCKED": 0,
+      "ERROR": 0
+    },
+    "destination_api": {
+      "PASS": 21,
+      "FAIL": 0,
+      "BLOCKED": 0,
+      "ERROR": 0
+    },
+    "browser_click": {
+      "PASS": 0,
+      "FAIL": 0,
+      "BLOCKED": 22,
+      "ERROR": 0
+    },
+    "refusal_payload": {
+      "PASS": 1,
+      "FAIL": 0,
+      "BLOCKED": 0,
+      "ERROR": 0
+    }
+  },
+  "cases": [
+    {
+      "case_id": "case_01",
+      "checks": {
+        "concepts": {
+          "status": "PASS",
+          "expected": [
+            "gradient_descent",
+            "loss_function"
+          ],
+          "actual": [
+            "gradient_descent",
+            "loss_function"
+          ]
+        },
+        "relationships": {
+          "status": "FAIL",
+          "expected": [
+            "loss_function->gradient_descent:prerequisite_of"
+          ],
+          "actual": [
+            "gradient_descent->loss_function:used_for",
+            "loss_function->gradient_descent:prerequisite_of"
+          ]
+        },
+        "sources": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "quiz_decision": {
+          "status": "PASS",
+          "expected": "GENERATE_QUIZ",
+          "actual": "GENERATE_QUIZ"
+        },
+        "unsupported_refusal": {
+          "status": "PASS",
+          "expected": "REFUSE_UNGROUNDED",
+          "actual": "REFUSE_UNGROUNDED"
+        },
+        "quiz_structure": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "quiz_citations": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "semantic_groundedness": {
+          "status": "BLOCKED",
+          "reason": "Question-bank answer requires independent semantic annotation/review"
+        },
+        "mastery": {
+          "status": "PASS",
+          "expected": [
+            1.0,
+            0.25
+          ],
+          "actual": [
+            1.0,
+            0.25
+          ]
+        },
+        "weak_state": {
+          "status": "PASS",
+          "expected": "weak",
+          "actual": "weak"
+        },
+        "recommendation_concept": {
+          "status": "PASS",
+          "expected": "loss_function",
+          "actual": "loss_function"
+        },
+        "recommendation_source": {
+          "status": "PASS",
+          "expected": 17,
+          "actual": 17
+        },
+        "destination_api": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "browser_click": {
+          "status": "BLOCKED",
+          "reason": "No FE/browser test"
+        }
+      },
+      "actual_graph": {
+        "lesson_id": "eval_case_01",
+        "nodes": [
+          {
+            "id": "gradient_descent",
+            "label": "Gradient Descent",
+            "description": "An optimization algorithm used to minimize a loss function.",
+            "sources": [
+              {
+                "document_id": "lecture_04",
+                "chunk_id": "eval_case_01_chunk",
+                "slide": 17,
+                "page": null,
+                "start_time": null,
+                "end_time": null
+              }
+            ]
+          },
+          {
+            "id": "loss_function",
+            "label": "Loss Function",
+            "description": "A function that measures prediction error.",
+            "sources": [
+              {
+                "document_id": "lecture_04",
+                "chunk_id": "eval_case_01_chunk",
+                "slide": 17,
+                "page": null,
+                "start_time": null,
+                "end_time": null
+              }
+            ]
+          }
+        ],
+        "edges": [
+          {
+            "source": "gradient_descent",
+            "target": "loss_function",
+            "relation": "used_for",
+            "evidence": [
+              "eval_case_01_chunk"
+            ]
+          },
+          {
+            "source": "loss_function",
+            "target": "gradient_descent",
+            "relation": "prerequisite_of",
+            "evidence": [
+              "eval_case_01_chunk"
+            ]
+          }
+        ]
+      },
+      "actual_quiz": {
+        "decision": "GENERATE_QUIZ",
+        "concept_id": "gradient_descent",
+        "difficulty": "medium",
+        "question": "What is the main goal of gradient descent in optimization?",
+        "options": [
+          "To minimize the value of a loss function.",
+          "To increase the model complexity.",
+          "To add noise to the dataset.",
+          "To remove all training examples."
+        ],
+        "correct_answer": "To minimize the value of a loss function.",
+        "explanation": "This quiz is grounded in the source evidence for 'gradient_descent'.",
+        "citations": [
+          {
+            "document_id": "lecture_04",
+            "chunk_id": "eval_case_01_chunk",
+            "slide": 17,
+            "start_time": null,
+            "end_time": null
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "case_02",
+      "checks": {
+        "concepts": {
+          "status": "PASS",
+          "expected": [
+            "regression",
+            "supervised_learning"
+          ],
+          "actual": [
+            "regression",
+            "supervised_learning"
+          ]
+        },
+        "relationships": {
+          "status": "PASS",
+          "expected": [
+            "regression->supervised_learning:type_of"
+          ],
+          "actual": [
+            "regression->supervised_learning:type_of"
+          ]
+        },
+        "sources": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "quiz_decision": {
+          "status": "PASS",
+          "expected": "GENERATE_QUIZ",
+          "actual": "GENERATE_QUIZ"
+        },
+        "unsupported_refusal": {
+          "status": "PASS",
+          "expected": "REFUSE_UNGROUNDED",
+          "actual": "REFUSE_UNGROUNDED"
+        },
+        "quiz_structure": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "quiz_citations": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "semantic_groundedness": {
+          "status": "BLOCKED",
+          "reason": "Question-bank answer requires independent semantic annotation/review"
+        },
+        "mastery": {
+          "status": "PASS",
+          "expected": [
+            1.0,
+            0.25
+          ],
+          "actual": [
+            1.0,
+            0.25
+          ]
+        },
+        "weak_state": {
+          "status": "PASS",
+          "expected": "weak",
+          "actual": "weak"
+        },
+        "recommendation_concept": {
+          "status": "PASS",
+          "expected": "regression",
+          "actual": "regression"
+        },
+        "recommendation_source": {
+          "status": "PASS",
+          "expected": 19,
+          "actual": 19
+        },
+        "destination_api": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "browser_click": {
+          "status": "BLOCKED",
+          "reason": "No FE/browser test"
+        }
+      },
+      "actual_graph": {
+        "lesson_id": "eval_case_02",
+        "nodes": [
+          {
+            "id": "regression",
+            "label": "Regression",
+            "description": "A supervised learning task for predicting continuous values.",
+            "sources": [
+              {
+                "document_id": "lecture_04",
+                "chunk_id": "eval_case_02_chunk",
+                "slide": 19,
+                "page": null,
+                "start_time": null,
+                "end_time": null
+              }
+            ]
+          },
+          {
+            "id": "supervised_learning",
+            "label": "Supervised Learning",
+            "description": "A learning paradigm that uses labeled examples.",
+            "sources": [
+              {
+                "document_id": "lecture_04",
+                "chunk_id": "eval_case_02_chunk",
+                "slide": 19,
+                "page": null,
+                "start_time": null,
+                "end_time": null
+              }
+            ]
+          }
+        ],
+        "edges": [
+          {
+            "source": "regression",
+            "target": "supervised_learning",
+            "relation": "type_of",
+            "evidence": [
+              "eval_case_02_chunk"
+            ]
+          }
+        ]
+      },
+      "actual_quiz": {
+        "decision": "GENERATE_QUIZ",
+        "concept_id": "regression",
+        "difficulty": "medium",
+        "question": "How is regression different from classification?",
+        "options": [
+          "It predicts continuous values.",
+          "It predicts discrete labels.",
+          "It groups data points without labels.",
+          "It reconstructs images from noise."
+        ],
+        "correct_answer": "It predicts continuous values.",
+        "explanation": "This quiz is grounded in the source evidence for 'regression'.",
+        "citations": [
+          {
+            "document_id": "lecture_04",
+            "chunk_id": "eval_case_02_chunk",
+            "slide": 19,
+            "start_time": null,
+            "end_time": null
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "case_03",
+      "checks": {
+        "concepts": {
+          "status": "PASS",
+          "expected": [
+            "loss_function"
+          ],
+          "actual": [
+            "loss_function"
+          ]
+        },
+        "relationships": {
+          "status": "PASS",
+          "expected": [],
+          "actual": []
+        },
+        "sources": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "quiz_decision": {
+          "status": "PASS",
+          "expected": "GENERATE_QUIZ",
+          "actual": "GENERATE_QUIZ"
+        },
+        "unsupported_refusal": {
+          "status": "PASS",
+          "expected": "REFUSE_UNGROUNDED",
+          "actual": "REFUSE_UNGROUNDED"
+        },
+        "quiz_structure": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "quiz_citations": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "semantic_groundedness": {
+          "status": "BLOCKED",
+          "reason": "Question-bank answer requires independent semantic annotation/review"
+        },
+        "mastery": {
+          "status": "PASS",
+          "expected": [
+            1.0,
+            0.25
+          ],
+          "actual": [
+            1.0,
+            0.25
+          ]
+        },
+        "weak_state": {
+          "status": "PASS",
+          "expected": "weak",
+          "actual": "weak"
+        },
+        "recommendation_concept": {
+          "status": "PASS",
+          "expected": "loss_function",
+          "actual": "loss_function"
+        },
+        "recommendation_source": {
+          "status": "PASS",
+          "expected": 17,
+          "actual": 17
+        },
+        "destination_api": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "browser_click": {
+          "status": "BLOCKED",
+          "reason": "No FE/browser test"
+        }
+      },
+      "actual_graph": {
+        "lesson_id": "eval_case_03",
+        "nodes": [
+          {
+            "id": "loss_function",
+            "label": "Loss Function",
+            "description": "A function that measures prediction error.",
+            "sources": [
+              {
+                "document_id": "lecture_04",
+                "chunk_id": "eval_case_03_chunk",
+                "slide": 17,
+                "page": null,
+                "start_time": null,
+                "end_time": null
+              }
+            ]
+          }
+        ],
+        "edges": []
+      },
+      "actual_quiz": {
+        "decision": "GENERATE_QUIZ",
+        "concept_id": "loss_function",
+        "difficulty": "medium",
+        "question": "How does a loss function help guide training?",
+        "options": [
+          "It measures prediction error.",
+          "It stores all model parameters.",
+          "It is only used for evaluation.",
+          "It prevents data from being used."
+        ],
+        "correct_answer": "It measures prediction error.",
+        "explanation": "This quiz is grounded in the source evidence for 'loss_function'.",
+        "citations": [
+          {
+            "document_id": "lecture_04",
+            "chunk_id": "eval_case_03_chunk",
+            "slide": 17,
+            "start_time": null,
+            "end_time": null
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "case_04",
+      "checks": {
+        "concepts": {
+          "status": "PASS",
+          "expected": [
+            "gradient_descent"
+          ],
+          "actual": [
+            "gradient_descent"
+          ]
+        },
+        "relationships": {
+          "status": "PASS",
+          "expected": [],
+          "actual": []
+        },
+        "sources": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "quiz_decision": {
+          "status": "PASS",
+          "expected": "GENERATE_QUIZ",
+          "actual": "GENERATE_QUIZ"
+        },
+        "unsupported_refusal": {
+          "status": "PASS",
+          "expected": "REFUSE_UNGROUNDED",
+          "actual": "REFUSE_UNGROUNDED"
+        },
+        "quiz_structure": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "quiz_citations": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "semantic_groundedness": {
+          "status": "BLOCKED",
+          "reason": "Question-bank answer requires independent semantic annotation/review"
+        },
+        "mastery": {
+          "status": "PASS",
+          "expected": [
+            1.0,
+            0.25
+          ],
+          "actual": [
+            1.0,
+            0.25
+          ]
+        },
+        "weak_state": {
+          "status": "PASS",
+          "expected": "weak",
+          "actual": "weak"
+        },
+        "recommendation_concept": {
+          "status": "PASS",
+          "expected": "gradient_descent",
+          "actual": "gradient_descent"
+        },
+        "recommendation_source": {
+          "status": "PASS",
+          "expected": 21,
+          "actual": 21
+        },
+        "destination_api": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "browser_click": {
+          "status": "BLOCKED",
+          "reason": "No FE/browser test"
+        }
+      },
+      "actual_graph": {
+        "lesson_id": "eval_case_04",
+        "nodes": [
+          {
+            "id": "gradient_descent",
+            "label": "Gradient Descent",
+            "description": "An optimization algorithm used to minimize a loss function.",
+            "sources": [
+              {
+                "document_id": "lecture_04",
+                "chunk_id": "eval_case_04_chunk",
+                "slide": 21,
+                "page": null,
+                "start_time": null,
+                "end_time": null
+              }
+            ]
+          }
+        ],
+        "edges": []
+      },
+      "actual_quiz": {
+        "decision": "GENERATE_QUIZ",
+        "concept_id": "gradient_descent",
+        "difficulty": "medium",
+        "question": "What is the main goal of gradient descent in optimization?",
+        "options": [
+          "To minimize the value of a loss function.",
+          "To increase the model complexity.",
+          "To add noise to the dataset.",
+          "To remove all training examples."
+        ],
+        "correct_answer": "To minimize the value of a loss function.",
+        "explanation": "This quiz is grounded in the source evidence for 'gradient_descent'.",
+        "citations": [
+          {
+            "document_id": "lecture_04",
+            "chunk_id": "eval_case_04_chunk",
+            "slide": 21,
+            "start_time": null,
+            "end_time": null
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "case_05",
+      "checks": {
+        "concepts": {
+          "status": "PASS",
+          "expected": [
+            "decision_tree",
+            "supervised_learning"
+          ],
+          "actual": [
+            "decision_tree",
+            "supervised_learning"
+          ]
+        },
+        "relationships": {
+          "status": "PASS",
+          "expected": [
+            "decision_tree->supervised_learning:type_of"
+          ],
+          "actual": [
+            "decision_tree->supervised_learning:type_of"
+          ]
+        },
+        "sources": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "quiz_decision": {
+          "status": "PASS",
+          "expected": "GENERATE_QUIZ",
+          "actual": "GENERATE_QUIZ"
+        },
+        "unsupported_refusal": {
+          "status": "PASS",
+          "expected": "REFUSE_UNGROUNDED",
+          "actual": "REFUSE_UNGROUNDED"
+        },
+        "quiz_structure": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "quiz_citations": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "semantic_groundedness": {
+          "status": "BLOCKED",
+          "reason": "Question-bank answer requires independent semantic annotation/review"
+        },
+        "mastery": {
+          "status": "PASS",
+          "expected": [
+            1.0,
+            0.25
+          ],
+          "actual": [
+            1.0,
+            0.25
+          ]
+        },
+        "weak_state": {
+          "status": "PASS",
+          "expected": "weak",
+          "actual": "weak"
+        },
+        "recommendation_concept": {
+          "status": "PASS",
+          "expected": "decision_tree",
+          "actual": "decision_tree"
+        },
+        "recommendation_source": {
+          "status": "PASS",
+          "expected": 4,
+          "actual": 4
+        },
+        "destination_api": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "browser_click": {
+          "status": "BLOCKED",
+          "reason": "No FE/browser test"
+        }
+      },
+      "actual_graph": {
+        "lesson_id": "eval_case_05",
+        "nodes": [
+          {
+            "id": "supervised_learning",
+            "label": "Supervised Learning",
+            "description": "A learning paradigm that uses labeled examples.",
+            "sources": [
+              {
+                "document_id": "lecture_05",
+                "chunk_id": "eval_case_05_chunk",
+                "slide": 4,
+                "page": null,
+                "start_time": null,
+                "end_time": null
+              }
+            ]
+          },
+          {
+            "id": "decision_tree",
+            "label": "Decision Tree",
+            "description": "A tree-shaped model that makes decisions based on feature thresholds.",
+            "sources": [
+              {
+                "document_id": "lecture_05",
+                "chunk_id": "eval_case_05_chunk",
+                "slide": 4,
+                "page": null,
+                "start_time": null,
+                "end_time": null
+              }
+            ]
+          }
+        ],
+        "edges": [
+          {
+            "source": "decision_tree",
+            "target": "supervised_learning",
+            "relation": "type_of",
+            "evidence": [
+              "eval_case_05_chunk"
+            ]
+          }
+        ]
+      },
+      "actual_quiz": {
+        "decision": "GENERATE_QUIZ",
+        "concept_id": "decision_tree",
+        "difficulty": "medium",
+        "question": "Which statement best matches the idea in the source material?",
+        "options": [
+          "To minimize the value of a loss function.",
+          "To increase the model complexity.",
+          "To add noise to the dataset.",
+          "To remove all training examples."
+        ],
+        "correct_answer": "To minimize the value of a loss function.",
+        "explanation": "This quiz is grounded in the source evidence for 'decision_tree'.",
+        "citations": [
+          {
+            "document_id": "lecture_05",
+            "chunk_id": "eval_case_05_chunk",
+            "slide": 4,
+            "start_time": null,
+            "end_time": null
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "case_06",
+      "checks": {
+        "concepts": {
+          "status": "PASS",
+          "expected": [
+            "classification"
+          ],
+          "actual": [
+            "classification"
+          ]
+        },
+        "relationships": {
+          "status": "PASS",
+          "expected": [],
+          "actual": []
+        },
+        "sources": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "quiz_decision": {
+          "status": "PASS",
+          "expected": "GENERATE_QUIZ",
+          "actual": "GENERATE_QUIZ"
+        },
+        "unsupported_refusal": {
+          "status": "PASS",
+          "expected": "REFUSE_UNGROUNDED",
+          "actual": "REFUSE_UNGROUNDED"
+        },
+        "quiz_structure": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "quiz_citations": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "semantic_groundedness": {
+          "status": "BLOCKED",
+          "reason": "Question-bank answer requires independent semantic annotation/review"
+        },
+        "mastery": {
+          "status": "PASS",
+          "expected": [
+            1.0,
+            0.25
+          ],
+          "actual": [
+            1.0,
+            0.25
+          ]
+        },
+        "weak_state": {
+          "status": "PASS",
+          "expected": "weak",
+          "actual": "weak"
+        },
+        "recommendation_concept": {
+          "status": "PASS",
+          "expected": "classification",
+          "actual": "classification"
+        },
+        "recommendation_source": {
+          "status": "PASS",
+          "expected": 12,
+          "actual": 12
+        },
+        "destination_api": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "browser_click": {
+          "status": "BLOCKED",
+          "reason": "No FE/browser test"
+        }
+      },
+      "actual_graph": {
+        "lesson_id": "eval_case_06",
+        "nodes": [
+          {
+            "id": "classification",
+            "label": "Classification",
+            "description": "A supervised learning task for predicting discrete classes.",
+            "sources": [
+              {
+                "document_id": "lecture_03",
+                "chunk_id": "eval_case_06_chunk",
+                "slide": 12,
+                "page": null,
+                "start_time": null,
+                "end_time": null
+              }
+            ]
+          }
+        ],
+        "edges": []
+      },
+      "actual_quiz": {
+        "decision": "GENERATE_QUIZ",
+        "concept_id": "classification",
+        "difficulty": "medium",
+        "question": "Which statement best matches the idea in the source material?",
+        "options": [
+          "To minimize the value of a loss function.",
+          "To increase the model complexity.",
+          "To add noise to the dataset.",
+          "To remove all training examples."
+        ],
+        "correct_answer": "To minimize the value of a loss function.",
+        "explanation": "This quiz is grounded in the source evidence for 'classification'.",
+        "citations": [
+          {
+            "document_id": "lecture_03",
+            "chunk_id": "eval_case_06_chunk",
+            "slide": 12,
+            "start_time": null,
+            "end_time": null
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "case_07",
+      "checks": {
+        "concepts": {
+          "status": "PASS",
+          "expected": [
+            "clustering"
+          ],
+          "actual": [
+            "clustering"
+          ]
+        },
+        "relationships": {
+          "status": "PASS",
+          "expected": [],
+          "actual": []
+        },
+        "sources": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "quiz_decision": {
+          "status": "PASS",
+          "expected": "GENERATE_QUIZ",
+          "actual": "GENERATE_QUIZ"
+        },
+        "unsupported_refusal": {
+          "status": "PASS",
+          "expected": "REFUSE_UNGROUNDED",
+          "actual": "REFUSE_UNGROUNDED"
+        },
+        "quiz_structure": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "quiz_citations": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "semantic_groundedness": {
+          "status": "BLOCKED",
+          "reason": "Question-bank answer requires independent semantic annotation/review"
+        },
+        "mastery": {
+          "status": "PASS",
+          "expected": [
+            1.0,
+            0.25
+          ],
+          "actual": [
+            1.0,
+            0.25
+          ]
+        },
+        "weak_state": {
+          "status": "PASS",
+          "expected": "weak",
+          "actual": "weak"
+        },
+        "recommendation_concept": {
+          "status": "PASS",
+          "expected": "clustering",
+          "actual": "clustering"
+        },
+        "recommendation_source": {
+          "status": "PASS",
+          "expected": 13,
+          "actual": 13
+        },
+        "destination_api": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "browser_click": {
+          "status": "BLOCKED",
+          "reason": "No FE/browser test"
+        }
+      },
+      "actual_graph": {
+        "lesson_id": "eval_case_07",
+        "nodes": [
+          {
+            "id": "clustering",
+            "label": "Clustering",
+            "description": "A form of unsupervised learning that groups similar data points.",
+            "sources": [
+              {
+                "document_id": "lecture_03",
+                "chunk_id": "eval_case_07_chunk",
+                "slide": 13,
+                "page": null,
+                "start_time": null,
+                "end_time": null
+              }
+            ]
+          }
+        ],
+        "edges": []
+      },
+      "actual_quiz": {
+        "decision": "GENERATE_QUIZ",
+        "concept_id": "clustering",
+        "difficulty": "medium",
+        "question": "Which statement best matches the idea in the source material?",
+        "options": [
+          "To minimize the value of a loss function.",
+          "To increase the model complexity.",
+          "To add noise to the dataset.",
+          "To remove all training examples."
+        ],
+        "correct_answer": "To minimize the value of a loss function.",
+        "explanation": "This quiz is grounded in the source evidence for 'clustering'.",
+        "citations": [
+          {
+            "document_id": "lecture_03",
+            "chunk_id": "eval_case_07_chunk",
+            "slide": 13,
+            "start_time": null,
+            "end_time": null
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "case_08",
+      "checks": {
+        "concepts": {
+          "status": "PASS",
+          "expected": [
+            "clustering",
+            "k_means"
+          ],
+          "actual": [
+            "clustering",
+            "k_means"
+          ]
+        },
+        "relationships": {
+          "status": "PASS",
+          "expected": [
+            "k_means->clustering:type_of"
+          ],
+          "actual": [
+            "k_means->clustering:type_of"
+          ]
+        },
+        "sources": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "quiz_decision": {
+          "status": "PASS",
+          "expected": "GENERATE_QUIZ",
+          "actual": "GENERATE_QUIZ"
+        },
+        "unsupported_refusal": {
+          "status": "PASS",
+          "expected": "REFUSE_UNGROUNDED",
+          "actual": "REFUSE_UNGROUNDED"
+        },
+        "quiz_structure": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "quiz_citations": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "semantic_groundedness": {
+          "status": "BLOCKED",
+          "reason": "Question-bank answer requires independent semantic annotation/review"
+        },
+        "mastery": {
+          "status": "PASS",
+          "expected": [
+            1.0,
+            0.25
+          ],
+          "actual": [
+            1.0,
+            0.25
+          ]
+        },
+        "weak_state": {
+          "status": "PASS",
+          "expected": "weak",
+          "actual": "weak"
+        },
+        "recommendation_concept": {
+          "status": "PASS",
+          "expected": "k_means",
+          "actual": "k_means"
+        },
+        "recommendation_source": {
+          "status": "PASS",
+          "expected": 13,
+          "actual": 13
+        },
+        "destination_api": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "browser_click": {
+          "status": "BLOCKED",
+          "reason": "No FE/browser test"
+        }
+      },
+      "actual_graph": {
+        "lesson_id": "eval_case_08",
+        "nodes": [
+          {
+            "id": "clustering",
+            "label": "Clustering",
+            "description": "A form of unsupervised learning that groups similar data points.",
+            "sources": [
+              {
+                "document_id": "lecture_03",
+                "chunk_id": "eval_case_08_chunk",
+                "slide": 13,
+                "page": null,
+                "start_time": null,
+                "end_time": null
+              }
+            ]
+          },
+          {
+            "id": "k_means",
+            "label": "K-Means",
+            "description": "A clustering algorithm that partitions data into k groups.",
+            "sources": [
+              {
+                "document_id": "lecture_03",
+                "chunk_id": "eval_case_08_chunk",
+                "slide": 13,
+                "page": null,
+                "start_time": null,
+                "end_time": null
+              }
+            ]
+          }
+        ],
+        "edges": [
+          {
+            "source": "k_means",
+            "target": "clustering",
+            "relation": "type_of",
+            "evidence": [
+              "eval_case_08_chunk"
+            ]
+          }
+        ]
+      },
+      "actual_quiz": {
+        "decision": "GENERATE_QUIZ",
+        "concept_id": "k_means",
+        "difficulty": "medium",
+        "question": "Which statement best matches the idea in the source material?",
+        "options": [
+          "To minimize the value of a loss function.",
+          "To increase the model complexity.",
+          "To add noise to the dataset.",
+          "To remove all training examples."
+        ],
+        "correct_answer": "To minimize the value of a loss function.",
+        "explanation": "This quiz is grounded in the source evidence for 'k_means'.",
+        "citations": [
+          {
+            "document_id": "lecture_03",
+            "chunk_id": "eval_case_08_chunk",
+            "slide": 13,
+            "start_time": null,
+            "end_time": null
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "case_09",
+      "checks": {
+        "concepts": {
+          "status": "FAIL",
+          "expected": [
+            "feature_vector",
+            "weight_vector"
+          ],
+          "actual": [
+            "feature_vector",
+            "vector",
+            "weight_vector"
+          ]
+        },
+        "relationships": {
+          "status": "PASS",
+          "expected": [],
+          "actual": []
+        },
+        "sources": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "quiz_decision": {
+          "status": "PASS",
+          "expected": "GENERATE_QUIZ",
+          "actual": "GENERATE_QUIZ"
+        },
+        "unsupported_refusal": {
+          "status": "PASS",
+          "expected": "REFUSE_UNGROUNDED",
+          "actual": "REFUSE_UNGROUNDED"
+        },
+        "quiz_structure": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "quiz_citations": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "semantic_groundedness": {
+          "status": "BLOCKED",
+          "reason": "Question-bank answer requires independent semantic annotation/review"
+        },
+        "mastery": {
+          "status": "PASS",
+          "expected": [
+            1.0,
+            0.25
+          ],
+          "actual": [
+            1.0,
+            0.25
+          ]
+        },
+        "weak_state": {
+          "status": "PASS",
+          "expected": "weak",
+          "actual": "weak"
+        },
+        "recommendation_concept": {
+          "status": "PASS",
+          "expected": "feature_vector",
+          "actual": "feature_vector"
+        },
+        "recommendation_source": {
+          "status": "PASS",
+          "expected": 2,
+          "actual": 2
+        },
+        "destination_api": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "browser_click": {
+          "status": "BLOCKED",
+          "reason": "No FE/browser test"
+        }
+      },
+      "actual_graph": {
+        "lesson_id": "eval_case_09",
+        "nodes": [
+          {
+            "id": "feature_vector",
+            "label": "Feature Vector",
+            "description": "A representation of an instance as a set of features.",
+            "sources": [
+              {
+                "document_id": "lecture_06",
+                "chunk_id": "eval_case_09_chunk",
+                "slide": 2,
+                "page": null,
+                "start_time": null,
+                "end_time": null
+              }
+            ]
+          },
+          {
+            "id": "weight_vector",
+            "label": "Weight Vector",
+            "description": "A vector of model weights used in learning.",
+            "sources": [
+              {
+                "document_id": "lecture_06",
+                "chunk_id": "eval_case_09_chunk",
+                "slide": 2,
+                "page": null,
+                "start_time": null,
+                "end_time": null
+              }
+            ]
+          },
+          {
+            "id": "vector",
+            "label": "Vector",
+            "description": "An ordered list of numbers used to represent data.",
+            "sources": [
+              {
+                "document_id": "lecture_06",
+                "chunk_id": "eval_case_09_chunk",
+                "slide": 2,
+                "page": null,
+                "start_time": null,
+                "end_time": null
+              }
+            ]
+          }
+        ],
+        "edges": []
+      },
+      "actual_quiz": {
+        "decision": "GENERATE_QUIZ",
+        "concept_id": "feature_vector",
+        "difficulty": "medium",
+        "question": "Which statement best matches the idea in the source material?",
+        "options": [
+          "To minimize the value of a loss function.",
+          "To increase the model complexity.",
+          "To add noise to the dataset.",
+          "To remove all training examples."
+        ],
+        "correct_answer": "To minimize the value of a loss function.",
+        "explanation": "This quiz is grounded in the source evidence for 'feature_vector'.",
+        "citations": [
+          {
+            "document_id": "lecture_06",
+            "chunk_id": "eval_case_09_chunk",
+            "slide": 2,
+            "start_time": null,
+            "end_time": null
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "case_10",
+      "checks": {
+        "concepts": {
+          "status": "FAIL",
+          "expected": [
+            "testing_data",
+            "training_data"
+          ],
+          "actual": [
+            "ai",
+            "testing_data",
+            "training_data"
+          ]
+        },
+        "relationships": {
+          "status": "PASS",
+          "expected": [],
+          "actual": []
+        },
+        "sources": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "quiz_decision": {
+          "status": "PASS",
+          "expected": "GENERATE_QUIZ",
+          "actual": "GENERATE_QUIZ"
+        },
+        "unsupported_refusal": {
+          "status": "PASS",
+          "expected": "REFUSE_UNGROUNDED",
+          "actual": "REFUSE_UNGROUNDED"
+        },
+        "quiz_structure": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "quiz_citations": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "semantic_groundedness": {
+          "status": "BLOCKED",
+          "reason": "Question-bank answer requires independent semantic annotation/review"
+        },
+        "mastery": {
+          "status": "PASS",
+          "expected": [
+            1.0,
+            0.25
+          ],
+          "actual": [
+            1.0,
+            0.25
+          ]
+        },
+        "weak_state": {
+          "status": "PASS",
+          "expected": "weak",
+          "actual": "weak"
+        },
+        "recommendation_concept": {
+          "status": "PASS",
+          "expected": "training_data",
+          "actual": "training_data"
+        },
+        "recommendation_source": {
+          "status": "PASS",
+          "expected": 5,
+          "actual": 5
+        },
+        "destination_api": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "browser_click": {
+          "status": "BLOCKED",
+          "reason": "No FE/browser test"
+        }
+      },
+      "actual_graph": {
+        "lesson_id": "eval_case_10",
+        "nodes": [
+          {
+            "id": "training_data",
+            "label": "Training Data",
+            "description": "The data used to fit a model.",
+            "sources": [
+              {
+                "document_id": "lecture_02",
+                "chunk_id": "eval_case_10_chunk",
+                "slide": 5,
+                "page": null,
+                "start_time": null,
+                "end_time": null
+              }
+            ]
+          },
+          {
+            "id": "testing_data",
+            "label": "Testing Data",
+            "description": "The data used to evaluate a model.",
+            "sources": [
+              {
+                "document_id": "lecture_02",
+                "chunk_id": "eval_case_10_chunk",
+                "slide": 5,
+                "page": null,
+                "start_time": null,
+                "end_time": null
+              }
+            ]
+          },
+          {
+            "id": "ai",
+            "label": "Ai",
+            "description": "The dataset contains training data and testing data.",
+            "sources": [
+              {
+                "document_id": "lecture_02",
+                "chunk_id": "eval_case_10_chunk",
+                "slide": 5,
+                "page": null,
+                "start_time": null,
+                "end_time": null
+              }
+            ]
+          }
+        ],
+        "edges": []
+      },
+      "actual_quiz": {
+        "decision": "GENERATE_QUIZ",
+        "concept_id": "training_data",
+        "difficulty": "medium",
+        "question": "Which statement best matches the idea in the source material?",
+        "options": [
+          "To minimize the value of a loss function.",
+          "To increase the model complexity.",
+          "To add noise to the dataset.",
+          "To remove all training examples."
+        ],
+        "correct_answer": "To minimize the value of a loss function.",
+        "explanation": "This quiz is grounded in the source evidence for 'training_data'.",
+        "citations": [
+          {
+            "document_id": "lecture_02",
+            "chunk_id": "eval_case_10_chunk",
+            "slide": 5,
+            "start_time": null,
+            "end_time": null
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "case_11",
+      "checks": {
+        "concepts": {
+          "status": "PASS",
+          "expected": [
+            "gradient_descent"
+          ],
+          "actual": [
+            "gradient_descent"
+          ]
+        },
+        "relationships": {
+          "status": "PASS",
+          "expected": [],
+          "actual": []
+        },
+        "sources": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "quiz_decision": {
+          "status": "PASS",
+          "expected": "GENERATE_QUIZ",
+          "actual": "GENERATE_QUIZ"
+        },
+        "unsupported_refusal": {
+          "status": "PASS",
+          "expected": "REFUSE_UNGROUNDED",
+          "actual": "REFUSE_UNGROUNDED"
+        },
+        "quiz_structure": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "quiz_citations": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "semantic_groundedness": {
+          "status": "BLOCKED",
+          "reason": "Question-bank answer requires independent semantic annotation/review"
+        },
+        "mastery": {
+          "status": "PASS",
+          "expected": [
+            1.0,
+            0.25
+          ],
+          "actual": [
+            1.0,
+            0.25
+          ]
+        },
+        "weak_state": {
+          "status": "PASS",
+          "expected": "weak",
+          "actual": "weak"
+        },
+        "recommendation_concept": {
+          "status": "PASS",
+          "expected": "gradient_descent",
+          "actual": "gradient_descent"
+        },
+        "recommendation_source": {
+          "status": "PASS",
+          "expected": 21,
+          "actual": 21
+        },
+        "destination_api": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "browser_click": {
+          "status": "BLOCKED",
+          "reason": "No FE/browser test"
+        }
+      },
+      "actual_graph": {
+        "lesson_id": "eval_case_11",
+        "nodes": [
+          {
+            "id": "gradient_descent",
+            "label": "Gradient Descent",
+            "description": "An optimization algorithm used to minimize a loss function.",
+            "sources": [
+              {
+                "document_id": "lecture_04",
+                "chunk_id": "eval_case_11_chunk",
+                "slide": 21,
+                "page": null,
+                "start_time": null,
+                "end_time": null
+              }
+            ]
+          }
+        ],
+        "edges": []
+      },
+      "actual_quiz": {
+        "decision": "GENERATE_QUIZ",
+        "concept_id": "gradient_descent",
+        "difficulty": "medium",
+        "question": "What is the main goal of gradient descent in optimization?",
+        "options": [
+          "To minimize the value of a loss function.",
+          "To increase the model complexity.",
+          "To add noise to the dataset.",
+          "To remove all training examples."
+        ],
+        "correct_answer": "To minimize the value of a loss function.",
+        "explanation": "This quiz is grounded in the source evidence for 'gradient_descent'.",
+        "citations": [
+          {
+            "document_id": "lecture_04",
+            "chunk_id": "eval_case_11_chunk",
+            "slide": 21,
+            "start_time": null,
+            "end_time": null
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "case_12",
+      "checks": {
+        "concepts": {
+          "status": "PASS",
+          "expected": [
+            "layer",
+            "neural_network",
+            "neuron"
+          ],
+          "actual": [
+            "layer",
+            "neural_network",
+            "neuron"
+          ]
+        },
+        "relationships": {
+          "status": "PASS",
+          "expected": [
+            "layer->neural_network:part_of"
+          ],
+          "actual": [
+            "layer->neural_network:part_of"
+          ]
+        },
+        "sources": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "quiz_decision": {
+          "status": "PASS",
+          "expected": "GENERATE_QUIZ",
+          "actual": "GENERATE_QUIZ"
+        },
+        "unsupported_refusal": {
+          "status": "PASS",
+          "expected": "REFUSE_UNGROUNDED",
+          "actual": "REFUSE_UNGROUNDED"
+        },
+        "quiz_structure": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "quiz_citations": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "semantic_groundedness": {
+          "status": "BLOCKED",
+          "reason": "Question-bank answer requires independent semantic annotation/review"
+        },
+        "mastery": {
+          "status": "PASS",
+          "expected": [
+            1.0,
+            0.25
+          ],
+          "actual": [
+            1.0,
+            0.25
+          ]
+        },
+        "weak_state": {
+          "status": "PASS",
+          "expected": "weak",
+          "actual": "weak"
+        },
+        "recommendation_concept": {
+          "status": "PASS",
+          "expected": "neural_network",
+          "actual": "neural_network"
+        },
+        "recommendation_source": {
+          "status": "PASS",
+          "expected": 8,
+          "actual": 8
+        },
+        "destination_api": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "browser_click": {
+          "status": "BLOCKED",
+          "reason": "No FE/browser test"
+        }
+      },
+      "actual_graph": {
+        "lesson_id": "eval_case_12",
+        "nodes": [
+          {
+            "id": "neural_network",
+            "label": "Neural Network",
+            "description": "A model composed of connected layers and neurons.",
+            "sources": [
+              {
+                "document_id": "lecture_07",
+                "chunk_id": "eval_case_12_chunk",
+                "slide": 8,
+                "page": null,
+                "start_time": null,
+                "end_time": null
+              }
+            ]
+          },
+          {
+            "id": "layer",
+            "label": "Layer",
+            "description": "A set of neurons or processing units in a model.",
+            "sources": [
+              {
+                "document_id": "lecture_07",
+                "chunk_id": "eval_case_12_chunk",
+                "slide": 8,
+                "page": null,
+                "start_time": null,
+                "end_time": null
+              }
+            ]
+          },
+          {
+            "id": "neuron",
+            "label": "Neuron",
+            "description": "A computational unit in a neural network.",
+            "sources": [
+              {
+                "document_id": "lecture_07",
+                "chunk_id": "eval_case_12_chunk",
+                "slide": 8,
+                "page": null,
+                "start_time": null,
+                "end_time": null
+              }
+            ]
+          }
+        ],
+        "edges": [
+          {
+            "source": "layer",
+            "target": "neural_network",
+            "relation": "part_of",
+            "evidence": [
+              "eval_case_12_chunk"
+            ]
+          }
+        ]
+      },
+      "actual_quiz": {
+        "decision": "GENERATE_QUIZ",
+        "concept_id": "neural_network",
+        "difficulty": "medium",
+        "question": "Which statement best matches the idea in the source material?",
+        "options": [
+          "To minimize the value of a loss function.",
+          "To increase the model complexity.",
+          "To add noise to the dataset.",
+          "To remove all training examples."
+        ],
+        "correct_answer": "To minimize the value of a loss function.",
+        "explanation": "This quiz is grounded in the source evidence for 'neural_network'.",
+        "citations": [
+          {
+            "document_id": "lecture_07",
+            "chunk_id": "eval_case_12_chunk",
+            "slide": 8,
+            "start_time": null,
+            "end_time": null
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "case_13",
+      "checks": {
+        "concepts": {
+          "status": "FAIL",
+          "expected": [
+            "overfitting"
+          ],
+          "actual": [
+            "ai",
+            "overfitting",
+            "training_data"
+          ]
+        },
+        "relationships": {
+          "status": "PASS",
+          "expected": [],
+          "actual": []
+        },
+        "sources": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "quiz_decision": {
+          "status": "PASS",
+          "expected": "GENERATE_QUIZ",
+          "actual": "GENERATE_QUIZ"
+        },
+        "unsupported_refusal": {
+          "status": "PASS",
+          "expected": "REFUSE_UNGROUNDED",
+          "actual": "REFUSE_UNGROUNDED"
+        },
+        "quiz_structure": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "quiz_citations": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "semantic_groundedness": {
+          "status": "BLOCKED",
+          "reason": "Question-bank answer requires independent semantic annotation/review"
+        },
+        "mastery": {
+          "status": "PASS",
+          "expected": [
+            1.0,
+            0.25
+          ],
+          "actual": [
+            1.0,
+            0.25
+          ]
+        },
+        "weak_state": {
+          "status": "PASS",
+          "expected": "weak",
+          "actual": "weak"
+        },
+        "recommendation_concept": {
+          "status": "PASS",
+          "expected": "overfitting",
+          "actual": "overfitting"
+        },
+        "recommendation_source": {
+          "status": "PASS",
+          "expected": 30,
+          "actual": 30
+        },
+        "destination_api": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "browser_click": {
+          "status": "BLOCKED",
+          "reason": "No FE/browser test"
+        }
+      },
+      "actual_graph": {
+        "lesson_id": "eval_case_13",
+        "nodes": [
+          {
+            "id": "training_data",
+            "label": "Training Data",
+            "description": "The data used to fit a model.",
+            "sources": [
+              {
+                "document_id": "lecture_04",
+                "chunk_id": "eval_case_13_chunk",
+                "slide": 30,
+                "page": null,
+                "start_time": null,
+                "end_time": null
+              }
+            ]
+          },
+          {
+            "id": "overfitting",
+            "label": "Overfitting",
+            "description": "A condition where a model fits the training data too closely.",
+            "sources": [
+              {
+                "document_id": "lecture_04",
+                "chunk_id": "eval_case_13_chunk",
+                "slide": 30,
+                "page": null,
+                "start_time": null,
+                "end_time": null
+              }
+            ]
+          },
+          {
+            "id": "ai",
+            "label": "Ai",
+            "description": "The term overfitting means the model fits training data too closely.",
+            "sources": [
+              {
+                "document_id": "lecture_04",
+                "chunk_id": "eval_case_13_chunk",
+                "slide": 30,
+                "page": null,
+                "start_time": null,
+                "end_time": null
+              }
+            ]
+          }
+        ],
+        "edges": []
+      },
+      "actual_quiz": {
+        "decision": "GENERATE_QUIZ",
+        "concept_id": "overfitting",
+        "difficulty": "medium",
+        "question": "Which statement best matches the idea in the source material?",
+        "options": [
+          "To minimize the value of a loss function.",
+          "To increase the model complexity.",
+          "To add noise to the dataset.",
+          "To remove all training examples."
+        ],
+        "correct_answer": "To minimize the value of a loss function.",
+        "explanation": "This quiz is grounded in the source evidence for 'overfitting'.",
+        "citations": [
+          {
+            "document_id": "lecture_04",
+            "chunk_id": "eval_case_13_chunk",
+            "slide": 30,
+            "start_time": null,
+            "end_time": null
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "case_14",
+      "checks": {
+        "concepts": {
+          "status": "PASS",
+          "expected": [
+            "underfitting"
+          ],
+          "actual": [
+            "underfitting"
+          ]
+        },
+        "relationships": {
+          "status": "PASS",
+          "expected": [],
+          "actual": []
+        },
+        "sources": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "quiz_decision": {
+          "status": "PASS",
+          "expected": "GENERATE_QUIZ",
+          "actual": "GENERATE_QUIZ"
+        },
+        "unsupported_refusal": {
+          "status": "PASS",
+          "expected": "REFUSE_UNGROUNDED",
+          "actual": "REFUSE_UNGROUNDED"
+        },
+        "quiz_structure": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "quiz_citations": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "semantic_groundedness": {
+          "status": "BLOCKED",
+          "reason": "Question-bank answer requires independent semantic annotation/review"
+        },
+        "mastery": {
+          "status": "PASS",
+          "expected": [
+            1.0,
+            0.25
+          ],
+          "actual": [
+            1.0,
+            0.25
+          ]
+        },
+        "weak_state": {
+          "status": "PASS",
+          "expected": "weak",
+          "actual": "weak"
+        },
+        "recommendation_concept": {
+          "status": "PASS",
+          "expected": "underfitting",
+          "actual": "underfitting"
+        },
+        "recommendation_source": {
+          "status": "PASS",
+          "expected": 31,
+          "actual": 31
+        },
+        "destination_api": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "browser_click": {
+          "status": "BLOCKED",
+          "reason": "No FE/browser test"
+        }
+      },
+      "actual_graph": {
+        "lesson_id": "eval_case_14",
+        "nodes": [
+          {
+            "id": "underfitting",
+            "label": "Underfitting",
+            "description": "A condition where a model is too simple to capture the pattern.",
+            "sources": [
+              {
+                "document_id": "lecture_04",
+                "chunk_id": "eval_case_14_chunk",
+                "slide": 31,
+                "page": null,
+                "start_time": null,
+                "end_time": null
+              }
+            ]
+          }
+        ],
+        "edges": []
+      },
+      "actual_quiz": {
+        "decision": "GENERATE_QUIZ",
+        "concept_id": "underfitting",
+        "difficulty": "medium",
+        "question": "Which statement best matches the idea in the source material?",
+        "options": [
+          "To minimize the value of a loss function.",
+          "To increase the model complexity.",
+          "To add noise to the dataset.",
+          "To remove all training examples."
+        ],
+        "correct_answer": "To minimize the value of a loss function.",
+        "explanation": "This quiz is grounded in the source evidence for 'underfitting'.",
+        "citations": [
+          {
+            "document_id": "lecture_04",
+            "chunk_id": "eval_case_14_chunk",
+            "slide": 31,
+            "start_time": null,
+            "end_time": null
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "case_15",
+      "checks": {
+        "concepts": {
+          "status": "PASS",
+          "expected": [
+            "adamw"
+          ],
+          "actual": [
+            "adamw"
+          ]
+        },
+        "relationships": {
+          "status": "PASS",
+          "expected": [],
+          "actual": []
+        },
+        "sources": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "quiz_decision": {
+          "status": "FAIL",
+          "expected": "REFUSE_UNGROUNDED",
+          "actual": "GENERATE_QUIZ"
+        },
+        "unsupported_refusal": {
+          "status": "PASS",
+          "expected": "REFUSE_UNGROUNDED",
+          "actual": "REFUSE_UNGROUNDED"
+        },
+        "quiz_structure": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "quiz_citations": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "semantic_groundedness": {
+          "status": "BLOCKED",
+          "reason": "Question-bank answer requires independent semantic annotation/review"
+        },
+        "mastery": {
+          "status": "PASS",
+          "expected": [
+            1.0,
+            0.25
+          ],
+          "actual": [
+            1.0,
+            0.25
+          ]
+        },
+        "weak_state": {
+          "status": "PASS",
+          "expected": "weak",
+          "actual": "weak"
+        },
+        "recommendation_concept": {
+          "status": "PASS",
+          "expected": "adamw",
+          "actual": "adamw"
+        },
+        "recommendation_source": {
+          "status": "PASS",
+          "expected": 40,
+          "actual": 40
+        },
+        "destination_api": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "browser_click": {
+          "status": "BLOCKED",
+          "reason": "No FE/browser test"
+        }
+      },
+      "actual_graph": {
+        "lesson_id": "eval_case_15",
+        "nodes": [
+          {
+            "id": "adamw",
+            "label": "Adamw",
+            "description": "An optimizer that adapts learning rates while using weight decay.",
+            "sources": [
+              {
+                "document_id": "lecture_08",
+                "chunk_id": "eval_case_15_chunk",
+                "slide": 40,
+                "page": null,
+                "start_time": null,
+                "end_time": null
+              }
+            ]
+          }
+        ],
+        "edges": []
+      },
+      "actual_quiz": {
+        "decision": "GENERATE_QUIZ",
+        "concept_id": "adamw",
+        "difficulty": "medium",
+        "question": "Which statement best matches the idea in the source material?",
+        "options": [
+          "To minimize the value of a loss function.",
+          "To increase the model complexity.",
+          "To add noise to the dataset.",
+          "To remove all training examples."
+        ],
+        "correct_answer": "To minimize the value of a loss function.",
+        "explanation": "This quiz is grounded in the source evidence for 'adamw'.",
+        "citations": [
+          {
+            "document_id": "lecture_08",
+            "chunk_id": "eval_case_15_chunk",
+            "slide": 40,
+            "start_time": null,
+            "end_time": null
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "case_16",
+      "checks": {
+        "concepts": {
+          "status": "FAIL",
+          "expected": [
+            "linear_function",
+            "linear_regression"
+          ],
+          "actual": [
+            "linear_function",
+            "linear_regression",
+            "regression"
+          ]
+        },
+        "relationships": {
+          "status": "FAIL",
+          "expected": [
+            "linear_function->linear_regression:used_for"
+          ],
+          "actual": [
+            "linear_regression->linear_function:used_for"
+          ]
+        },
+        "sources": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "quiz_decision": {
+          "status": "PASS",
+          "expected": "GENERATE_QUIZ",
+          "actual": "GENERATE_QUIZ"
+        },
+        "unsupported_refusal": {
+          "status": "PASS",
+          "expected": "REFUSE_UNGROUNDED",
+          "actual": "REFUSE_UNGROUNDED"
+        },
+        "quiz_structure": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "quiz_citations": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "semantic_groundedness": {
+          "status": "BLOCKED",
+          "reason": "Question-bank answer requires independent semantic annotation/review"
+        },
+        "mastery": {
+          "status": "PASS",
+          "expected": [
+            1.0,
+            0.25
+          ],
+          "actual": [
+            1.0,
+            0.25
+          ]
+        },
+        "weak_state": {
+          "status": "PASS",
+          "expected": "weak",
+          "actual": "weak"
+        },
+        "recommendation_concept": {
+          "status": "PASS",
+          "expected": "linear_regression",
+          "actual": "linear_regression"
+        },
+        "recommendation_source": {
+          "status": "PASS",
+          "expected": 25,
+          "actual": 25
+        },
+        "destination_api": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "browser_click": {
+          "status": "BLOCKED",
+          "reason": "No FE/browser test"
+        }
+      },
+      "actual_graph": {
+        "lesson_id": "eval_case_16",
+        "nodes": [
+          {
+            "id": "regression",
+            "label": "Regression",
+            "description": "A supervised learning task for predicting continuous values.",
+            "sources": [
+              {
+                "document_id": "lecture_04",
+                "chunk_id": "eval_case_16_chunk",
+                "slide": 25,
+                "page": null,
+                "start_time": null,
+                "end_time": null
+              }
+            ]
+          },
+          {
+            "id": "linear_regression",
+            "label": "Linear Regression",
+            "description": "A regression model using a linear function.",
+            "sources": [
+              {
+                "document_id": "lecture_04",
+                "chunk_id": "eval_case_16_chunk",
+                "slide": 25,
+                "page": null,
+                "start_time": null,
+                "end_time": null
+              }
+            ]
+          },
+          {
+            "id": "linear_function",
+            "label": "Linear Function",
+            "description": "A function following a linear relationship between variables.",
+            "sources": [
+              {
+                "document_id": "lecture_04",
+                "chunk_id": "eval_case_16_chunk",
+                "slide": 25,
+                "page": null,
+                "start_time": null,
+                "end_time": null
+              }
+            ]
+          }
+        ],
+        "edges": [
+          {
+            "source": "linear_regression",
+            "target": "linear_function",
+            "relation": "used_for",
+            "evidence": [
+              "eval_case_16_chunk"
+            ]
+          }
+        ]
+      },
+      "actual_quiz": {
+        "decision": "GENERATE_QUIZ",
+        "concept_id": "linear_regression",
+        "difficulty": "medium",
+        "question": "Which statement best matches the idea in the source material?",
+        "options": [
+          "To minimize the value of a loss function.",
+          "To increase the model complexity.",
+          "To add noise to the dataset.",
+          "To remove all training examples."
+        ],
+        "correct_answer": "To minimize the value of a loss function.",
+        "explanation": "This quiz is grounded in the source evidence for 'linear_regression'.",
+        "citations": [
+          {
+            "document_id": "lecture_04",
+            "chunk_id": "eval_case_16_chunk",
+            "slide": 25,
+            "start_time": null,
+            "end_time": null
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "case_17",
+      "checks": {
+        "concepts": {
+          "status": "PASS",
+          "expected": [
+            "gradient_boosting",
+            "gradient_descent"
+          ],
+          "actual": [
+            "gradient_boosting",
+            "gradient_descent"
+          ]
+        },
+        "relationships": {
+          "status": "PASS",
+          "expected": [],
+          "actual": []
+        },
+        "sources": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "quiz_decision": {
+          "status": "FAIL",
+          "expected": "DISAMBIGUATE",
+          "actual": "GENERATE_QUIZ"
+        },
+        "unsupported_refusal": {
+          "status": "PASS",
+          "expected": "REFUSE_UNGROUNDED",
+          "actual": "REFUSE_UNGROUNDED"
+        },
+        "quiz_structure": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "quiz_citations": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "semantic_groundedness": {
+          "status": "BLOCKED",
+          "reason": "Question-bank answer requires independent semantic annotation/review"
+        },
+        "mastery": {
+          "status": "PASS",
+          "expected": [
+            1.0,
+            0.25
+          ],
+          "actual": [
+            1.0,
+            0.25
+          ]
+        },
+        "weak_state": {
+          "status": "PASS",
+          "expected": "weak",
+          "actual": "weak"
+        },
+        "recommendation_concept": {
+          "status": "PASS",
+          "expected": "gradient_descent",
+          "actual": "gradient_descent"
+        },
+        "recommendation_source": {
+          "status": "PASS",
+          "expected": 15,
+          "actual": 15
+        },
+        "destination_api": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "browser_click": {
+          "status": "BLOCKED",
+          "reason": "No FE/browser test"
+        }
+      },
+      "actual_graph": {
+        "lesson_id": "eval_case_17",
+        "nodes": [
+          {
+            "id": "gradient_descent",
+            "label": "Gradient Descent",
+            "description": "An optimization algorithm used to minimize a loss function.",
+            "sources": [
+              {
+                "document_id": "lecture_09",
+                "chunk_id": "eval_case_17_chunk",
+                "slide": 15,
+                "page": null,
+                "start_time": null,
+                "end_time": null
+              }
+            ]
+          },
+          {
+            "id": "gradient_boosting",
+            "label": "Gradient Boosting",
+            "description": "An ensemble method that builds trees sequentially to reduce error.",
+            "sources": [
+              {
+                "document_id": "lecture_09",
+                "chunk_id": "eval_case_17_chunk",
+                "slide": 15,
+                "page": null,
+                "start_time": null,
+                "end_time": null
+              }
+            ]
+          }
+        ],
+        "edges": []
+      },
+      "actual_quiz": {
+        "decision": "GENERATE_QUIZ",
+        "concept_id": "gradient_descent",
+        "difficulty": "medium",
+        "question": "What is the main goal of gradient descent in optimization?",
+        "options": [
+          "To minimize the value of a loss function.",
+          "To increase the model complexity.",
+          "To add noise to the dataset.",
+          "To remove all training examples."
+        ],
+        "correct_answer": "To minimize the value of a loss function.",
+        "explanation": "This quiz is grounded in the source evidence for 'gradient_descent'.",
+        "citations": [
+          {
+            "document_id": "lecture_09",
+            "chunk_id": "eval_case_17_chunk",
+            "slide": 15,
+            "start_time": null,
+            "end_time": null
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "case_18",
+      "checks": {
+        "concepts": {
+          "status": "PASS",
+          "expected": [],
+          "actual": []
+        },
+        "relationships": {
+          "status": "PASS",
+          "expected": [],
+          "actual": []
+        },
+        "sources": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "quiz_decision": {
+          "status": "PASS",
+          "expected": "REFUSE_UNGROUNDED",
+          "actual": "REFUSE_UNGROUNDED"
+        },
+        "unsupported_refusal": {
+          "status": "PASS",
+          "expected": "REFUSE_UNGROUNDED",
+          "actual": "REFUSE_UNGROUNDED"
+        },
+        "refusal_payload": {
+          "status": "PASS",
+          "expected": [],
+          "actual": []
+        },
+        "browser_click": {
+          "status": "BLOCKED",
+          "reason": "No FE/browser test"
+        }
+      },
+      "actual_graph": {
+        "lesson_id": "eval_case_18",
+        "nodes": [],
+        "edges": []
+      },
+      "actual_quiz": {
+        "decision": "REFUSE_UNGROUNDED",
+        "concept_id": "unsupported_concept",
+        "difficulty": "medium",
+        "question": "",
+        "options": [],
+        "correct_answer": "",
+        "explanation": "The concept 'unsupported_concept' is not present in the source material, so this request is unsupported.",
+        "citations": []
+      }
+    },
+    {
+      "case_id": "case_19",
+      "checks": {
+        "concepts": {
+          "status": "PASS",
+          "expected": [
+            "embedding",
+            "vector"
+          ],
+          "actual": [
+            "embedding",
+            "vector"
+          ]
+        },
+        "relationships": {
+          "status": "PASS",
+          "expected": [],
+          "actual": []
+        },
+        "sources": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "quiz_decision": {
+          "status": "PASS",
+          "expected": "GENERATE_QUIZ",
+          "actual": "GENERATE_QUIZ"
+        },
+        "unsupported_refusal": {
+          "status": "PASS",
+          "expected": "REFUSE_UNGROUNDED",
+          "actual": "REFUSE_UNGROUNDED"
+        },
+        "quiz_structure": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "quiz_citations": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "semantic_groundedness": {
+          "status": "BLOCKED",
+          "reason": "Question-bank answer requires independent semantic annotation/review"
+        },
+        "mastery": {
+          "status": "PASS",
+          "expected": [
+            1.0,
+            0.25
+          ],
+          "actual": [
+            1.0,
+            0.25
+          ]
+        },
+        "weak_state": {
+          "status": "PASS",
+          "expected": "weak",
+          "actual": "weak"
+        },
+        "recommendation_concept": {
+          "status": "PASS",
+          "expected": "embedding",
+          "actual": "embedding"
+        },
+        "recommendation_source": {
+          "status": "PASS",
+          "expected": 6,
+          "actual": 6
+        },
+        "destination_api": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "browser_click": {
+          "status": "BLOCKED",
+          "reason": "No FE/browser test"
+        }
+      },
+      "actual_graph": {
+        "lesson_id": "eval_case_19",
+        "nodes": [
+          {
+            "id": "embedding",
+            "label": "Embedding",
+            "description": "A dense vector representation of some input.",
+            "sources": [
+              {
+                "document_id": "lecture_11",
+                "chunk_id": "eval_case_19_chunk",
+                "slide": 6,
+                "page": null,
+                "start_time": null,
+                "end_time": null
+              }
+            ]
+          },
+          {
+            "id": "vector",
+            "label": "Vector",
+            "description": "An ordered list of numbers used to represent data.",
+            "sources": [
+              {
+                "document_id": "lecture_11",
+                "chunk_id": "eval_case_19_chunk",
+                "slide": 6,
+                "page": null,
+                "start_time": null,
+                "end_time": null
+              }
+            ]
+          }
+        ],
+        "edges": []
+      },
+      "actual_quiz": {
+        "decision": "GENERATE_QUIZ",
+        "concept_id": "embedding",
+        "difficulty": "medium",
+        "question": "Which statement best matches the idea in the source material?",
+        "options": [
+          "To minimize the value of a loss function.",
+          "To increase the model complexity.",
+          "To add noise to the dataset.",
+          "To remove all training examples."
+        ],
+        "correct_answer": "To minimize the value of a loss function.",
+        "explanation": "This quiz is grounded in the source evidence for 'embedding'.",
+        "citations": [
+          {
+            "document_id": "lecture_11",
+            "chunk_id": "eval_case_19_chunk",
+            "slide": 6,
+            "start_time": null,
+            "end_time": null
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "case_20",
+      "checks": {
+        "concepts": {
+          "status": "FAIL",
+          "expected": [
+            "self_attention",
+            "transformer"
+          ],
+          "actual": [
+            "layer",
+            "self_attention",
+            "transformer"
+          ]
+        },
+        "relationships": {
+          "status": "PASS",
+          "expected": [
+            "self_attention->transformer:part_of"
+          ],
+          "actual": [
+            "self_attention->transformer:part_of"
+          ]
+        },
+        "sources": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "quiz_decision": {
+          "status": "PASS",
+          "expected": "GENERATE_QUIZ",
+          "actual": "GENERATE_QUIZ"
+        },
+        "unsupported_refusal": {
+          "status": "PASS",
+          "expected": "REFUSE_UNGROUNDED",
+          "actual": "REFUSE_UNGROUNDED"
+        },
+        "quiz_structure": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "quiz_citations": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "semantic_groundedness": {
+          "status": "BLOCKED",
+          "reason": "Question-bank answer requires independent semantic annotation/review"
+        },
+        "mastery": {
+          "status": "PASS",
+          "expected": [
+            1.0,
+            0.25
+          ],
+          "actual": [
+            1.0,
+            0.25
+          ]
+        },
+        "weak_state": {
+          "status": "PASS",
+          "expected": "weak",
+          "actual": "weak"
+        },
+        "recommendation_concept": {
+          "status": "PASS",
+          "expected": "transformer",
+          "actual": "transformer"
+        },
+        "recommendation_source": {
+          "status": "PASS",
+          "expected": 18,
+          "actual": 18
+        },
+        "destination_api": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "browser_click": {
+          "status": "BLOCKED",
+          "reason": "No FE/browser test"
+        }
+      },
+      "actual_graph": {
+        "lesson_id": "eval_case_20",
+        "nodes": [
+          {
+            "id": "layer",
+            "label": "Layer",
+            "description": "A set of neurons or processing units in a model.",
+            "sources": [
+              {
+                "document_id": "lecture_13",
+                "chunk_id": "eval_case_20_chunk",
+                "slide": 18,
+                "page": null,
+                "start_time": null,
+                "end_time": null
+              }
+            ]
+          },
+          {
+            "id": "transformer",
+            "label": "Transformer",
+            "description": "A neural architecture that uses self-attention to model sequences.",
+            "sources": [
+              {
+                "document_id": "lecture_13",
+                "chunk_id": "eval_case_20_chunk",
+                "slide": 18,
+                "page": null,
+                "start_time": null,
+                "end_time": null
+              }
+            ]
+          },
+          {
+            "id": "self_attention",
+            "label": "Self-Attention",
+            "description": "A mechanism that relates elements within a sequence.",
+            "sources": [
+              {
+                "document_id": "lecture_13",
+                "chunk_id": "eval_case_20_chunk",
+                "slide": 18,
+                "page": null,
+                "start_time": null,
+                "end_time": null
+              }
+            ]
+          }
+        ],
+        "edges": [
+          {
+            "source": "self_attention",
+            "target": "transformer",
+            "relation": "part_of",
+            "evidence": [
+              "eval_case_20_chunk"
+            ]
+          }
+        ]
+      },
+      "actual_quiz": {
+        "decision": "GENERATE_QUIZ",
+        "concept_id": "transformer",
+        "difficulty": "medium",
+        "question": "Which statement best matches the idea in the source material?",
+        "options": [
+          "To minimize the value of a loss function.",
+          "To increase the model complexity.",
+          "To add noise to the dataset.",
+          "To remove all training examples."
+        ],
+        "correct_answer": "To minimize the value of a loss function.",
+        "explanation": "This quiz is grounded in the source evidence for 'transformer'.",
+        "citations": [
+          {
+            "document_id": "lecture_13",
+            "chunk_id": "eval_case_20_chunk",
+            "slide": 18,
+            "start_time": null,
+            "end_time": null
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "case_21",
+      "checks": {
+        "concepts": {
+          "status": "PASS",
+          "expected": [
+            "gradient_descent",
+            "loss_function"
+          ],
+          "actual": [
+            "gradient_descent",
+            "loss_function"
+          ]
+        },
+        "relationships": {
+          "status": "FAIL",
+          "expected": [
+            "loss_function->gradient_descent:prerequisite_of"
+          ],
+          "actual": [
+            "gradient_descent->loss_function:used_for",
+            "loss_function->gradient_descent:prerequisite_of"
+          ]
+        },
+        "sources": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "quiz_decision": {
+          "status": "PASS",
+          "expected": "GENERATE_QUIZ",
+          "actual": "GENERATE_QUIZ"
+        },
+        "unsupported_refusal": {
+          "status": "PASS",
+          "expected": "REFUSE_UNGROUNDED",
+          "actual": "REFUSE_UNGROUNDED"
+        },
+        "quiz_structure": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "quiz_citations": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "semantic_groundedness": {
+          "status": "BLOCKED",
+          "reason": "Question-bank answer requires independent semantic annotation/review"
+        },
+        "mastery": {
+          "status": "PASS",
+          "expected": [
+            1.0,
+            0.25
+          ],
+          "actual": [
+            1.0,
+            0.25
+          ]
+        },
+        "weak_state": {
+          "status": "PASS",
+          "expected": "weak",
+          "actual": "weak"
+        },
+        "recommendation_concept": {
+          "status": "PASS",
+          "expected": "loss_function",
+          "actual": "loss_function"
+        },
+        "recommendation_source": {
+          "status": "PASS",
+          "expected": 17,
+          "actual": 17
+        },
+        "destination_api": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "browser_click": {
+          "status": "BLOCKED",
+          "reason": "No FE/browser test"
+        }
+      },
+      "actual_graph": {
+        "lesson_id": "eval_case_21",
+        "nodes": [
+          {
+            "id": "gradient_descent",
+            "label": "Gradient Descent",
+            "description": "An optimization algorithm used to minimize a loss function.",
+            "sources": [
+              {
+                "document_id": "lecture_04",
+                "chunk_id": "eval_case_21_chunk",
+                "slide": 17,
+                "page": null,
+                "start_time": null,
+                "end_time": null
+              }
+            ]
+          },
+          {
+            "id": "loss_function",
+            "label": "Loss Function",
+            "description": "A function that measures prediction error.",
+            "sources": [
+              {
+                "document_id": "lecture_04",
+                "chunk_id": "eval_case_21_chunk",
+                "slide": 17,
+                "page": null,
+                "start_time": null,
+                "end_time": null
+              }
+            ]
+          }
+        ],
+        "edges": [
+          {
+            "source": "gradient_descent",
+            "target": "loss_function",
+            "relation": "used_for",
+            "evidence": [
+              "eval_case_21_chunk"
+            ]
+          },
+          {
+            "source": "loss_function",
+            "target": "gradient_descent",
+            "relation": "prerequisite_of",
+            "evidence": [
+              "eval_case_21_chunk"
+            ]
+          }
+        ]
+      },
+      "actual_quiz": {
+        "decision": "GENERATE_QUIZ",
+        "concept_id": "loss_function",
+        "difficulty": "medium",
+        "question": "How does a loss function help guide training?",
+        "options": [
+          "It measures prediction error.",
+          "It stores all model parameters.",
+          "It is only used for evaluation.",
+          "It prevents data from being used."
+        ],
+        "correct_answer": "It measures prediction error.",
+        "explanation": "This quiz is grounded in the source evidence for 'loss_function'.",
+        "citations": [
+          {
+            "document_id": "lecture_04",
+            "chunk_id": "eval_case_21_chunk",
+            "slide": 17,
+            "start_time": null,
+            "end_time": null
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "case_22",
+      "checks": {
+        "concepts": {
+          "status": "FAIL",
+          "expected": [
+            "softmax"
+          ],
+          "actual": [
+            "ai",
+            "softmax"
+          ]
+        },
+        "relationships": {
+          "status": "PASS",
+          "expected": [],
+          "actual": []
+        },
+        "sources": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "quiz_decision": {
+          "status": "PASS",
+          "expected": "GENERATE_QUIZ",
+          "actual": "GENERATE_QUIZ"
+        },
+        "unsupported_refusal": {
+          "status": "PASS",
+          "expected": "REFUSE_UNGROUNDED",
+          "actual": "REFUSE_UNGROUNDED"
+        },
+        "quiz_structure": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "quiz_citations": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "semantic_groundedness": {
+          "status": "BLOCKED",
+          "reason": "Question-bank answer requires independent semantic annotation/review"
+        },
+        "mastery": {
+          "status": "PASS",
+          "expected": [
+            1.0,
+            0.25
+          ],
+          "actual": [
+            1.0,
+            0.25
+          ]
+        },
+        "weak_state": {
+          "status": "PASS",
+          "expected": "weak",
+          "actual": "weak"
+        },
+        "recommendation_concept": {
+          "status": "PASS",
+          "expected": "softmax",
+          "actual": "softmax"
+        },
+        "recommendation_source": {
+          "status": "PASS",
+          "expected": 10,
+          "actual": 10
+        },
+        "destination_api": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true
+        },
+        "browser_click": {
+          "status": "BLOCKED",
+          "reason": "No FE/browser test"
+        }
+      },
+      "actual_graph": {
+        "lesson_id": "eval_case_22",
+        "nodes": [
+          {
+            "id": "softmax",
+            "label": "Softmax",
+            "description": "A function used to convert scores to probabilities.",
+            "sources": [
+              {
+                "document_id": "lecture_12",
+                "chunk_id": "eval_case_22_chunk",
+                "slide": 10,
+                "page": null,
+                "start_time": null,
+                "end_time": null
+              }
+            ]
+          },
+          {
+            "id": "ai",
+            "label": "Ai",
+            "description": "The system trains a model with the softmax function.",
+            "sources": [
+              {
+                "document_id": "lecture_12",
+                "chunk_id": "eval_case_22_chunk",
+                "slide": 10,
+                "page": null,
+                "start_time": null,
+                "end_time": null
+              }
+            ]
+          }
+        ],
+        "edges": []
+      },
+      "actual_quiz": {
+        "decision": "GENERATE_QUIZ",
+        "concept_id": "softmax",
+        "difficulty": "medium",
+        "question": "Which statement best matches the idea in the source material?",
+        "options": [
+          "To minimize the value of a loss function.",
+          "To increase the model complexity.",
+          "To add noise to the dataset.",
+          "To remove all training examples."
+        ],
+        "correct_answer": "To minimize the value of a loss function.",
+        "explanation": "This quiz is grounded in the source evidence for 'softmax'.",
+        "citations": [
+          {
+            "document_id": "lecture_12",
+            "chunk_id": "eval_case_22_chunk",
+            "slide": 10,
+            "start_time": null,
+            "end_time": null
+          }
+        ]
+      }
+    }
+  ],
+  "sample_upload": {
+    "file": "slide AI.pptx",
+    "upload_status": 200,
+    "chunks": 45,
+    "actual_ai_graph": {
+      "lesson_id": "lesson_02",
+      "nodes": [
+        {
+          "id": "tr_tu_nh_n_t_o",
+          "label": "Trí Tuệ Nhân Tạo",
+          "description": "TRÍ TUỆ NHÂN TẠO",
+          "sources": [
+            {
+              "document_id": "lesson_02",
+              "chunk_id": "chunk_pptx_lesson_02_001",
+              "slide": 1,
+              "page": 1,
+              "start_time": null,
+              "end_time": null
+            },
+            {
+              "document_id": "lesson_02",
+              "chunk_id": "chunk_pptx_lesson_02_002",
+              "slide": 2,
+              "page": 2,
+              "start_time": null,
+              "end_time": null
+            },
+            {
+              "document_id": "lesson_02",
+              "chunk_id": "chunk_pptx_lesson_02_003",
+              "slide": 3,
+              "page": 3,
+              "start_time": null,
+              "end_time": null
+            },
+            {
+              "document_id": "lesson_02",
+              "chunk_id": "chunk_pptx_lesson_02_006",
+              "slide": 6,
+              "page": 6,
+              "start_time": null,
+              "end_time": null
+            },
+            {
+              "document_id": "lesson_02",
+              "chunk_id": "chunk_pptx_lesson_02_008",
+              "slide": 8,
+              "page": 8,
+              "start_time": null,
+              "end_time": null
+            },
+            {
+              "document_id": "lesson_02",
+              "chunk_id": "chunk_pptx_lesson_02_014",
+              "slide": 14,
+              "page": 14,
+              "start_time": null,
+              "end_time": null
+            },
+            {
+              "document_id": "lesson_02",
+              "chunk_id": "chunk_pptx_lesson_02_015",
+              "slide": 15,
+              "page": 15,
+              "start_time": null,
+              "end_time": null
+            },
+            {
+              "document_id": "lesson_02",
+              "chunk_id": "chunk_pptx_lesson_02_016",
+              "slide": 16,
+              "page": 16,
+              "start_time": null,
+              "end_time": null
+            }
+          ]
+        },
+        {
+          "id": "ai",
+          "label": "Ai",
+          "description": "Ba hệ thống khác nhau về AI:\nAI phân tích: dựa trên kết quả dữ liệu trong quá khứ để phân tích để thông báo các quyết định trong tương lai.\nAI con người: có những yếu tố cảm xúc, nhận định, nhận thức như con người.\nAI nhân cách hóa: có các đặc điểm của tất cả các loại trí tuệ nhận thức, cảm xúc và xã hội, có khả năng tự ý thức và tự nhận thức được trong các tương tác.",
+          "sources": [
+            {
+              "document_id": "lesson_02",
+              "chunk_id": "chunk_pptx_lesson_02_004",
+              "slide": 4,
+              "page": 4,
+              "start_time": null,
+              "end_time": null
+            },
+            {
+              "document_id": "lesson_02",
+              "chunk_id": "chunk_pptx_lesson_02_005",
+              "slide": 5,
+              "page": 5,
+              "start_time": null,
+              "end_time": null
+            },
+            {
+              "document_id": "lesson_02",
+              "chunk_id": "chunk_pptx_lesson_02_007",
+              "slide": 7,
+              "page": 7,
+              "start_time": null,
+              "end_time": null
+            },
+            {
+              "document_id": "lesson_02",
+              "chunk_id": "chunk_pptx_lesson_02_009",
+              "slide": 9,
+              "page": 9,
+              "start_time": null,
+              "end_time": null
+            },
+            {
+              "document_id": "lesson_02",
+              "chunk_id": "chunk_pptx_lesson_02_023",
+              "slide": 23,
+              "page": 23,
+              "start_time": null,
+              "end_time": null
+            },
+            {
+              "document_id": "lesson_02",
+              "chunk_id": "chunk_pptx_lesson_02_024",
+              "slide": 24,
+              "page": 24,
+              "start_time": null,
+              "end_time": null
+            },
+            {
+              "document_id": "lesson_02",
+              "chunk_id": "chunk_pptx_lesson_02_027",
+              "slide": 27,
+              "page": 27,
+              "start_time": null,
+              "end_time": null
+            },
+            {
+              "document_id": "lesson_02",
+              "chunk_id": "chunk_pptx_lesson_02_039",
+              "slide": 39,
+              "page": 39,
+              "start_time": null,
+              "end_time": null
+            },
+            {
+              "document_id": "lesson_02",
+              "chunk_id": "chunk_pptx_lesson_02_044",
+              "slide": 44,
+              "page": 44,
+              "start_time": null,
+              "end_time": null
+            },
+            {
+              "document_id": "lesson_02",
+              "chunk_id": "chunk_pptx_lesson_02_045",
+              "slide": 45,
+              "page": 45,
+              "start_time": null,
+              "end_time": null
+            },
+            {
+              "document_id": "lesson_02",
+              "chunk_id": "chunk_pptx_lesson_02_047",
+              "slide": 47,
+              "page": 47,
+              "start_time": null,
+              "end_time": null
+            },
+            {
+              "document_id": "lesson_02",
+              "chunk_id": "chunk_pptx_lesson_02_055",
+              "slide": 55,
+              "page": 55,
+              "start_time": null,
+              "end_time": null
+            }
+          ]
+        },
+        {
+          "id": "ai_ph_n_t_ch",
+          "label": "Ai Phân Tích",
+          "description": "Ba hệ thống khác nhau về AI:\nAI phân tích: dựa trên kết quả dữ liệu trong quá khứ để phân tích để thông báo các quyết định trong tương lai.\nAI con người: có những yếu tố cảm xúc, nhận định, nhận thức như con người.\nAI nhân cách hóa: có các đặc điểm của tất cả các loại trí tuệ nhận thức, cảm xúc và xã hội, có khả năng tự ý thức và tự nhận thức được trong các tương tác.",
+          "sources": [
+            {
+              "document_id": "lesson_02",
+              "chunk_id": "chunk_pptx_lesson_02_004",
+              "slide": 4,
+              "page": 4,
+              "start_time": null,
+              "end_time": null
+            }
+          ]
+        },
+        {
+          "id": "ai_con_ng_i",
+          "label": "Ai Con Người",
+          "description": "Ba hệ thống khác nhau về AI:\nAI phân tích: dựa trên kết quả dữ liệu trong quá khứ để phân tích để thông báo các quyết định trong tương lai.\nAI con người: có những yếu tố cảm xúc, nhận định, nhận thức như con người.\nAI nhân cách hóa: có các đặc điểm của tất cả các loại trí tuệ nhận thức, cảm xúc và xã hội, có khả năng tự ý thức và tự nhận thức được trong các tương tác.",
+          "sources": [
+            {
+              "document_id": "lesson_02",
+              "chunk_id": "chunk_pptx_lesson_02_004",
+              "slide": 4,
+              "page": 4,
+              "start_time": null,
+              "end_time": null
+            }
+          ]
+        }
+      ],
+      "edges": []
+    },
+    "expected_annotations": "Not supplied for this deck; no correctness rate claimed"
+  },
+  "production_e2e_complete": false,
+  "limitations": [
+    "AI graph transfer is a test adapter, not backend wiring.",
+    "Quiz correctness is computed in adapter because backend trusts is_correct.",
+    "No actual upload/browser/video in this golden component suite."
+  ]
+}
