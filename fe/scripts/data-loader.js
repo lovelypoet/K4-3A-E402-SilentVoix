@@ -200,6 +200,7 @@ function normalizeBackendData(lesson, graph, mastery) {
   const transcript = lesson.transcript || [];
 
   return {
+    isMock: false,
     lessonId: lesson.lesson_id,
     title: lesson.title,
     durationSec: lesson.duration_seconds,
@@ -212,9 +213,15 @@ function normalizeBackendData(lesson, graph, mastery) {
   };
 }
 
-/** Chuẩn hoá dữ liệu mock (fe/data/lesson-mock.js) về cùng hình dạng trên. */
+/**
+ * Chuẩn hoá dữ liệu mock (fe/data/lesson-mock.js) về cùng hình dạng trên.
+ * isMock=true để app.js BÁO RÕ RA MÀN HÌNH rằng đây là dữ liệu mẫu — trước đây
+ * việc rơi về mock diễn ra âm thầm (chỉ console.warn), khiến người dùng tưởng
+ * đang xem dữ liệu thật từ backend và mất rất nhiều thời gian truy sai hướng.
+ */
 function normalizeMockData(raw) {
   return {
+    isMock: true,
     lessonId: raw.lesson_id,
     title: raw.title,
     durationSec: raw.duration_sec,

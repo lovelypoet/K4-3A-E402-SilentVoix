@@ -611,6 +611,9 @@ body {
 .relation-chip:hover { border-color: var(--blue-primary); color: var(--blue-primary); }
 .relation-chip strong { font-weight: 600; }
 
+/* Đang chạy bằng dữ liệu mẫu -> tiêu đề đổi màu cảnh báo cho khỏi nhầm là dữ liệu thật */
+.lesson-title--mock { color: var(--amber); }
+
 .node-detail-evidence { display: flex; flex-direction: column; gap: 6px; }
 .evidence-item {
   display: flex;

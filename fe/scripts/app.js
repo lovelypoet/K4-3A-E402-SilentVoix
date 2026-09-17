@@ -78,8 +78,15 @@
   async function bootLesson(lessonId, { allowMockFallback = true } = {}) {
     data = await loadLessonData(lessonId, { allowMockFallback });
     // Hiện luôn lesson_id đang xem: trước đây không nhìn được app đang ở bài nào,
-    // nên lúc bị reset về bài mặc định rất khó phát hiện.
-    els.lessonTitle.textContent = data.lessonId ? `${data.title} · ${data.lessonId}` : data.title;
+    // nên lúc bị reset về bài mặc định rất khó phát hiện. Và nếu đang chạy bằng
+    // dữ liệu mẫu (backend chưa bật / lesson_id không tồn tại) thì phải nói
+    // thẳng ra, đừng để người dùng tưởng nhầm là dữ liệu thật.
+    els.lessonTitle.textContent = data.isMock
+      ? `${data.title} · ⚠️ DỮ LIỆU MẪU (backend chưa chạy hoặc không có bài học này)`
+      : data.lessonId
+      ? `${data.title} · ${data.lessonId}`
+      : data.title;
+    els.lessonTitle.classList.toggle("lesson-title--mock", !!data.isMock);
     nodeById = new Map(data.nodes.map(n => [n.concept_id, n]));
 
     graph = renderGraph(els.graphSvg, data.nodes, data.edges);
