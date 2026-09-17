@@ -1,199 +1,222 @@
 [
   {
-    "id": "case_1_mastery_no_attempts",
-    "type": "mastery",
-    "attempts": [],
-    "expected_mastery": null
-  },
-  {
-    "id": "case_2_mastery_all_correct",
-    "type": "mastery",
-    "attempts": [{"is_correct": true, "difficulty": 1.0}],
-    "expected_mastery": 1.0
-  },
-  {
-    "id": "case_3_mastery_mixed",
-    "type": "mastery",
-    "attempts": [{"is_correct": true, "difficulty": 1.0}, {"is_correct": false, "difficulty": 1.0}],
-    "expected_mastery": 0.5
-  },
-  {
-    "id": "case_4_mastery_weighted",
-    "type": "mastery",
-    "attempts": [{"is_correct": true, "difficulty": 1.0}, {"is_correct": false, "difficulty": 3.0}],
-    "expected_mastery": 0.25
-  },
-  {
-    "id": "case_5_state_current_overrides",
-    "type": "state",
-    "mastery": 0.1,
-    "is_current": true,
-    "expected_state": "current"
-  },
-  {
-    "id": "case_6_state_not_learned",
-    "type": "state",
-    "mastery": null,
-    "is_current": false,
-    "expected_state": "not_learned"
-  },
-  {
-    "id": "case_7_state_weak",
-    "type": "state",
-    "mastery": 0.49,
-    "is_current": false,
-    "expected_state": "weak"
-  },
-  {
-    "id": "case_8_state_learning",
-    "type": "state",
-    "mastery": 0.8,
-    "is_current": false,
-    "expected_state": "learning"
-  },
-  {
-    "id": "case_9_state_mastered",
-    "type": "state",
-    "mastery": 0.9,
-    "is_current": false,
-    "expected_state": "mastered"
-  },
-  {
-    "id": "case_10_traversal_no_prereq",
-    "type": "traversal",
-    "edges": {},
-    "mastery_scores": {"c1": 0.2},
-    "start_concept": "c1",
-    "expected_recommendation": "c1"
-  },
-  {
-    "id": "case_11_traversal_single_weak_prereq",
-    "type": "traversal",
-    "edges": {"c2": ["c1"]},
-    "mastery_scores": {"c1": 0.3, "c2": 0.2},
-    "start_concept": "c2",
-    "expected_recommendation": "c1"
-  },
-  {
-    "id": "case_12_traversal_mastered_prereq_ignored",
-    "type": "traversal",
-    "edges": {"c2": ["c1"]},
-    "mastery_scores": {"c1": 0.9, "c2": 0.2},
-    "start_concept": "c2",
-    "expected_recommendation": "c2"
-  },
-  {
-    "id": "case_13_traversal_multiple_weak_deterministic",
-    "type": "traversal",
-    "edges": {"c3": ["c2", "c1"]},
-    "mastery_scores": {"c1": 0.2, "c2": 0.3, "c3": 0.4},
-    "start_concept": "c3",
-    "expected_recommendation": "c1"
-  },
-  {
-    "id": "case_14_traversal_circular_graph",
-    "type": "traversal",
-    "edges": {"c1": ["c2"], "c2": ["c1"]},
-    "mastery_scores": {"c1": 0.2, "c2": 0.3},
-    "start_concept": "c1",
-    "expected_recommendation": "c2"
-  },
-  {
-    "id": "case_15_traversal_deep_prereq",
-    "type": "traversal",
-    "edges": {"c3": ["c2"], "c2": ["c1"]},
-    "mastery_scores": {"c1": 0.1, "c2": 0.9, "c3": 0.4},
-    "start_concept": "c3",
-    "expected_recommendation": "c1"
-  },
-  {
-    "id": "case_16_traversal_all_mastered",
-    "type": "traversal",
-    "edges": {"c2": ["c1"]},
-    "mastery_scores": {"c1": 0.9, "c2": 0.9},
-    "start_concept": "c2",
-    "expected_recommendation": null
-  },
-  {
-    "id": "case_17_e2e_recommendation_weak",
-    "type": "recommendation_api",
-    "student_id": "student_1",
-    "current_concept": "c6",
-    "expected_weak_concept": "Gradient Descent",
-    "expected_recommended_concept": "Loss Function"
-  },
-  {
-    "id": "case_18_e2e_recommendation_mastered",
-    "type": "recommendation_api",
-    "student_id": "student_perfect",
-    "current_concept": "c6",
-    "expected_weak_concept": "",
-    "expected_recommended_concept": ""
-  },
-  {
-    "id": "case_19_data_integrity_regenerate_graph",
-    "type": "integrity",
-    "description": "Regenerating graph twice keeps source mapping identical",
-    "expected_pass": true
-  },
-  {
-    "id": "case_20_data_integrity_delete_lesson",
-    "type": "integrity",
-    "description": "Deleting a lesson leaves no orphaned data",
-    "expected_pass": true
-  },
-  {
-    "id": "case_21_llm_groundedness_pass",
-    "type": "groundedness",
-    "description": "Quiz should be grounded in the document",
-    "input_data": {"document": "Machine learning uses data to learn.", "quiz": "What does ML use?"},
-    "expected_pass": true
-  },
-  {
-    "id": "case_22_llm_citation_fail",
-    "type": "citation_correctness",
-    "description": "Citation must point to the correct slide",
-    "input_data": {"citation": "Slide 5", "actual_content_slide": "Slide 2"},
-    "expected_pass": false
-  },
-  {
-    "id": "case_23_llm_quiz_quality_pass",
-    "type": "quiz_quality",
-    "description": "Quiz should have clear distractors",
-    "input_data": {
-      "quiz": "Trong thuật toán Gradient Descent, learning rate quá lớn sẽ dẫn đến hiện tượng gì?",
-      "options": [
-        "A. Mô hình hội tụ nhanh hơn",
-        "B. Mô hình không thể hội tụ và dao động phân kỳ",
-        "C. Mô hình bị kẹt ở local minimum",
-        "D. Mất mát (Loss) giảm đều đặn"
-      ],
+    "id": "q1",
+    "source_text": "Machine learning is a subfield of artificial intelligence.",
+    "generated_quiz": {
+      "quiz": "Machine learning is a subfield of what?",
+      "options": ["A. Biology", "B. Artificial Intelligence", "C. Physics", "D. Chemistry"],
       "correct_answer": "B"
     },
-    "expected_pass": true
+    "generated_citation": "Slide 1",
+    "expected_citation": "Slide 1"
   },
   {
-    "id": "case_24_struct_extraction_match",
-    "type": "extraction",
-    "description": "Concept names should match exactly or normalized",
-    "extracted_concept": "Gradient Descent",
-    "expected_concept": "gradient descent",
-    "expected_pass": true
+    "id": "q2",
+    "source_text": "Supervised learning uses labeled datasets to train algorithms.",
+    "generated_quiz": {
+      "quiz": "What type of data does supervised learning use?",
+      "options": ["A. Unlabeled data", "B. Labeled data", "C. Audio only", "D. Random noise"],
+      "correct_answer": "B"
+    },
+    "generated_citation": "Slide 2",
+    "expected_citation": "Slide 2"
   },
   {
-    "id": "case_25_struct_refusal",
-    "type": "refusal",
-    "description": "Check if refusal enum matches expected",
-    "extracted_refusal": "I don't know",
-    "expected_refusal": "I don't know",
-    "expected_pass": true
+    "id": "q3",
+    "source_text": "Unsupervised learning is used to find hidden patterns in unlabeled data.",
+    "generated_quiz": {
+      "quiz": "Which learning type finds hidden patterns in unlabeled data?",
+      "options": ["A. Supervised", "B. Reinforcement", "C. Unsupervised", "D. Semi-supervised"],
+      "correct_answer": "C"
+    },
+    "generated_citation": "Slide 3",
+    "expected_citation": "Slide 3"
   },
   {
-    "id": "case_26_struct_sync",
-    "type": "sync",
-    "description": "Timestamp matches expected concept",
-    "timestamp": "12:45",
-    "expected_concept_id": "c6",
-    "expected_pass": true
+    "id": "q4",
+    "source_text": "Overfitting occurs when a model learns the training data too well, including noise.",
+    "generated_quiz": {
+      "quiz": "What happens when a model learns training data too well?",
+      "options": ["A. Underfitting", "B. Overfitting", "C. Perfect accuracy", "D. Data loss"],
+      "correct_answer": "B"
+    },
+    "generated_citation": "Slide 4",
+    "expected_citation": "Slide 4"
+  },
+  {
+    "id": "q5",
+    "source_text": "Regularization techniques like L1 and L2 help prevent overfitting.",
+    "generated_quiz": {
+      "quiz": "What is a common technique to prevent overfitting?",
+      "options": ["A. Adding more noise", "B. Regularization", "C. Removing data", "D. Reducing learning rate"],
+      "correct_answer": "B"
+    },
+    "generated_citation": "Slide 5",
+    "expected_citation": "Slide 5"
+  },
+  {
+    "id": "q6",
+    "source_text": "A Loss Function measures how well a specific algorithm models the given data.",
+    "generated_quiz": {
+      "quiz": "What measures how well an algorithm models data?",
+      "options": ["A. Loss Function", "B. Activation Function", "C. Optimization", "D. Accuracy"],
+      "correct_answer": "A"
+    },
+    "generated_citation": "Slide 6",
+    "expected_citation": "Slide 6"
+  },
+  {
+    "id": "q7",
+    "source_text": "Gradient Descent is an iterative optimization algorithm used to minimize the loss function.",
+    "generated_quiz": {
+      "quiz": "What is the goal of Gradient Descent?",
+      "options": ["A. Maximize accuracy", "B. Minimize loss function", "C. Increase overfitting", "D. Generate data"],
+      "correct_answer": "B"
+    },
+    "generated_citation": "Slide 7",
+    "expected_citation": "Slide 7"
+  },
+  {
+    "id": "q8",
+    "source_text": "Learning rate controls how much to change the model in response to the estimated error each time the model weights are updated.",
+    "generated_quiz": {
+      "quiz": "Which hyperparameter controls the step size of weight updates?",
+      "options": ["A. Epochs", "B. Batch size", "C. Learning rate", "D. Momentum"],
+      "correct_answer": "C"
+    },
+    "generated_citation": "Slide 8",
+    "expected_citation": "Slide 8"
+  },
+  {
+    "id": "q9",
+    "source_text": "Neural Networks are inspired by the biological neural networks that constitute animal brains.",
+    "generated_quiz": {
+      "quiz": "What biological structure inspired Neural Networks?",
+      "options": ["A. Plant cells", "B. Animal brains", "C. DNA", "D. Immune system"],
+      "correct_answer": "B"
+    },
+    "generated_citation": "Slide 9",
+    "expected_citation": "Slide 9"
+  },
+  {
+    "id": "q10",
+    "source_text": "Activation functions introduce non-linear properties to the network.",
+    "generated_quiz": {
+      "quiz": "What introduces non-linearity to a neural network?",
+      "options": ["A. Weights", "B. Biases", "C. Activation functions", "D. Loss functions"],
+      "correct_answer": "C"
+    },
+    "generated_citation": "Slide 10",
+    "expected_citation": "Slide 10"
+  },
+  {
+    "id": "q11",
+    "source_text": "ReLU stands for Rectified Linear Unit, a popular activation function.",
+    "generated_quiz": {
+      "quiz": "What does ReLU stand for?",
+      "options": ["A. Recurrent Linear Unit", "B. Rectified Linear Unit", "C. Random Linear Unit", "D. Real Linear Unit"],
+      "correct_answer": "B"
+    },
+    "generated_citation": "Slide 11",
+    "expected_citation": "Slide 11"
+  },
+  {
+    "id": "q12",
+    "source_text": "Backpropagation computes the gradient of the loss function with respect to the weights of the network.",
+    "generated_quiz": {
+      "quiz": "What algorithm computes gradients in neural networks?",
+      "options": ["A. Feedforward", "B. Gradient Descent", "C. Backpropagation", "D. Dropout"],
+      "correct_answer": "C"
+    },
+    "generated_citation": "Slide 12",
+    "expected_citation": "Slide 12"
+  },
+  {
+    "id": "q13",
+    "source_text": "Dropout is a regularization technique where randomly selected neurons are ignored during training.",
+    "generated_quiz": {
+      "quiz": "What is Dropout used for?",
+      "options": ["A. Speeding up inference", "B. Regularization", "C. Increasing model size", "D. Feature extraction"],
+      "correct_answer": "B"
+    },
+    "generated_citation": "Slide 13",
+    "expected_citation": "Slide 13"
+  },
+  {
+    "id": "q14",
+    "source_text": "Convolutional Neural Networks (CNNs) are highly effective for image recognition tasks.",
+    "generated_quiz": {
+      "quiz": "Which network type is best suited for image recognition?",
+      "options": ["A. RNN", "B. CNN", "C. GAN", "D. Transformer"],
+      "correct_answer": "B"
+    },
+    "generated_citation": "Slide 14",
+    "expected_citation": "Slide 14"
+  },
+  {
+    "id": "q15",
+    "source_text": "Recurrent Neural Networks (RNNs) are designed to work with sequence data like text or time series.",
+    "generated_quiz": {
+      "quiz": "What type of data are RNNs designed for?",
+      "options": ["A. Images", "B. Tabular data", "C. Sequence data", "D. 3D models"],
+      "correct_answer": "C"
+    },
+    "generated_citation": "Slide 15",
+    "expected_citation": "Slide 15"
+  },
+  {
+    "id": "q16",
+    "source_text": "Transformers rely on the self-attention mechanism to process sequences in parallel.",
+    "generated_quiz": {
+      "quiz": "What core mechanism do Transformers rely on?",
+      "options": ["A. Convolutions", "B. Recurrence", "C. Self-attention", "D. Pooling"],
+      "correct_answer": "C"
+    },
+    "generated_citation": "Slide 16",
+    "expected_citation": "Slide 16"
+  },
+  {
+    "id": "q17",
+    "source_text": "Natural Language Processing (NLP) focuses on the interaction between computers and humans through natural language.",
+    "generated_quiz": {
+      "quiz": "What does NLP stand for?",
+      "options": ["A. Natural Logic Programming", "B. Natural Language Processing", "C. Neural Language Programming", "D. Node Logic Parsing"],
+      "correct_answer": "B"
+    },
+    "generated_citation": "Slide 17",
+    "expected_citation": "Slide 17"
+  },
+  {
+    "id": "q18",
+    "source_text": "Precision is the ratio of correctly predicted positive observations to the total predicted positive observations.",
+    "generated_quiz": {
+      "quiz": "Which metric measures the accuracy of positive predictions?",
+      "options": ["A. Recall", "B. F1-Score", "C. Precision", "D. Support"],
+      "correct_answer": "C"
+    },
+    "generated_citation": "Slide 18",
+    "expected_citation": "Slide 18"
+  },
+  {
+    "id": "q19",
+    "source_text": "Recall is the ratio of correctly predicted positive observations to the all observations in actual class.",
+    "generated_quiz": {
+      "quiz": "Which metric measures the ability to find all positive instances?",
+      "options": ["A. Precision", "B. Accuracy", "C. Recall", "D. AUC"],
+      "correct_answer": "C"
+    },
+    "generated_citation": "Slide 19",
+    "expected_citation": "Slide 21" 
+  },
+  {
+    "id": "q20",
+    "source_text": "K-Means is a clustering algorithm that groups similar data points into K clusters.",
+    "generated_quiz": {
+      "quiz": "What type of algorithm is K-Means?",
+      "options": ["A. Classification", "B. Regression", "C. Clustering", "D. Dimensionality Reduction"],
+      "correct_answer": "C"
+    },
+    "generated_citation": "Slide 20",
+    "expected_citation": "Slide 20"
   }
 ]
