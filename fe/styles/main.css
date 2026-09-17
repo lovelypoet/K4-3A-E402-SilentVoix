@@ -1,0 +1,562 @@
+:root {
+  --bg-main: #f7f8fb;
+  --bg-card: #ffffff;
+  --border-color: #e2e5ec;
+  --text-title: #10131a;
+  --text-body: #3c4250;
+  --text-muted: #6b7280;
+
+  --blue-primary: #2563eb;
+  --blue-light: #eff6ff;
+  --amber: #d97706;
+  --emerald: #10b981;
+  --rose: #e11d48;
+  --slate: #94a3b8;
+
+  --radius-lg: 16px;
+  --radius-md: 10px;
+  --shadow-card: 0 1px 2px rgba(16, 19, 26, 0.04), 0 8px 24px rgba(16, 19, 26, 0.06);
+}
+
+* { box-sizing: border-box; }
+
+/* QUAN TRỌNG: đảm bảo thuộc tính "hidden" luôn thắng, bất kể element đó có rule
+   "display: ..." riêng hay không (VD .slide-generated { display:flex }). Mặc định
+   của trình duyệt cho [hidden] có độ ưu tiên thấp, dễ bị 1 class tự viết đè mất
+   -> JS set hidden=true nhưng phần tử vẫn hiện. Đặt !important ở đây 1 lần,
+   khỏi phải tự nhớ thêm "[hidden]{display:none}" riêng cho từng component. */
+[hidden] { display: none !important; }
+
+body {
+  margin: 0;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: var(--bg-main);
+  color: var(--text-body);
+}
+
+.app-header {
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-card);
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.app-header h1 {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text-title);
+  margin: 0;
+}
+
+.app-header .app-subtitle {
+  font-size: 12.5px;
+  color: var(--text-muted);
+}
+
+/* ---------- Layout chính: trái video rộng, phải graph ---------- */
+
+.workspace {
+  display: grid;
+  /* Tỉ lệ 50-50 giữa Video và Knowledge Graph */
+  grid-template-columns: minmax(320px, 1fr) minmax(320px, 1fr);
+  gap: 18px;
+  padding: 20px 24px;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .workspace {
+    grid-template-columns: 1fr;
+  }
+}
+
+.panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+}
+
+.panel-header {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-title);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* ---------- Video (trái, rộng ngang) ---------- */
+
+.video-link-bar {
+  display: flex;
+  gap: 8px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border-color);
+  background: #fafbfd;
+}
+.video-link-bar input {
+  flex: 1;
+  min-width: 0;
+  padding: 7px 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 7px;
+  font-size: 12.5px;
+}
+.video-link-bar button {
+  border: none;
+  background: var(--blue-primary);
+  color: #fff;
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 7px 14px;
+  border-radius: 7px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.media-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 8px 14px 0;
+  background: #fafbfd;
+  border-bottom: 1px solid var(--border-color);
+}
+.media-tab {
+  border: none;
+  background: transparent;
+  padding: 8px 14px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+}
+.media-tab.active {
+  color: var(--blue-primary);
+  border-bottom-color: var(--blue-primary);
+}
+
+.video-panel .video-container {
+  width: 100%;
+  background: #0b0f19;
+}
+
+/* Chế độ Slide: wrapper chứa ô dán link PDF + (a) thẻ mô tả tự sinh, hoặc
+   (b) iframe PDF thật khi đã dán link — 2 cái không hiện cùng lúc. */
+.slide-view {
+  width: 100%;
+  border-bottom: 1px solid var(--border-color);
+}
+.slide-link-bar {
+  display: flex;
+  gap: 8px;
+  padding: 10px 14px;
+  background: #fafbfd;
+  border-bottom: 1px solid var(--border-color);
+}
+.slide-link-bar input {
+  flex: 1;
+  min-width: 0;
+  padding: 7px 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 7px;
+  font-size: 12.5px;
+}
+.slide-link-bar button {
+  border: none;
+  background: var(--blue-primary);
+  color: #fff;
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 7px 14px;
+  border-radius: 7px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.slide-link-bar #slide-link-clear {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+}
+
+.slide-generated {
+  aspect-ratio: 16 / 8;
+  background: linear-gradient(180deg, #fdfbf6, #f6f1e6);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 32px;
+  gap: 10px;
+}
+.slide-page-badge {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--blue-primary);
+  background: var(--blue-light);
+  padding: 3px 10px;
+  border-radius: 999px;
+  letter-spacing: 0.02em;
+}
+.slide-generated h2 { margin: 0; font-size: 22px; color: var(--text-title); }
+.slide-formula {
+  font-family: "Fira Code", monospace;
+  font-size: 15px;
+  color: var(--blue-primary);
+}
+.slide-generated p { margin: 0; max-width: 520px; font-size: 13.5px; line-height: 1.6; color: var(--text-body); }
+
+/* PDF thật nhúng qua iframe — trình duyệt tự render, không cần thư viện gì. */
+.slide-pdf-frame {
+  width: 100%;
+  height: 640px;
+  border: 0;
+  display: block;
+  background: #f1f1f1;
+}
+
+/* Vùng hiển thị video/placeholder — TÁCH RIÊNG khỏi .video-controls bên dưới
+   (là anh em, không lồng nhau), để placeholder "position:absolute; inset:0"
+   chỉ phủ đúng khung video, không phủ luôn cả thanh điều khiển. */
+.video-stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 8;
+  background: #0b0f19;
+}
+
+.video-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #cbd5e1;
+}
+.video-placeholder-icon { font-size: 34px; opacity: 0.7; }
+.video-placeholder-text { font-size: 12.5px; opacity: 0.75; }
+
+.video-real { width: 100%; height: 100%; object-fit: cover; }
+
+.video-yt-mount { position: absolute; inset: 0; width: 100%; height: 100%; }
+.video-yt-mount iframe { width: 100%; height: 100%; border: 0; }
+
+.video-controls {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  background: #0b0f19;
+  border-top: 1px solid #1c2333;
+}
+
+.btn-play-pause {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  border: none;
+  background: var(--blue-primary);
+  color: #fff;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.video-progress-track {
+  position: relative;
+  height: 5px;
+  background: #29314a;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.video-progress-fill {
+  position: absolute; top: 0; left: 0; height: 100%;
+  background: var(--blue-primary);
+  border-radius: 4px;
+  width: 0%;
+}
+.video-progress-handle {
+  position: absolute; top: 50%; left: 0%;
+  width: 12px; height: 12px;
+  background: #fff;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.35);
+}
+
+.video-time-label {
+  font-size: 11.5px;
+  color: #cbd5e1;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.video-speed-group { display: flex; gap: 4px; }
+.speed-btn {
+  padding: 3px 8px;
+  border-radius: 6px;
+  border: 1px solid #29314a;
+  background: transparent;
+  color: #cbd5e1;
+  font-size: 11px;
+  cursor: pointer;
+}
+.speed-btn.active { background: var(--blue-primary); border-color: var(--blue-primary); color: #fff; }
+
+.concept-detail {
+  padding: 18px;
+}
+.concept-detail h2 {
+  margin: 0 0 6px;
+  font-size: 16px;
+  color: var(--text-title);
+}
+.concept-detail .concept-formula {
+  font-family: "Fira Code", monospace;
+  font-size: 12.5px;
+  background: var(--blue-light);
+  color: var(--blue-primary);
+  padding: 6px 10px;
+  border-radius: 6px;
+  display: inline-block;
+  margin-bottom: 10px;
+}
+.concept-detail p { font-size: 13px; line-height: 1.55; color: var(--text-body); margin: 0 0 12px; }
+
+.mastery-pill {
+  display: inline-block;
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+  margin-bottom: 12px;
+}
+.mastery-pill--mastered { background: #ecfdf5; color: #065f46; }
+.mastery-pill--learning { background: #fffbeb; color: #92400e; }
+.mastery-pill--weak     { background: #fff1f2; color: #9f1239; }
+.mastery-pill--not_learned { background: #f8fafc; color: #475569; }
+
+.btn-open-quiz {
+  border: none;
+  background: var(--blue-primary);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 9px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.btn-open-quiz:disabled {
+  background: #d1d5db;
+  color: #6b7280;
+  cursor: not-allowed;
+}
+
+/* ---------- Graph (phải) ---------- */
+
+/* Khung chứa chung cho svg + node-detail-card, để card đè đúng lên vị trí graph
+   (position:relative làm mốc cho card position:absolute bên trong). */
+.graph-stage {
+  position: relative;
+}
+
+.graph-panel svg {
+  width: 100%;
+  height: 620px;
+  display: block;
+  background: linear-gradient(180deg, #fbfcfe, #f4f6fb);
+}
+
+.kg-node--active circle { filter: drop-shadow(0 0 0 rgba(37,99,235,0)); }
+
+/* Hiện dần theo tiến trình video — node/cạnh của đoạn CHƯA xem tới thì ẩn hẳn,
+   video chạy tới đâu thì "mọc" ra tới đó (giống sơ đồ tư duy dựng dần). */
+.kg-node {
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.kg-node--hidden {
+  opacity: 0;
+  transform: scale(0.5);
+  pointer-events: none;
+}
+.kg-edge {
+  transition: opacity 0.5s ease;
+}
+.kg-edge--hidden {
+  opacity: 0 !important;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  padding: 12px 16px;
+  border-top: 1px solid var(--border-color);
+  font-size: 11.5px;
+  color: var(--text-muted);
+}
+.legend-item { display: flex; align-items: center; gap: 5px; }
+.legend-dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+.legend-dot--mastered { background: var(--emerald); }
+.legend-dot--learning { background: var(--amber); }
+.legend-dot--weak { background: var(--rose); }
+.legend-dot--not_learned { background: var(--slate); }
+.legend-dot--current { background: var(--blue-primary); }
+
+/* Bấm 1 node trên Graph -> nội dung này ĐÈ LÊN đúng vị trí graph-svg (cùng kích
+   thước, cùng chỗ trong .graph-stage), thay vì hiện thêm ở dưới. Nút trong header
+   để đóng lại, quay về xem graph. */
+.node-detail-card {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  background: var(--bg-card);
+  padding: 20px 22px;
+  overflow-y: auto;
+  border-radius: 0 0 0 0;
+}
+.node-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border-color);
+}
+.node-detail-header strong { font-size: 16px; color: var(--text-title); }
+.node-detail-header button {
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 7px;
+  cursor: pointer;
+  color: var(--blue-primary);
+}
+.node-detail-header button:hover { background: var(--blue-light); }
+.node-detail-card p { font-size: 13px; line-height: 1.6; color: var(--text-body); margin: 0 0 10px; }
+.node-detail-source { font-size: 11.5px; color: var(--blue-primary); margin-bottom: 8px; }
+
+.recommendation-box {
+  margin: 0 16px 16px;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  background: #fff1f2;
+  border: 1px solid #fecdd3;
+}
+.rec-title { font-size: 12.5px; font-weight: 700; color: #9f1239; margin-bottom: 4px; }
+.rec-body { font-size: 12.5px; color: #7f1d3a; line-height: 1.5; margin-bottom: 8px; }
+.btn-jump-source {
+  border: none;
+  background: #e11d48;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+/* ---------- Quiz modal ---------- */
+
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  padding: 16px;
+}
+.modal-overlay.show { display: flex; }
+
+.quiz-modal {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 480px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+}
+
+.modal-header {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.modal-header strong { font-size: 14.5px; color: var(--text-title); }
+.modal-header button { border: none; background: transparent; font-size: 18px; cursor: pointer; }
+
+.quiz-body { padding: 18px; }
+
+.citation-box {
+  background: var(--blue-light);
+  border: 1px solid #bfdbfe;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 12px;
+  color: #1e40af;
+  margin-bottom: 12px;
+}
+
+.quiz-question-text {
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--text-title);
+  margin-bottom: 12px;
+}
+
+.options-group { display: flex; flex-direction: column; gap: 8px; }
+.quiz-option {
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 9px 12px;
+  font-size: 13px;
+  cursor: pointer;
+}
+.quiz-option:hover { border-color: var(--blue-primary); }
+.quiz-option.selected { border-color: var(--blue-primary); background: var(--blue-light); }
+.quiz-option.correct { border-color: var(--emerald); background: #ecfdf5; }
+.quiz-option.wrong { border-color: var(--rose); background: #fff1f2; }
+
+.quiz-empty { font-size: 13px; color: var(--text-muted); }
+
+.modal-footer {
+  padding: 12px 18px;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+.btn-secondary {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  padding: 7px 14px;
+  border-radius: 7px;
+  cursor: pointer;
+  font-size: 13px;
+}
+.btn-submit-quiz {
+  border: none;
+  background: var(--blue-primary);
+  color: #fff;
+  padding: 7px 16px;
+  border-radius: 7px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.load-error { padding: 24px; color: var(--rose); font-size: 13px; }
