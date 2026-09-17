@@ -20,5 +20,6 @@
 - Còn 51 warning deprecation từ Starlette/Pydantic/httpx; không làm fail test
 - Protective stash `pre-backend-merge-local-ai-state` vẫn được giữ
 - Đã commit `15a9418`, merge remote index commit thành `80add66`, push thành công `origin/main`
+- Đã cập nhật `spec.md`, commit `456fa24`, push thành công; `main` sạch và đồng bộ remote
 ## ➡️ Bước tiếp theo:
 1. Khi có dữ liệu thật, bổ sung ingestion/evaluation thực tế; sau đó xử lý warning Pydantic/Starlette.
