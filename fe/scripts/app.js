@@ -112,11 +112,17 @@
   // Ưu tiên bài đã xem gần nhất (hash trên URL / localStorage), KHÔNG mặc định
   // nhảy về LESSON_ID — nếu không, F5 (hoặc Live Server tự refresh) là mất bài
   // vừa dán link phân tích xong.
+  //
+  // Bài đã nhớ phải nạp với allowMockFallback:false. Nếu để mặc định (true), lúc
+  // bài đó không còn tồn tại nữa thì loadLessonData âm thầm trả về mock và coi
+  // như THÀNH CÔNG -> nhánh catch không bao giờ chạy -> id đã chết nằm lì trong
+  // localStorage, mỗi lần mở trang lại gọi 404 rồi hiện mock mãi mãi.
   try {
-    await bootLesson(getInitialLessonId());
+    await bootLesson(getInitialLessonId(), { allowMockFallback: false });
   } catch (err) {
-    // Bài đã nhớ không còn tồn tại (VD backend xoá/reset storage) -> quên nó đi, quay về mặc định.
-    forgetLessonId();
+    // 404 = bài đã nhớ không còn (backend đổi storage, lesson bị xoá) -> quên hẳn đi.
+    // Lỗi khác (backend chưa bật) -> GIỮ id lại, để lúc bật backend lên còn vào đúng bài cũ.
+    if (err.status === 404) forgetLessonId();
     try {
       await bootLesson();
     } catch (err2) {
