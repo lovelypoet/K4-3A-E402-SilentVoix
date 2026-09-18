@@ -1,7 +1,8 @@
+import hashlib
 import os
 import re
 import uuid
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any, Optional, Tuple
 from urllib.parse import urlparse, parse_qs
 from .models import Chunk
 
@@ -25,7 +26,26 @@ try:
 except ImportError:
     YouTubeTranscriptApi = None
 
+try:
+    from faster_whisper import WhisperModel
+except ImportError:
+    WhisperModel = None
+
 import urllib.request
+
+# ---------------------------------------------------------------------------
+# Ingestion status codes
+# ---------------------------------------------------------------------------
+INGESTION_OK            = "INGESTION_OK"
+NO_EXTRACTABLE_TEXT     = "NO_EXTRACTABLE_TEXT"
+OCR_REQUIRED            = "OCR_REQUIRED"
+TRANSCRIPTION_REQUIRED  = "TRANSCRIPTION_REQUIRED"
+EMPTY_SOURCE            = "EMPTY_SOURCE"
+INGESTION_FAILED        = "INGESTION_FAILED"
+DUPLICATE_SOURCE        = "DUPLICATE_SOURCE"
+
+LOCAL_VIDEO_EXTENSIONS  = {".mp4", ".mov", ".avi", ".webm", ".mkv", ".mp3", ".wav", ".m4a"}
+
 
 
 class DocumentIngestor:
@@ -38,6 +58,10 @@ class DocumentIngestor:
     def _chunk_id(prefix: str, lesson_id: str, idx: int) -> str:
         safe_lesson = re.sub(r"[^\w\-]+", "_", lesson_id)
         return f"{prefix}_{safe_lesson}_{idx:03d}"
+
+    # ------------------------------------------------------------------
+    # Source identity helpers
+    # ------------------------------------------------------------------
 
     @staticmethod
     def extract_youtube_video_id(url: str) -> Optional[str]:
@@ -55,6 +79,134 @@ class DocumentIngestor:
             if len(candidate) == 11:
                 return candidate
         return None
+
+    @classmethod
+    def youtube_source_key(cls, url: str) -> Optional[str]:
+        """Return canonical source_key for a YouTube URL, ignoring timestamps."""
+        vid = cls.extract_youtube_video_id(url)
+        if vid:
+            return f"youtube:{vid}"
+        return None
+
+    @staticmethod
+    def file_sha256(file_path: str) -> Optional[str]:
+        """Return SHA-256 hex digest of a local file's contents."""
+        try:
+            h = hashlib.sha256()
+            with open(file_path, "rb") as f:
+                for block in iter(lambda: f.read(65536), b""):
+                    h.update(block)
+            return h.hexdigest()
+        except Exception:
+            return None
+
+    @classmethod
+    def file_source_key(cls, file_path: str) -> Optional[str]:
+        """Return a content-based source_key for an uploaded file."""
+        digest = cls.file_sha256(file_path)
+        if digest:
+            return f"file:{digest}"
+        return None
+
+    @staticmethod
+    def pdf_is_likely_scanned(file_path: str, min_chars_per_page: int = 20) -> bool:
+        """
+        Return True if pypdf extracts < min_chars_per_page on average
+        — likely a scanned/image-only PDF.
+        """
+        if not pypdf:
+            return False
+        try:
+            reader = pypdf.PdfReader(file_path)
+            if not reader.pages:
+                return True
+            total_chars = sum(len((p.extract_text() or "").strip()) for p in reader.pages)
+            avg = total_chars / len(reader.pages)
+            return avg < min_chars_per_page
+        except Exception:
+            return True
+
+    @staticmethod
+    def validate_chunks(chunks: List[Chunk]) -> Tuple[bool, str]:
+        """
+        Post-extraction validation.
+        Returns (ok: bool, error_code: str).
+        A result with 0 chunks is NOT silently accepted.
+        """
+        if not chunks:
+            return False, NO_EXTRACTABLE_TEXT
+        meaningful = [c for c in chunks if len(c.text.strip()) >= 10]
+        if not meaningful:
+            return False, NO_EXTRACTABLE_TEXT
+        return True, INGESTION_OK
+
+    @staticmethod
+    def stamp_chunks(
+        chunks: List[Chunk],
+        *,
+        document_id: str,
+        source_key: Optional[str] = None,
+        source_group: Optional[str] = None,
+        source_type: Optional[str] = None,
+    ) -> List[Chunk]:
+        """Apply identity fields after the document/lesson IDs are allocated."""
+        for chunk in chunks:
+            chunk.document_id = document_id
+            chunk.source_key = source_key
+            chunk.source_group = source_group or source_key
+            chunk.source_type = source_type
+        return chunks
+
+    @classmethod
+    def ingest_local_video_file(
+        cls,
+        file_path: str,
+        lesson_id: str = "lesson_01",
+        *,
+        document_id: Optional[str] = None,
+        source_key: Optional[str] = None,
+        model_size: Optional[str] = None,
+        device: Optional[str] = None,
+        compute_type: Optional[str] = None,
+    ) -> List[Chunk]:
+        """Transcribe a local video/audio file into timestamped chunks.
+
+        faster-whisper is optional because model download/runtime support is
+        environment-dependent. Callers should report TRANSCRIPTION_REQUIRED
+        when it is not installed, rather than registering an empty READY lesson.
+        """
+        if not WhisperModel:
+            raise RuntimeError(f"{TRANSCRIPTION_REQUIRED}: faster-whisper is not installed")
+        if not os.path.isfile(file_path):
+            raise FileNotFoundError(file_path)
+
+        model = WhisperModel(
+            model_size or os.getenv("WHISPER_MODEL", "small"),
+            device=device or os.getenv("WHISPER_DEVICE", "auto"),
+            compute_type=compute_type or os.getenv("WHISPER_COMPUTE_TYPE", "int8"),
+        )
+        segments, _info = model.transcribe(file_path, vad_filter=True)
+        chunks: List[Chunk] = []
+        for idx, segment in enumerate(segments, start=1):
+            text = (segment.text or "").strip()
+            if not text:
+                continue
+            chunks.append(Chunk(
+                chunk_id=cls._chunk_id("chunk_video", lesson_id, idx),
+                lesson_id=lesson_id,
+                document_id=document_id,
+                text=text,
+                start_time=round(float(segment.start), 2),
+                end_time=round(float(segment.end), 2),
+                source_key=source_key,
+                source_group=source_key,
+                source_type="video",
+            ))
+        valid, status = cls.validate_chunks(chunks)
+        if not valid:
+            raise RuntimeError(status)
+        return chunks
+
 
     @classmethod
     def ingest_youtube_url(cls, video_url: str, lesson_id: str = "lesson_01") -> List[Chunk]:
@@ -322,22 +474,46 @@ class DocumentIngestor:
 
     @classmethod
     def ingest_pdf_file(cls, file_path: str, lesson_id: str = "lesson_01") -> List[Chunk]:
-        """Parses PDF page-by-page; slide_number = page_idx + 1."""
+        """
+        Parses PDF page-by-page; page == chunk.page == slide for source mapping.
+
+        Pipeline:
+            pypdf extraction
+              ↓
+            meaningful text? YES → return chunks
+                             NO  → raise ValueError(OCR_REQUIRED)
+        """
         if not pypdf:
             raise ImportError("pypdf is required to parse PDF files. Please install pypdf.")
 
-        chunks = []
         reader = pypdf.PdfReader(file_path)
+        chunks = []
+        total_text_chars = 0
         for idx, page in enumerate(reader.pages):
             text = (page.extract_text() or "").strip()
+            total_text_chars += len(text)
             if text:
                 chunks.append(Chunk(
                     chunk_id=cls._chunk_id("chunk_pdf", lesson_id, idx + 1),
                     lesson_id=lesson_id,
                     text=text,
                     slide=idx + 1,
+                    page=idx + 1,
                 ))
+
+        # If no text was extracted at all, classify the failure
+        if not chunks:
+            n_pages = len(reader.pages)
+            if n_pages == 0:
+                raise ValueError(f"{EMPTY_SOURCE}: PDF has no pages.")
+            raise ValueError(
+                f"{OCR_REQUIRED}: PDF '{os.path.basename(file_path)}' ({n_pages} pages) "
+                "produced 0 text characters — likely scanned or image-only. "
+                "Use an OCR tool and re-upload as text-based PDF."
+            )
+
         return chunks
+
 
     @classmethod
     def ingest_pptx_file(cls, file_path: str, lesson_id: str = "lesson_01") -> List[Chunk]:

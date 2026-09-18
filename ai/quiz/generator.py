@@ -1,7 +1,8 @@
 from typing import Any, Dict, List
 
 from ai.grounding.retriever import GroundingRetriever
-from ai.quiz.decision import decide_quiz
+from ai.quiz.decision import analyze_quiz_evidence, decide_quiz
+from ai.quiz.validator import validate_quiz_output
 
 
 QUESTION_BANK = {
@@ -42,6 +43,7 @@ def generate_quiz(graph: Dict[str, Any], concept_id: str, difficulty: str = "med
         }
 
     decision = decide_quiz(graph, concept_id)
+    evidence_analysis = analyze_quiz_evidence(graph, concept_id)
     node = next((n for n in graph.get("nodes") or [] if n.get("id") == concept_id), None)
     if node is None:
         return {
@@ -56,15 +58,16 @@ def generate_quiz(graph: Dict[str, Any], concept_id: str, difficulty: str = "med
         }
 
     evidence = GroundingRetriever(graph).retrieve_evidence(concept_id)
-    if decision == "REFUSE_UNGROUNDED" or not evidence:
+    if decision != "GENERATE_QUIZ" or not evidence:
         return {
-            "decision": "REFUSE_UNGROUNDED",
+            "decision": decision,
             "concept_id": concept_id,
             "difficulty": difficulty,
             "question": "",
             "options": [],
             "correct_answer": "",
-            "explanation": f"The concept '{concept_id}' is not supported by grounded source evidence in the uploaded materials.",
+            "explanation": (f"The concept '{concept_id}' cannot support a grounded quiz yet: "
+                            + "; ".join(evidence_analysis.get("reasons") or ["insufficient evidence"])),
             "citations": [],
         }
 
@@ -101,7 +104,7 @@ def generate_quiz(graph: Dict[str, Any], concept_id: str, difficulty: str = "med
             "end_time": source.get("end_time"),
         })
 
-    return {
+    quiz = {
         "decision": "GENERATE_QUIZ",
         "concept_id": concept_id,
         "difficulty": difficulty,
@@ -111,3 +114,13 @@ def generate_quiz(graph: Dict[str, Any], concept_id: str, difficulty: str = "med
         "explanation": f"This quiz is grounded in the source evidence for '{concept_id}'.",
         "citations": citations,
     }
+    validation = validate_quiz_output(graph, quiz)
+    if not validation["valid"]:
+        quiz["decision"] = "VALIDATION_FAILED"
+        quiz["validation_failures"] = validation["failures"]
+        quiz["explanation"] = "Quiz was withheld because deterministic grounding checks failed: " + "; ".join(validation["failures"])
+        quiz["question"] = ""
+        quiz["options"] = []
+        quiz["correct_answer"] = ""
+        quiz["citations"] = []
+    return quiz

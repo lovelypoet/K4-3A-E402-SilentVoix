@@ -38,7 +38,7 @@ def concept_lookup_key(text: str) -> str:
 def deduplicate_concepts(concepts: List[Dict]) -> List[Dict]:
     mapping: Dict[str, Dict] = {}
     for concept in concepts:
-        key = concept_lookup_key(concept.get("label", ""))
+        key = concept.get("id") or concept_lookup_key(concept.get("label", ""))
         if key not in mapping:
             mapping[key] = {
                 "id": key,

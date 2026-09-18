@@ -1,0 +1,115 @@
+{
+  "dataset_size": 26,
+  "synthetic_cases": 26,
+  "real_cases": 0,
+  "concept": {
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0,
+    "true_positive": [
+      "classification",
+      "clustering",
+      "embedding",
+      "feature_vector",
+      "gradient_boosting",
+      "gradient_descent",
+      "k_means",
+      "layer",
+      "loss_function",
+      "neural_network",
+      "neuron",
+      "regression",
+      "self_attention",
+      "softmax",
+      "supervised_learning",
+      "transformer",
+      "vector"
+    ],
+    "false_positive": [],
+    "false_negative": []
+  },
+  "relationship": {
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0,
+    "true_positive": [
+      "k_means->clustering:type_of",
+      "layer->neural_network:part_of",
+      "loss_function->gradient_descent:prerequisite_of",
+      "regression->supervised_learning:type_of",
+      "self_attention->transformer:part_of"
+    ],
+    "false_positive": [],
+    "false_negative": []
+  },
+  "grounding": {
+    "citation_accuracy": 0.6923076923076923,
+    "source_recall": 1.0,
+    "unsupported_claim_rate": 0.3076923076923077
+  },
+  "decision": {
+    "accuracy": 1.0,
+    "per_class": {
+      "DISAMBIGUATE": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+      },
+      "GENERATE_QUIZ": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+      },
+      "REFUSE_UNGROUNDED": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+      }
+    },
+    "confusion_matrix": {
+      "DISAMBIGUATE": {
+        "DISAMBIGUATE": 3,
+        "GENERATE_QUIZ": 0,
+        "REFUSE_UNGROUNDED": 0
+      },
+      "GENERATE_QUIZ": {
+        "DISAMBIGUATE": 0,
+        "GENERATE_QUIZ": 15,
+        "REFUSE_UNGROUNDED": 0
+      },
+      "REFUSE_UNGROUNDED": {
+        "DISAMBIGUATE": 0,
+        "GENERATE_QUIZ": 0,
+        "REFUSE_UNGROUNDED": 8
+      }
+    },
+    "support": 26,
+    "false_generate": 0,
+    "false_refuse": 0
+  },
+  "quiz": {
+    "generated_count": 10,
+    "publishable_count": 10,
+    "mean_score": 20.0,
+    "median_score": 20.0,
+    "score_distribution": {
+      "20": 10
+    },
+    "acceptable_or_better_rate": 1.0,
+    "semantic_mean": 20.0,
+    "semantic_median": 20.0,
+    "classification_counts": {
+      "strong": 10,
+      "acceptable": 0,
+      "needs_improvement": 0,
+      "fail": 0
+    },
+    "critical_failures": [
+      "CONCEPT_001",
+      "CONCEPT_003",
+      "CONCEPT_004",
+      "RELATION_002",
+      "RELATION_003"
+    ]
+  }
+}

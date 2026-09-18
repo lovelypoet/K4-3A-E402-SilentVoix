@@ -1,0 +1,1741 @@
+{
+  "dataset_size": 26,
+  "quiz": {
+    "generated_count": 10,
+    "publishable_count": 10,
+    "mean_score": 20.0,
+    "median_score": 20.0,
+    "score_distribution": {
+      "20": 10
+    },
+    "acceptable_or_better_rate": 1.0,
+    "semantic_mean": 20.0,
+    "semantic_median": 20.0,
+    "classification_counts": {
+      "strong": 10,
+      "acceptable": 0,
+      "needs_improvement": 0,
+      "fail": 0
+    },
+    "critical_failures": [
+      "CONCEPT_001",
+      "CONCEPT_003",
+      "CONCEPT_004",
+      "RELATION_002",
+      "RELATION_003"
+    ]
+  },
+  "generated_cases": [
+    {
+      "case_id": "CONCEPT_002",
+      "category": "concept",
+      "synthetic": true,
+      "tags": [
+        "multiple_concepts",
+        "cross_chunk"
+      ],
+      "expected": {
+        "case_id": "CONCEPT_002",
+        "category": "concept",
+        "difficulty": "medium",
+        "synthetic": true,
+        "tags": [
+          "multiple_concepts",
+          "cross_chunk"
+        ],
+        "chunks": [
+          {
+            "chunk_id": "c002a",
+            "document_id": "doc_concepts",
+            "text": "Gradient descent minimizes a loss function.",
+            "source": {
+              "type": "slide",
+              "slide": 2
+            }
+          },
+          {
+            "chunk_id": "c002b",
+            "document_id": "doc_concepts",
+            "text": "The loss function measures prediction error.",
+            "source": {
+              "type": "slide",
+              "slide": 3
+            }
+          }
+        ],
+        "expected_concepts": [
+          "gradient_descent",
+          "loss_function"
+        ],
+        "expected_relationships": [
+          "loss_function->gradient_descent:prerequisite_of"
+        ],
+        "requested_concept": "loss_function",
+        "expected_decision": "GENERATE_QUIZ",
+        "expected_source": {
+          "document_id": "doc_concepts",
+          "chunk_id": "c002b",
+          "slide": 3
+        }
+      },
+      "graph": {
+        "lesson_id": "doc_concepts",
+        "nodes": [
+          {
+            "id": "gradient_descent",
+            "label": "Gradient Descent",
+            "description": "An optimization algorithm used to minimize a loss function.",
+            "sources": [
+              {
+                "document_id": "doc_concepts",
+                "chunk_id": "c002a",
+                "slide": 2,
+                "page": null,
+                "start_time": null,
+                "end_time": null,
+                "text": "Gradient descent minimizes a loss function."
+              }
+            ]
+          },
+          {
+            "id": "loss_function",
+            "label": "Loss Function",
+            "description": "A function that measures prediction error.",
+            "sources": [
+              {
+                "document_id": "doc_concepts",
+                "chunk_id": "c002a",
+                "slide": 2,
+                "page": null,
+                "start_time": null,
+                "end_time": null,
+                "text": "Gradient descent minimizes a loss function."
+              },
+              {
+                "document_id": "doc_concepts",
+                "chunk_id": "c002b",
+                "slide": 3,
+                "page": null,
+                "start_time": null,
+                "end_time": null,
+                "text": "The loss function measures prediction error."
+              }
+            ]
+          }
+        ],
+        "edges": []
+      },
+      "quiz": {
+        "decision": "GENERATE_QUIZ",
+        "concept_id": "loss_function",
+        "difficulty": "medium",
+        "question": "How does a loss function help guide training?",
+        "options": [
+          "It measures prediction error.",
+          "It stores all model parameters.",
+          "It is only used for evaluation.",
+          "It prevents data from being used."
+        ],
+        "correct_answer": "It measures prediction error.",
+        "explanation": "This quiz is grounded in the source evidence for 'loss_function'.",
+        "citations": [
+          {
+            "document_id": "doc_concepts",
+            "chunk_id": "c002a",
+            "slide": 2,
+            "start_time": null,
+            "end_time": null
+          },
+          {
+            "document_id": "doc_concepts",
+            "chunk_id": "c002b",
+            "slide": 3,
+            "start_time": null,
+            "end_time": null
+          }
+        ]
+      },
+      "predicted_concepts": [
+        "gradient_descent",
+        "loss_function"
+      ],
+      "predicted_relationships": [],
+      "concept_metrics": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "true_positive": [
+          "gradient_descent",
+          "loss_function"
+        ],
+        "false_positive": [],
+        "false_negative": []
+      },
+      "relation_metrics": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "true_positive": [],
+        "false_positive": [],
+        "false_negative": [
+          "loss_function->gradient_descent:prerequisite_of"
+        ]
+      },
+      "decision": {
+        "expected": "GENERATE_QUIZ",
+        "predicted": "GENERATE_QUIZ",
+        "final_output": "GENERATE_QUIZ",
+        "correct": true
+      },
+      "grounding": {
+        "citation_accuracy": 1.0,
+        "source_recall": 1.0,
+        "unsupported_claim": false,
+        "matched": true
+      },
+      "quiz_evaluation": {
+        "score": 20,
+        "max_score": 20,
+        "classification": "strong",
+        "critical_failure": false,
+        "critical_reasons": [],
+        "scores": {
+          "grounding": 2,
+          "correctness": 2,
+          "single_best_answer": 2,
+          "distractor_quality": 2,
+          "concept_alignment": 2,
+          "difficulty_alignment": 2,
+          "explanation_quality": 2,
+          "citation_quality": 2,
+          "clarity": 2,
+          "no_leakage": 2
+        },
+        "checks": {
+          "answer_in_options": true,
+          "duplicate_options": false,
+          "citations_exist": true,
+          "concept_aligned": true,
+          "answer_leaked": false
+        }
+      }
+    },
+    {
+      "case_id": "CONCEPT_006",
+      "category": "concept",
+      "synthetic": true,
+      "tags": [
+        "cross_slide"
+      ],
+      "expected": {
+        "case_id": "CONCEPT_006",
+        "category": "concept",
+        "difficulty": "hard",
+        "synthetic": true,
+        "tags": [
+          "cross_slide"
+        ],
+        "chunks": [
+          {
+            "chunk_id": "c006a",
+            "document_id": "doc_concepts",
+            "text": "Regression is supervised learning.",
+            "source": {
+              "type": "slide",
+              "slide": 7
+            }
+          },
+          {
+            "chunk_id": "c006b",
+            "document_id": "doc_concepts",
+            "text": "Regression predicts continuous values.",
+            "source": {
+              "type": "slide",
+              "slide": 8
+            }
+          }
+        ],
+        "expected_concepts": [
+          "regression",
+          "supervised_learning"
+        ],
+        "expected_relationships": [
+          "regression->supervised_learning:type_of"
+        ],
+        "requested_concept": "regression",
+        "expected_decision": "GENERATE_QUIZ",
+        "expected_source": {
+          "document_id": "doc_concepts",
+          "chunk_id": "c006b",
+          "slide": 8
+        }
+      },
+      "graph": {
+        "lesson_id": "doc_concepts",
+        "nodes": [
+          {
+            "id": "supervised_learning",
+            "label": "Supervised Learning",
+            "description": "A learning paradigm that uses labeled examples.",
+            "sources": [
+              {
+                "document_id": "doc_concepts",
+                "chunk_id": "c006a",
+                "slide": 7,
+                "page": null,
+                "start_time": null,
+                "end_time": null,
+                "text": "Regression is supervised learning."
+              }
+            ]
+          },
+          {
+            "id": "regression",
+            "label": "Regression",
+            "description": "A supervised learning task for predicting continuous values.",
+            "sources": [
+              {
+                "document_id": "doc_concepts",
+                "chunk_id": "c006a",
+                "slide": 7,
+                "page": null,
+                "start_time": null,
+                "end_time": null,
+                "text": "Regression is supervised learning."
+              },
+              {
+                "document_id": "doc_concepts",
+                "chunk_id": "c006b",
+                "slide": 8,
+                "page": null,
+                "start_time": null,
+                "end_time": null,
+                "text": "Regression predicts continuous values."
+              }
+            ]
+          }
+        ],
+        "edges": [
+          {
+            "source": "regression",
+            "target": "supervised_learning",
+            "relation": "type_of",
+            "evidence": [
+              "c006a"
+            ]
+          }
+        ]
+      },
+      "quiz": {
+        "decision": "GENERATE_QUIZ",
+        "concept_id": "regression",
+        "difficulty": "hard",
+        "question": "Why is regression used for continuous target variables?",
+        "options": [
+          "It predicts continuous values.",
+          "It predicts discrete labels.",
+          "It groups data points without labels.",
+          "It reconstructs images from noise."
+        ],
+        "correct_answer": "It predicts continuous values.",
+        "explanation": "This quiz is grounded in the source evidence for 'regression'.",
+        "citations": [
+          {
+            "document_id": "doc_concepts",
+            "chunk_id": "c006a",
+            "slide": 7,
+            "start_time": null,
+            "end_time": null
+          },
+          {
+            "document_id": "doc_concepts",
+            "chunk_id": "c006b",
+            "slide": 8,
+            "start_time": null,
+            "end_time": null
+          }
+        ]
+      },
+      "predicted_concepts": [
+        "supervised_learning",
+        "regression"
+      ],
+      "predicted_relationships": [
+        "regression->supervised_learning:type_of"
+      ],
+      "concept_metrics": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "true_positive": [
+          "regression",
+          "supervised_learning"
+        ],
+        "false_positive": [],
+        "false_negative": []
+      },
+      "relation_metrics": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "true_positive": [
+          "regression->supervised_learning:type_of"
+        ],
+        "false_positive": [],
+        "false_negative": []
+      },
+      "decision": {
+        "expected": "GENERATE_QUIZ",
+        "predicted": "GENERATE_QUIZ",
+        "final_output": "GENERATE_QUIZ",
+        "correct": true
+      },
+      "grounding": {
+        "citation_accuracy": 1.0,
+        "source_recall": 1.0,
+        "unsupported_claim": false,
+        "matched": true
+      },
+      "quiz_evaluation": {
+        "score": 20,
+        "max_score": 20,
+        "classification": "strong",
+        "critical_failure": false,
+        "critical_reasons": [],
+        "scores": {
+          "grounding": 2,
+          "correctness": 2,
+          "single_best_answer": 2,
+          "distractor_quality": 2,
+          "concept_alignment": 2,
+          "difficulty_alignment": 2,
+          "explanation_quality": 2,
+          "citation_quality": 2,
+          "clarity": 2,
+          "no_leakage": 2
+        },
+        "checks": {
+          "answer_in_options": true,
+          "duplicate_options": false,
+          "citations_exist": true,
+          "concept_aligned": true,
+          "answer_leaked": false
+        }
+      }
+    },
+    {
+      "case_id": "RELATION_001",
+      "category": "relation",
+      "synthetic": true,
+      "tags": [
+        "prerequisite"
+      ],
+      "expected": {
+        "case_id": "RELATION_001",
+        "category": "relation",
+        "difficulty": "medium",
+        "synthetic": true,
+        "tags": [
+          "prerequisite"
+        ],
+        "chunks": [
+          {
+            "chunk_id": "r001",
+            "document_id": "doc_relations",
+            "text": "A loss function is a prerequisite for understanding gradient descent.",
+            "source": {
+              "type": "slide",
+              "slide": 10
+            }
+          }
+        ],
+        "expected_concepts": [
+          "loss_function",
+          "gradient_descent"
+        ],
+        "expected_relationships": [
+          "loss_function->gradient_descent:prerequisite_of"
+        ],
+        "requested_concept": "gradient_descent",
+        "expected_decision": "GENERATE_QUIZ",
+        "expected_source": {
+          "document_id": "doc_relations",
+          "chunk_id": "r001",
+          "slide": 10
+        }
+      },
+      "graph": {
+        "lesson_id": "doc_relations",
+        "nodes": [
+          {
+            "id": "gradient_descent",
+            "label": "Gradient Descent",
+            "description": "An optimization algorithm used to minimize a loss function.",
+            "sources": [
+              {
+                "document_id": "doc_relations",
+                "chunk_id": "r001",
+                "slide": 10,
+                "page": null,
+                "start_time": null,
+                "end_time": null,
+                "text": "A loss function is a prerequisite for understanding gradient descent."
+              }
+            ]
+          },
+          {
+            "id": "loss_function",
+            "label": "Loss Function",
+            "description": "A function that measures prediction error.",
+            "sources": [
+              {
+                "document_id": "doc_relations",
+                "chunk_id": "r001",
+                "slide": 10,
+                "page": null,
+                "start_time": null,
+                "end_time": null,
+                "text": "A loss function is a prerequisite for understanding gradient descent."
+              }
+            ]
+          }
+        ],
+        "edges": [
+          {
+            "source": "loss_function",
+            "target": "gradient_descent",
+            "relation": "prerequisite_of",
+            "evidence": [
+              "r001"
+            ]
+          }
+        ]
+      },
+      "quiz": {
+        "decision": "GENERATE_QUIZ",
+        "concept_id": "gradient_descent",
+        "difficulty": "medium",
+        "question": "What is the main goal of gradient descent in optimization?",
+        "options": [
+          "To minimize the value of a loss function.",
+          "To increase the model complexity.",
+          "To add noise to the dataset.",
+          "To remove all training examples."
+        ],
+        "correct_answer": "To minimize the value of a loss function.",
+        "explanation": "This quiz is grounded in the source evidence for 'gradient_descent'.",
+        "citations": [
+          {
+            "document_id": "doc_relations",
+            "chunk_id": "r001",
+            "slide": 10,
+            "start_time": null,
+            "end_time": null
+          }
+        ]
+      },
+      "predicted_concepts": [
+        "gradient_descent",
+        "loss_function"
+      ],
+      "predicted_relationships": [
+        "loss_function->gradient_descent:prerequisite_of"
+      ],
+      "concept_metrics": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "true_positive": [
+          "gradient_descent",
+          "loss_function"
+        ],
+        "false_positive": [],
+        "false_negative": []
+      },
+      "relation_metrics": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "true_positive": [
+          "loss_function->gradient_descent:prerequisite_of"
+        ],
+        "false_positive": [],
+        "false_negative": []
+      },
+      "decision": {
+        "expected": "GENERATE_QUIZ",
+        "predicted": "GENERATE_QUIZ",
+        "final_output": "GENERATE_QUIZ",
+        "correct": true
+      },
+      "grounding": {
+        "citation_accuracy": 1.0,
+        "source_recall": 1.0,
+        "unsupported_claim": false,
+        "matched": true
+      },
+      "quiz_evaluation": {
+        "score": 20,
+        "max_score": 20,
+        "classification": "strong",
+        "critical_failure": false,
+        "critical_reasons": [],
+        "scores": {
+          "grounding": 2,
+          "correctness": 2,
+          "single_best_answer": 2,
+          "distractor_quality": 2,
+          "concept_alignment": 2,
+          "difficulty_alignment": 2,
+          "explanation_quality": 2,
+          "citation_quality": 2,
+          "clarity": 2,
+          "no_leakage": 2
+        },
+        "checks": {
+          "answer_in_options": true,
+          "duplicate_options": false,
+          "citations_exist": true,
+          "concept_aligned": true,
+          "answer_leaked": false
+        }
+      }
+    },
+    {
+      "case_id": "GROUNDING_001",
+      "category": "grounding",
+      "synthetic": true,
+      "tags": [
+        "correct_chunk"
+      ],
+      "expected": {
+        "case_id": "GROUNDING_001",
+        "category": "grounding",
+        "difficulty": "easy",
+        "synthetic": true,
+        "tags": [
+          "correct_chunk"
+        ],
+        "chunks": [
+          {
+            "chunk_id": "g001",
+            "document_id": "doc_grounding",
+            "text": "Regression predicts continuous values.",
+            "source": {
+              "type": "slide",
+              "slide": 20
+            }
+          }
+        ],
+        "expected_concepts": [
+          "regression"
+        ],
+        "expected_relationships": [],
+        "requested_concept": "regression",
+        "expected_decision": "GENERATE_QUIZ",
+        "expected_source": {
+          "document_id": "doc_grounding",
+          "chunk_id": "g001",
+          "slide": 20
+        }
+      },
+      "graph": {
+        "lesson_id": "doc_grounding",
+        "nodes": [
+          {
+            "id": "regression",
+            "label": "Regression",
+            "description": "A supervised learning task for predicting continuous values.",
+            "sources": [
+              {
+                "document_id": "doc_grounding",
+                "chunk_id": "g001",
+                "slide": 20,
+                "page": null,
+                "start_time": null,
+                "end_time": null,
+                "text": "Regression predicts continuous values."
+              }
+            ]
+          }
+        ],
+        "edges": []
+      },
+      "quiz": {
+        "decision": "GENERATE_QUIZ",
+        "concept_id": "regression",
+        "difficulty": "easy",
+        "question": "What type of output does regression predict?",
+        "options": [
+          "It predicts continuous values.",
+          "It predicts discrete labels.",
+          "It groups data points without labels.",
+          "It reconstructs images from noise."
+        ],
+        "correct_answer": "It predicts continuous values.",
+        "explanation": "This quiz is grounded in the source evidence for 'regression'.",
+        "citations": [
+          {
+            "document_id": "doc_grounding",
+            "chunk_id": "g001",
+            "slide": 20,
+            "start_time": null,
+            "end_time": null
+          }
+        ]
+      },
+      "predicted_concepts": [
+        "regression"
+      ],
+      "predicted_relationships": [],
+      "concept_metrics": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "true_positive": [
+          "regression"
+        ],
+        "false_positive": [],
+        "false_negative": []
+      },
+      "relation_metrics": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "true_positive": [],
+        "false_positive": [],
+        "false_negative": []
+      },
+      "decision": {
+        "expected": "GENERATE_QUIZ",
+        "predicted": "GENERATE_QUIZ",
+        "final_output": "GENERATE_QUIZ",
+        "correct": true
+      },
+      "grounding": {
+        "citation_accuracy": 1.0,
+        "source_recall": 1.0,
+        "unsupported_claim": false,
+        "matched": true
+      },
+      "quiz_evaluation": {
+        "score": 20,
+        "max_score": 20,
+        "classification": "strong",
+        "critical_failure": false,
+        "critical_reasons": [],
+        "scores": {
+          "grounding": 2,
+          "correctness": 2,
+          "single_best_answer": 2,
+          "distractor_quality": 2,
+          "concept_alignment": 2,
+          "difficulty_alignment": 2,
+          "explanation_quality": 2,
+          "citation_quality": 2,
+          "clarity": 2,
+          "no_leakage": 2
+        },
+        "checks": {
+          "answer_in_options": true,
+          "duplicate_options": false,
+          "citations_exist": true,
+          "concept_aligned": true,
+          "answer_leaked": false
+        }
+      }
+    },
+    {
+      "case_id": "GROUNDING_002",
+      "category": "grounding",
+      "synthetic": true,
+      "tags": [
+        "timestamp"
+      ],
+      "expected": {
+        "case_id": "GROUNDING_002",
+        "category": "grounding",
+        "difficulty": "medium",
+        "synthetic": true,
+        "tags": [
+          "timestamp"
+        ],
+        "chunks": [
+          {
+            "chunk_id": "g002",
+            "document_id": "doc_grounding",
+            "text": "The loss function measures prediction error.",
+            "source": {
+              "type": "video",
+              "start_time": 42.0,
+              "end_time": 50.0
+            }
+          }
+        ],
+        "expected_concepts": [
+          "loss_function"
+        ],
+        "expected_relationships": [],
+        "requested_concept": "loss_function",
+        "expected_decision": "GENERATE_QUIZ",
+        "expected_source": {
+          "document_id": "doc_grounding",
+          "chunk_id": "g002",
+          "start_time": 42.0,
+          "end_time": 50.0
+        }
+      },
+      "graph": {
+        "lesson_id": "doc_grounding",
+        "nodes": [
+          {
+            "id": "loss_function",
+            "label": "Loss Function",
+            "description": "A function that measures prediction error.",
+            "sources": [
+              {
+                "document_id": "doc_grounding",
+                "chunk_id": "g002",
+                "slide": null,
+                "page": null,
+                "start_time": 42.0,
+                "end_time": 50.0,
+                "text": "The loss function measures prediction error."
+              }
+            ]
+          }
+        ],
+        "edges": []
+      },
+      "quiz": {
+        "decision": "GENERATE_QUIZ",
+        "concept_id": "loss_function",
+        "difficulty": "medium",
+        "question": "How does a loss function help guide training?",
+        "options": [
+          "It measures prediction error.",
+          "It stores all model parameters.",
+          "It is only used for evaluation.",
+          "It prevents data from being used."
+        ],
+        "correct_answer": "It measures prediction error.",
+        "explanation": "This quiz is grounded in the source evidence for 'loss_function'.",
+        "citations": [
+          {
+            "document_id": "doc_grounding",
+            "chunk_id": "g002",
+            "slide": null,
+            "start_time": 42.0,
+            "end_time": 50.0
+          }
+        ]
+      },
+      "predicted_concepts": [
+        "loss_function"
+      ],
+      "predicted_relationships": [],
+      "concept_metrics": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "true_positive": [
+          "loss_function"
+        ],
+        "false_positive": [],
+        "false_negative": []
+      },
+      "relation_metrics": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "true_positive": [],
+        "false_positive": [],
+        "false_negative": []
+      },
+      "decision": {
+        "expected": "GENERATE_QUIZ",
+        "predicted": "GENERATE_QUIZ",
+        "final_output": "GENERATE_QUIZ",
+        "correct": true
+      },
+      "grounding": {
+        "citation_accuracy": 1.0,
+        "source_recall": 1.0,
+        "unsupported_claim": false,
+        "matched": true
+      },
+      "quiz_evaluation": {
+        "score": 20,
+        "max_score": 20,
+        "classification": "strong",
+        "critical_failure": false,
+        "critical_reasons": [],
+        "scores": {
+          "grounding": 2,
+          "correctness": 2,
+          "single_best_answer": 2,
+          "distractor_quality": 2,
+          "concept_alignment": 2,
+          "difficulty_alignment": 2,
+          "explanation_quality": 2,
+          "citation_quality": 2,
+          "clarity": 2,
+          "no_leakage": 2
+        },
+        "checks": {
+          "answer_in_options": true,
+          "duplicate_options": false,
+          "citations_exist": true,
+          "concept_aligned": true,
+          "answer_leaked": false
+        }
+      }
+    },
+    {
+      "case_id": "GROUNDING_003",
+      "category": "grounding",
+      "synthetic": true,
+      "tags": [
+        "incorrect_source"
+      ],
+      "expected": {
+        "case_id": "GROUNDING_003",
+        "category": "grounding",
+        "difficulty": "medium",
+        "synthetic": true,
+        "tags": [
+          "incorrect_source"
+        ],
+        "chunks": [
+          {
+            "chunk_id": "g003",
+            "document_id": "doc_grounding",
+            "text": "Regression predicts continuous values.",
+            "source": {
+              "type": "slide",
+              "slide": 21
+            }
+          }
+        ],
+        "expected_concepts": [
+          "regression"
+        ],
+        "expected_relationships": [],
+        "requested_concept": "regression",
+        "expected_decision": "GENERATE_QUIZ",
+        "expected_source": {
+          "document_id": "doc_grounding",
+          "chunk_id": "g003",
+          "slide": 21
+        }
+      },
+      "graph": {
+        "lesson_id": "doc_grounding",
+        "nodes": [
+          {
+            "id": "regression",
+            "label": "Regression",
+            "description": "A supervised learning task for predicting continuous values.",
+            "sources": [
+              {
+                "document_id": "doc_grounding",
+                "chunk_id": "g003",
+                "slide": 21,
+                "page": null,
+                "start_time": null,
+                "end_time": null,
+                "text": "Regression predicts continuous values."
+              }
+            ]
+          }
+        ],
+        "edges": []
+      },
+      "quiz": {
+        "decision": "GENERATE_QUIZ",
+        "concept_id": "regression",
+        "difficulty": "medium",
+        "question": "How is regression different from classification?",
+        "options": [
+          "It predicts continuous values.",
+          "It predicts discrete labels.",
+          "It groups data points without labels.",
+          "It reconstructs images from noise."
+        ],
+        "correct_answer": "It predicts continuous values.",
+        "explanation": "This quiz is grounded in the source evidence for 'regression'.",
+        "citations": [
+          {
+            "document_id": "doc_grounding",
+            "chunk_id": "g003",
+            "slide": 21,
+            "start_time": null,
+            "end_time": null
+          }
+        ]
+      },
+      "predicted_concepts": [
+        "regression"
+      ],
+      "predicted_relationships": [],
+      "concept_metrics": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "true_positive": [
+          "regression"
+        ],
+        "false_positive": [],
+        "false_negative": []
+      },
+      "relation_metrics": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "true_positive": [],
+        "false_positive": [],
+        "false_negative": []
+      },
+      "decision": {
+        "expected": "GENERATE_QUIZ",
+        "predicted": "GENERATE_QUIZ",
+        "final_output": "GENERATE_QUIZ",
+        "correct": true
+      },
+      "grounding": {
+        "citation_accuracy": 1.0,
+        "source_recall": 1.0,
+        "unsupported_claim": false,
+        "matched": true
+      },
+      "quiz_evaluation": {
+        "score": 20,
+        "max_score": 20,
+        "classification": "strong",
+        "critical_failure": false,
+        "critical_reasons": [],
+        "scores": {
+          "grounding": 2,
+          "correctness": 2,
+          "single_best_answer": 2,
+          "distractor_quality": 2,
+          "concept_alignment": 2,
+          "difficulty_alignment": 2,
+          "explanation_quality": 2,
+          "citation_quality": 2,
+          "clarity": 2,
+          "no_leakage": 2
+        },
+        "checks": {
+          "answer_in_options": true,
+          "duplicate_options": false,
+          "citations_exist": true,
+          "concept_aligned": true,
+          "answer_leaked": false
+        }
+      }
+    },
+    {
+      "case_id": "GROUNDING_005",
+      "category": "grounding",
+      "synthetic": true,
+      "tags": [
+        "multiple_sources"
+      ],
+      "expected": {
+        "case_id": "GROUNDING_005",
+        "category": "grounding",
+        "difficulty": "hard",
+        "synthetic": true,
+        "tags": [
+          "multiple_sources"
+        ],
+        "chunks": [
+          {
+            "chunk_id": "g005a",
+            "document_id": "doc_grounding",
+            "text": "Gradient descent minimizes a loss function.",
+            "source": {
+              "type": "slide",
+              "slide": 23
+            }
+          },
+          {
+            "chunk_id": "g005b",
+            "document_id": "doc_grounding",
+            "text": "Gradient descent updates parameters using the gradient.",
+            "source": {
+              "type": "video",
+              "start_time": 80.0,
+              "end_time": 90.0
+            }
+          }
+        ],
+        "expected_concepts": [
+          "gradient_descent",
+          "loss_function"
+        ],
+        "expected_relationships": [
+          "loss_function->gradient_descent:prerequisite_of"
+        ],
+        "requested_concept": "gradient_descent",
+        "expected_decision": "GENERATE_QUIZ",
+        "expected_source": {
+          "document_id": "doc_grounding",
+          "chunk_id": "g005a",
+          "slide": 23
+        }
+      },
+      "graph": {
+        "lesson_id": "doc_grounding",
+        "nodes": [
+          {
+            "id": "gradient_descent",
+            "label": "Gradient Descent",
+            "description": "An optimization algorithm used to minimize a loss function.",
+            "sources": [
+              {
+                "document_id": "doc_grounding",
+                "chunk_id": "g005a",
+                "slide": 23,
+                "page": null,
+                "start_time": null,
+                "end_time": null,
+                "text": "Gradient descent minimizes a loss function."
+              },
+              {
+                "document_id": "doc_grounding",
+                "chunk_id": "g005b",
+                "slide": null,
+                "page": null,
+                "start_time": 80.0,
+                "end_time": 90.0,
+                "text": "Gradient descent updates parameters using the gradient."
+              }
+            ]
+          },
+          {
+            "id": "loss_function",
+            "label": "Loss Function",
+            "description": "A function that measures prediction error.",
+            "sources": [
+              {
+                "document_id": "doc_grounding",
+                "chunk_id": "g005a",
+                "slide": 23,
+                "page": null,
+                "start_time": null,
+                "end_time": null,
+                "text": "Gradient descent minimizes a loss function."
+              }
+            ]
+          }
+        ],
+        "edges": []
+      },
+      "quiz": {
+        "decision": "GENERATE_QUIZ",
+        "concept_id": "gradient_descent",
+        "difficulty": "hard",
+        "question": "Why does gradient descent move in the direction of steepest descent?",
+        "options": [
+          "To minimize the value of a loss function.",
+          "To increase the model complexity.",
+          "To add noise to the dataset.",
+          "To remove all training examples."
+        ],
+        "correct_answer": "To minimize the value of a loss function.",
+        "explanation": "This quiz is grounded in the source evidence for 'gradient_descent'.",
+        "citations": [
+          {
+            "document_id": "doc_grounding",
+            "chunk_id": "g005a",
+            "slide": 23,
+            "start_time": null,
+            "end_time": null
+          },
+          {
+            "document_id": "doc_grounding",
+            "chunk_id": "g005b",
+            "slide": null,
+            "start_time": 80.0,
+            "end_time": 90.0
+          }
+        ]
+      },
+      "predicted_concepts": [
+        "gradient_descent",
+        "loss_function"
+      ],
+      "predicted_relationships": [],
+      "concept_metrics": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "true_positive": [
+          "gradient_descent",
+          "loss_function"
+        ],
+        "false_positive": [],
+        "false_negative": []
+      },
+      "relation_metrics": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "true_positive": [],
+        "false_positive": [],
+        "false_negative": [
+          "loss_function->gradient_descent:prerequisite_of"
+        ]
+      },
+      "decision": {
+        "expected": "GENERATE_QUIZ",
+        "predicted": "GENERATE_QUIZ",
+        "final_output": "GENERATE_QUIZ",
+        "correct": true
+      },
+      "grounding": {
+        "citation_accuracy": 1.0,
+        "source_recall": 1.0,
+        "unsupported_claim": false,
+        "matched": true
+      },
+      "quiz_evaluation": {
+        "score": 20,
+        "max_score": 20,
+        "classification": "strong",
+        "critical_failure": false,
+        "critical_reasons": [],
+        "scores": {
+          "grounding": 2,
+          "correctness": 2,
+          "single_best_answer": 2,
+          "distractor_quality": 2,
+          "concept_alignment": 2,
+          "difficulty_alignment": 2,
+          "explanation_quality": 2,
+          "citation_quality": 2,
+          "clarity": 2,
+          "no_leakage": 2
+        },
+        "checks": {
+          "answer_in_options": true,
+          "duplicate_options": false,
+          "citations_exist": true,
+          "concept_aligned": true,
+          "answer_leaked": false
+        }
+      }
+    },
+    {
+      "case_id": "QUIZ_001",
+      "category": "quiz",
+      "synthetic": true,
+      "tags": [
+        "easy",
+        "multiple_choice"
+      ],
+      "expected": {
+        "case_id": "QUIZ_001",
+        "category": "quiz",
+        "difficulty": "easy",
+        "synthetic": true,
+        "tags": [
+          "easy",
+          "multiple_choice"
+        ],
+        "chunks": [
+          {
+            "chunk_id": "q001",
+            "document_id": "doc_quiz",
+            "text": "Gradient descent is an optimization algorithm used to minimize a loss function.",
+            "source": {
+              "type": "slide",
+              "slide": 40
+            }
+          }
+        ],
+        "expected_concepts": [
+          "gradient_descent",
+          "loss_function"
+        ],
+        "expected_relationships": [
+          "loss_function->gradient_descent:prerequisite_of"
+        ],
+        "requested_concept": "gradient_descent",
+        "expected_decision": "GENERATE_QUIZ",
+        "expected_correct_answer": "To minimize the value of a loss function.",
+        "expected_source": {
+          "document_id": "doc_quiz",
+          "chunk_id": "q001",
+          "slide": 40
+        }
+      },
+      "graph": {
+        "lesson_id": "doc_quiz",
+        "nodes": [
+          {
+            "id": "gradient_descent",
+            "label": "Gradient Descent",
+            "description": "An optimization algorithm used to minimize a loss function.",
+            "sources": [
+              {
+                "document_id": "doc_quiz",
+                "chunk_id": "q001",
+                "slide": 40,
+                "page": null,
+                "start_time": null,
+                "end_time": null,
+                "text": "Gradient descent is an optimization algorithm used to minimize a loss function."
+              }
+            ]
+          },
+          {
+            "id": "loss_function",
+            "label": "Loss Function",
+            "description": "A function that measures prediction error.",
+            "sources": [
+              {
+                "document_id": "doc_quiz",
+                "chunk_id": "q001",
+                "slide": 40,
+                "page": null,
+                "start_time": null,
+                "end_time": null,
+                "text": "Gradient descent is an optimization algorithm used to minimize a loss function."
+              }
+            ]
+          }
+        ],
+        "edges": [
+          {
+            "source": "loss_function",
+            "target": "gradient_descent",
+            "relation": "prerequisite_of",
+            "evidence": [
+              "q001"
+            ]
+          }
+        ]
+      },
+      "quiz": {
+        "decision": "GENERATE_QUIZ",
+        "concept_id": "gradient_descent",
+        "difficulty": "easy",
+        "question": "What is the primary purpose of gradient descent?",
+        "options": [
+          "To minimize the value of a loss function.",
+          "To increase the model complexity.",
+          "To add noise to the dataset.",
+          "To remove all training examples."
+        ],
+        "correct_answer": "To minimize the value of a loss function.",
+        "explanation": "This quiz is grounded in the source evidence for 'gradient_descent'.",
+        "citations": [
+          {
+            "document_id": "doc_quiz",
+            "chunk_id": "q001",
+            "slide": 40,
+            "start_time": null,
+            "end_time": null
+          }
+        ]
+      },
+      "predicted_concepts": [
+        "gradient_descent",
+        "loss_function"
+      ],
+      "predicted_relationships": [
+        "loss_function->gradient_descent:prerequisite_of"
+      ],
+      "concept_metrics": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "true_positive": [
+          "gradient_descent",
+          "loss_function"
+        ],
+        "false_positive": [],
+        "false_negative": []
+      },
+      "relation_metrics": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "true_positive": [
+          "loss_function->gradient_descent:prerequisite_of"
+        ],
+        "false_positive": [],
+        "false_negative": []
+      },
+      "decision": {
+        "expected": "GENERATE_QUIZ",
+        "predicted": "GENERATE_QUIZ",
+        "final_output": "GENERATE_QUIZ",
+        "correct": true
+      },
+      "grounding": {
+        "citation_accuracy": 1.0,
+        "source_recall": 1.0,
+        "unsupported_claim": false,
+        "matched": true
+      },
+      "quiz_evaluation": {
+        "score": 20,
+        "max_score": 20,
+        "classification": "strong",
+        "critical_failure": false,
+        "critical_reasons": [],
+        "scores": {
+          "grounding": 2,
+          "correctness": 2,
+          "single_best_answer": 2,
+          "distractor_quality": 2,
+          "concept_alignment": 2,
+          "difficulty_alignment": 2,
+          "explanation_quality": 2,
+          "citation_quality": 2,
+          "clarity": 2,
+          "no_leakage": 2
+        },
+        "checks": {
+          "answer_in_options": true,
+          "duplicate_options": false,
+          "citations_exist": true,
+          "concept_aligned": true,
+          "answer_leaked": false
+        }
+      }
+    },
+    {
+      "case_id": "QUIZ_002",
+      "category": "quiz",
+      "synthetic": true,
+      "tags": [
+        "medium",
+        "one_concept"
+      ],
+      "expected": {
+        "case_id": "QUIZ_002",
+        "category": "quiz",
+        "difficulty": "medium",
+        "synthetic": true,
+        "tags": [
+          "medium",
+          "one_concept"
+        ],
+        "chunks": [
+          {
+            "chunk_id": "q002",
+            "document_id": "doc_quiz",
+            "text": "The loss function measures prediction error.",
+            "source": {
+              "type": "slide",
+              "slide": 41
+            }
+          }
+        ],
+        "expected_concepts": [
+          "loss_function"
+        ],
+        "expected_relationships": [],
+        "requested_concept": "loss_function",
+        "expected_decision": "GENERATE_QUIZ",
+        "expected_correct_answer": "It measures prediction error.",
+        "expected_source": {
+          "document_id": "doc_quiz",
+          "chunk_id": "q002",
+          "slide": 41
+        }
+      },
+      "graph": {
+        "lesson_id": "doc_quiz",
+        "nodes": [
+          {
+            "id": "loss_function",
+            "label": "Loss Function",
+            "description": "A function that measures prediction error.",
+            "sources": [
+              {
+                "document_id": "doc_quiz",
+                "chunk_id": "q002",
+                "slide": 41,
+                "page": null,
+                "start_time": null,
+                "end_time": null,
+                "text": "The loss function measures prediction error."
+              }
+            ]
+          }
+        ],
+        "edges": []
+      },
+      "quiz": {
+        "decision": "GENERATE_QUIZ",
+        "concept_id": "loss_function",
+        "difficulty": "medium",
+        "question": "How does a loss function help guide training?",
+        "options": [
+          "It measures prediction error.",
+          "It stores all model parameters.",
+          "It is only used for evaluation.",
+          "It prevents data from being used."
+        ],
+        "correct_answer": "It measures prediction error.",
+        "explanation": "This quiz is grounded in the source evidence for 'loss_function'.",
+        "citations": [
+          {
+            "document_id": "doc_quiz",
+            "chunk_id": "q002",
+            "slide": 41,
+            "start_time": null,
+            "end_time": null
+          }
+        ]
+      },
+      "predicted_concepts": [
+        "loss_function"
+      ],
+      "predicted_relationships": [],
+      "concept_metrics": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "true_positive": [
+          "loss_function"
+        ],
+        "false_positive": [],
+        "false_negative": []
+      },
+      "relation_metrics": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "true_positive": [],
+        "false_positive": [],
+        "false_negative": []
+      },
+      "decision": {
+        "expected": "GENERATE_QUIZ",
+        "predicted": "GENERATE_QUIZ",
+        "final_output": "GENERATE_QUIZ",
+        "correct": true
+      },
+      "grounding": {
+        "citation_accuracy": 1.0,
+        "source_recall": 1.0,
+        "unsupported_claim": false,
+        "matched": true
+      },
+      "quiz_evaluation": {
+        "score": 20,
+        "max_score": 20,
+        "classification": "strong",
+        "critical_failure": false,
+        "critical_reasons": [],
+        "scores": {
+          "grounding": 2,
+          "correctness": 2,
+          "single_best_answer": 2,
+          "distractor_quality": 2,
+          "concept_alignment": 2,
+          "difficulty_alignment": 2,
+          "explanation_quality": 2,
+          "citation_quality": 2,
+          "clarity": 2,
+          "no_leakage": 2
+        },
+        "checks": {
+          "answer_in_options": true,
+          "duplicate_options": false,
+          "citations_exist": true,
+          "concept_aligned": true,
+          "answer_leaked": false
+        }
+      }
+    },
+    {
+      "case_id": "QUIZ_003",
+      "category": "quiz",
+      "synthetic": true,
+      "tags": [
+        "hard",
+        "cross_concept"
+      ],
+      "expected": {
+        "case_id": "QUIZ_003",
+        "category": "quiz",
+        "difficulty": "hard",
+        "synthetic": true,
+        "tags": [
+          "hard",
+          "cross_concept"
+        ],
+        "chunks": [
+          {
+            "chunk_id": "q003",
+            "document_id": "doc_quiz",
+            "text": "Regression is supervised learning used to predict continuous values.",
+            "source": {
+              "type": "slide",
+              "slide": 42
+            }
+          }
+        ],
+        "expected_concepts": [
+          "regression",
+          "supervised_learning"
+        ],
+        "expected_relationships": [
+          "regression->supervised_learning:type_of"
+        ],
+        "requested_concept": "regression",
+        "expected_decision": "GENERATE_QUIZ",
+        "expected_correct_answer": "It predicts continuous values.",
+        "expected_source": {
+          "document_id": "doc_quiz",
+          "chunk_id": "q003",
+          "slide": 42
+        }
+      },
+      "graph": {
+        "lesson_id": "doc_quiz",
+        "nodes": [
+          {
+            "id": "supervised_learning",
+            "label": "Supervised Learning",
+            "description": "A learning paradigm that uses labeled examples.",
+            "sources": [
+              {
+                "document_id": "doc_quiz",
+                "chunk_id": "q003",
+                "slide": 42,
+                "page": null,
+                "start_time": null,
+                "end_time": null,
+                "text": "Regression is supervised learning used to predict continuous values."
+              }
+            ]
+          },
+          {
+            "id": "regression",
+            "label": "Regression",
+            "description": "A supervised learning task for predicting continuous values.",
+            "sources": [
+              {
+                "document_id": "doc_quiz",
+                "chunk_id": "q003",
+                "slide": 42,
+                "page": null,
+                "start_time": null,
+                "end_time": null,
+                "text": "Regression is supervised learning used to predict continuous values."
+              }
+            ]
+          }
+        ],
+        "edges": [
+          {
+            "source": "regression",
+            "target": "supervised_learning",
+            "relation": "type_of",
+            "evidence": [
+              "q003"
+            ]
+          }
+        ]
+      },
+      "quiz": {
+        "decision": "GENERATE_QUIZ",
+        "concept_id": "regression",
+        "difficulty": "hard",
+        "question": "Why is regression used for continuous target variables?",
+        "options": [
+          "It predicts continuous values.",
+          "It predicts discrete labels.",
+          "It groups data points without labels.",
+          "It reconstructs images from noise."
+        ],
+        "correct_answer": "It predicts continuous values.",
+        "explanation": "This quiz is grounded in the source evidence for 'regression'.",
+        "citations": [
+          {
+            "document_id": "doc_quiz",
+            "chunk_id": "q003",
+            "slide": 42,
+            "start_time": null,
+            "end_time": null
+          }
+        ]
+      },
+      "predicted_concepts": [
+        "supervised_learning",
+        "regression"
+      ],
+      "predicted_relationships": [
+        "regression->supervised_learning:type_of"
+      ],
+      "concept_metrics": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "true_positive": [
+          "regression",
+          "supervised_learning"
+        ],
+        "false_positive": [],
+        "false_negative": []
+      },
+      "relation_metrics": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "true_positive": [
+          "regression->supervised_learning:type_of"
+        ],
+        "false_positive": [],
+        "false_negative": []
+      },
+      "decision": {
+        "expected": "GENERATE_QUIZ",
+        "predicted": "GENERATE_QUIZ",
+        "final_output": "GENERATE_QUIZ",
+        "correct": true
+      },
+      "grounding": {
+        "citation_accuracy": 1.0,
+        "source_recall": 1.0,
+        "unsupported_claim": false,
+        "matched": true
+      },
+      "quiz_evaluation": {
+        "score": 20,
+        "max_score": 20,
+        "classification": "strong",
+        "critical_failure": false,
+        "critical_reasons": [],
+        "scores": {
+          "grounding": 2,
+          "correctness": 2,
+          "single_best_answer": 2,
+          "distractor_quality": 2,
+          "concept_alignment": 2,
+          "difficulty_alignment": 2,
+          "explanation_quality": 2,
+          "citation_quality": 2,
+          "clarity": 2,
+          "no_leakage": 2
+        },
+        "checks": {
+          "answer_in_options": true,
+          "duplicate_options": false,
+          "citations_exist": true,
+          "concept_aligned": true,
+          "answer_leaked": false
+        }
+      }
+    }
+  ]
+}

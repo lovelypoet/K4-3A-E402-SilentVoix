@@ -1,0 +1,8 @@
+{
+  "status": "UNAVAILABLE",
+  "lessons": 0,
+  "cases": 0,
+  "quiz_cases": 0,
+  "human_reviewers": 0,
+  "reason": "No human-labeled real gold cases are available."
+}

@@ -46,6 +46,7 @@ def build_graph(chunks: List[Dict[str, Any]], lesson_id: str | None = None) -> D
                 "page": source.get("page"),
                 "start_time": source.get("start_time"),
                 "end_time": source.get("end_time"),
+                "text": source.get("text"),
             })
 
     for node in graph_nodes:

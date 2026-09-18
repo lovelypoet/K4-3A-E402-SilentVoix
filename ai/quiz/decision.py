@@ -1,5 +1,7 @@
 from typing import Any, Dict
 
+from ai.grounding.evidence import analyze_evidence
+
 
 VALID_DECISIONS = {"GENERATE_QUIZ", "DISAMBIGUATE", "REFUSE_UNGROUNDED"}
 
@@ -12,11 +14,8 @@ def decide_quiz(graph: Dict[str, Any], concept_id: str) -> str:
     if node is None:
         return "REFUSE_UNGROUNDED"
 
-    sources = node.get("sources") or []
-    if not sources:
-        return "REFUSE_UNGROUNDED"
+    return analyze_evidence(graph, concept_id)["decision"]
 
-    if len(sources) == 1:
-        return "GENERATE_QUIZ"
 
-    return "GENERATE_QUIZ"
+def analyze_quiz_evidence(graph: Dict[str, Any], concept_id: str) -> Dict[str, Any]:
+    return analyze_evidence(graph, concept_id)

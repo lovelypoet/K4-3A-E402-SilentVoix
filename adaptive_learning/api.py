@@ -1,3 +1,4 @@
+import hashlib
 import os
 import re
 import json
@@ -16,7 +17,16 @@ from .models import (
 )
 from .mastery import compute_mastery, compute_mastery_state
 from .graph import find_weak_prerequisite
-from .ingestion import DocumentIngestor
+from .ingestion import (
+    DocumentIngestor,
+    INGESTION_OK,
+    DUPLICATE_SOURCE,
+    OCR_REQUIRED,
+    TRANSCRIPTION_REQUIRED,
+    NO_EXTRACTABLE_TEXT,
+    INGESTION_FAILED,
+    LOCAL_VIDEO_EXTENSIONS,
+)
 from .storage import db_storage
 from ai.pipeline import build_graph as ai_build_graph
 
@@ -88,6 +98,20 @@ def _safe_filename(original: str) -> str:
     return f"{name}_{uuid.uuid4().hex[:8]}{ext.lower()}"
 
 
+def _find_existing_by_source_key(source_key: str) -> Optional[Dict[str, Any]]:
+    """
+    Search all stored lessons for one that has the same source_key.
+    Returns the lesson dict if found, else None.
+    """
+    if not source_key:
+        return None
+    lessons = db_storage.data.get("lessons", {})
+    for lid, lesson in lessons.items():
+        if lesson.get("source_key") == source_key:
+            return lesson
+    return None
+
+
 def _persist_chunks_and_concepts(chunks: List[Chunk], lesson_id: str) -> float:
     """Lưu chunks (thay thế theo lesson), extract concepts, trả về duration_seconds."""
     duration_seconds = 0.0
@@ -121,6 +145,8 @@ def _ingest_uploaded_doc(file_path: str, file_ext: str, lesson_id: str) -> List[
         return DocumentIngestor.ingest_pptx_file(file_path, lesson_id=lesson_id)
     if file_ext == ".docx":
         return DocumentIngestor.ingest_docx_file(file_path, lesson_id=lesson_id)
+    if file_ext in VIDEO_EXTENSIONS or file_ext in LOCAL_VIDEO_EXTENSIONS:
+        return DocumentIngestor.ingest_local_video_file(file_path, lesson_id=lesson_id)
     return []
 
 
@@ -202,6 +228,10 @@ def _merge_lesson(
     file_path: Optional[str] = None,
     total_slides: int = 0,
     duration_seconds: float = 0,
+    source_key: Optional[str] = None,
+    source_group: Optional[str] = None,
+    status: str = "READY",
+    error_code: Optional[str] = None,
 ) -> Dict[str, Any]:
     """Mỗi lesson chỉ giữ ĐÚNG 1 nguồn: video | slide | document."""
     existing = db_storage.get_lesson(lesson_id) or {}
@@ -211,12 +241,17 @@ def _merge_lesson(
         "source_type": source_type,
         "video_url": video_url if source_type == "video" else None,
         "slide_url": slide_url if source_type == "slide" else None,
-        "file_path": file_path if source_type == "document" else None,
+        "file_path": file_path if source_type in ("document", "video") else None,
         "total_slides": total_slides if source_type in ("slide", "document") else 0,
         "duration_seconds": duration_seconds if source_type == "video" else 0,
+        "source_key": source_key,
+        "source_group": source_group or source_key,
+        "status": status,
+        "error_code": error_code,
     }
     db_storage.save_lesson(lesson_record)
     return lesson_record
+
 
 
 # ============================================================================
@@ -239,24 +274,39 @@ async def _handle_document_upload(
     filename = file.filename or "document"
     file_ext = os.path.splitext(filename)[1].lower()
 
-    if file_ext in VIDEO_EXTENSIONS:
+    if file_ext not in ALLOWED_DOC_EXTENSIONS and file_ext not in VIDEO_EXTENSIONS and file_ext not in LOCAL_VIDEO_EXTENSIONS:
         raise HTTPException(
             status_code=400,
-            detail="Không upload video. Dùng POST /adaptive/lessons/video với video_url.",
-        )
-    if file_ext not in ALLOWED_DOC_EXTENSIONS:
-        raise HTTPException(
-            status_code=400,
-            detail=f"Chỉ chấp nhận .pdf / .pptx / .docx. Nhận được: {file_ext or '(không có đuôi)'}",
+            detail=f"Không hỗ trợ đuôi file: {file_ext or '(không có đuôi)'}",
         )
 
-    target_lesson_id = db_storage.get_next_lesson_id()
-    file_title = title or os.path.splitext(os.path.basename(filename))[0]
-    safe_name = _safe_filename(filename)
-    disk_path = os.path.join(UPLOAD_DIR, safe_name)
     contents = await file.read()
     if not contents:
         raise HTTPException(status_code=400, detail="File upload rỗng.")
+
+    # --- Compute source_key from file content hash ---
+    file_hash = hashlib.sha256(contents).hexdigest()
+    source_key = f"file:{file_hash}"
+
+    # --- Deduplication check ---
+    existing = _find_existing_by_source_key(source_key)
+    if existing:
+        return {
+            "status": DUPLICATE_SOURCE,
+            "source_type": "document",
+            "existing_lesson_id": existing["lesson_id"],
+            "source_key": source_key,
+            "message": (
+                f"This exact file was already ingested as lesson '{existing['lesson_id']}'. "
+                "Use that lesson or upload a different file."
+            ),
+        }
+
+    target_lesson_id = db_storage.get_next_lesson_id()
+    doc_id = db_storage.get_next_document_id()
+    file_title = title or os.path.splitext(os.path.basename(filename))[0]
+    safe_name = _safe_filename(filename)
+    disk_path = os.path.join(UPLOAD_DIR, safe_name)
 
     with open(disk_path, "wb") as f:
         f.write(contents)
@@ -266,16 +316,45 @@ async def _handle_document_upload(
         doc_type = "pdf"
     elif file_ext == ".pptx":
         doc_type = "pptx"
-    else:
+    elif file_ext == ".docx":
         doc_type = "docx"
+    else:
+        doc_type = "video"
+
+    warnings: List[str] = []
+    error_code: Optional[str] = None
 
     try:
         chunks = _ingest_uploaded_doc(disk_path, file_ext, target_lesson_id)
     except ImportError as e:
         raise HTTPException(status_code=500, detail=str(e))
+    except ValueError as e:
+        # Structured error from ingest_pdf_file (scanned PDF, empty source)
+        err_str = str(e)
+        chunks = []
+        error_code = OCR_REQUIRED if OCR_REQUIRED in err_str else (
+            TRANSCRIPTION_REQUIRED if TRANSCRIPTION_REQUIRED in err_str else INGESTION_FAILED
+        )
+        warnings.append(err_str)
+    except RuntimeError as e:
+        err_str = str(e)
+        chunks = []
+        error_code = TRANSCRIPTION_REQUIRED if TRANSCRIPTION_REQUIRED in err_str else INGESTION_FAILED
+        warnings.append(err_str)
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Không đọc được file {file_ext}: {e}")
 
+    if not chunks and not error_code:
+        error_code = NO_EXTRACTABLE_TEXT
+        warnings.append(f"File '{filename}' produced 0 extractable chunks.")
+
+    DocumentIngestor.stamp_chunks(
+        chunks,
+        document_id=doc_id,
+        source_key=source_key,
+        source_group=source_key,
+        source_type="video" if doc_type == "video" else "document",
+    )
     _persist_chunks_and_concepts(chunks, target_lesson_id)
     slide_numbers = [c.slide for c in chunks if c.slide is not None]
     total_slides = max(slide_numbers) if slide_numbers else 0
@@ -283,13 +362,15 @@ async def _handle_document_upload(
     lesson_record = _merge_lesson(
         target_lesson_id,
         file_title,
-        source_type="document",
+        source_type="video" if doc_type == "video" else "document",
         file_path=public_file_path,
         total_slides=total_slides,
-        duration_seconds=0,
+        duration_seconds=max((c.end_time or 0 for c in chunks), default=0.0),
+        source_key=source_key,
+        status="READY" if chunks else (error_code or "INGESTION_FAILED"),
+        error_code=error_code,
     )
 
-    doc_id = db_storage.get_next_document_id()
     doc_record = {
         "document_id": doc_id,
         "title": file_title,
@@ -297,20 +378,27 @@ async def _handle_document_upload(
         "file_path": public_file_path,
         "lesson_id": target_lesson_id,
         "chunks_count": len(chunks),
+        "source_key": source_key,
+        "source_group": source_key,
+        "status": "READY" if chunks else (error_code or "INGESTION_FAILED"),
+        "error_code": error_code,
     }
     db_storage.save_document(doc_record)
     db_storage.save()
 
     return {
-        "status": "success",
-        "source_type": "document",
-        "message": f"Đã nạp document {target_lesson_id} thành công!",
+        "status": "success" if chunks else "INGESTION_FAILED",
+        "source_type": "video" if doc_type == "video" else "document",
+        "message": f"Đã nạp document {target_lesson_id} thành công!" if chunks else f"Upload succeeded but extraction failed: {error_code}",
+        "error_code": error_code,
         "lesson": lesson_record,
         "document": doc_record,
         "parsed_slides_count": total_slides,
         "parsed_chunks_count": len(chunks),
-        "warnings": [],
+        "warnings": warnings,
     }
+
+
 
 
 def _create_video_lesson(video_url: str, title: Optional[str] = None, lesson_id: Optional[str] = None):
@@ -321,20 +409,54 @@ def _create_video_lesson(video_url: str, title: Optional[str] = None, lesson_id:
     if not video_url or not _is_valid_http_url(video_url):
         raise HTTPException(status_code=400, detail="video_url không hợp lệ (cần http/https).")
 
+    # --- Deduplication check ---
+    source_key: Optional[str] = None
+    if _is_youtube_url(video_url):
+        source_key = DocumentIngestor.youtube_source_key(video_url)
+    if source_key:
+        existing = _find_existing_by_source_key(source_key)
+        if existing:
+            return {
+                "status": DUPLICATE_SOURCE,
+                "source_type": "video",
+                "existing_lesson_id": existing["lesson_id"],
+                "source_key": source_key,
+                "message": (
+                    f"Source '{source_key}' already ingested as lesson "
+                    f"'{existing['lesson_id']}'. Use that lesson or pass a "
+                    "different video URL."
+                ),
+            }
+
     lid = lesson_id_input or db_storage.get_next_lesson_id()
+    doc_id = db_storage.get_next_document_id()
     resolved_title = title or "Bài giảng Video"
     chunks: List[Chunk] = []
     warnings: List[str] = []
+    error_code: Optional[str] = None
 
     if _is_youtube_url(video_url):
-        yt_chunks = DocumentIngestor.ingest_youtube_url(video_url, lesson_id=lid)
-        if yt_chunks:
-            chunks.extend(yt_chunks)
-        else:
-            warnings.append("Không lấy được phụ đề YouTube (video có thể không có transcript).")
+        try:
+            yt_chunks = DocumentIngestor.ingest_youtube_url(video_url, lesson_id=lid)
+            if yt_chunks:
+                chunks.extend(yt_chunks)
+            else:
+                warnings.append("Không lấy được phụ đề YouTube (video có thể không có transcript).")
+                error_code = NO_EXTRACTABLE_TEXT
+        except Exception as exc:
+            warnings.append(f"Transcript fetch failed: {exc}")
+            error_code = INGESTION_FAILED
     else:
-        warnings.append("video_url không phải YouTube — đã lưu link, không có transcript tự động.")
+        warnings.append("video_url không phải YouTube — đã lưu link, không có transcript tự động. Gửi file video để dùng tính năng phiên âm.")
+        error_code = TRANSCRIPTION_REQUIRED
 
+    DocumentIngestor.stamp_chunks(
+        chunks,
+        document_id=doc_id,
+        source_key=source_key,
+        source_group=source_key,
+        source_type="video",
+    )
     duration_seconds = _persist_chunks_and_concepts(chunks, lid) if chunks else 0.0
     lesson_data = _merge_lesson(
         lid,
@@ -342,19 +464,35 @@ def _create_video_lesson(video_url: str, title: Optional[str] = None, lesson_id:
         source_type="video",
         video_url=video_url,
         duration_seconds=duration_seconds,
+        source_key=source_key,
+        status="READY" if chunks else "INGESTION_FAILED",
+        error_code=error_code,
     )
+    db_storage.save_document({
+        "document_id": doc_id,
+        "title": resolved_title,
+        "file_type": "video",
+        "video_url": video_url,
+        "lesson_id": lid,
+        "chunks_count": len(chunks),
+        "source_key": source_key,
+        "source_group": source_key,
+        "status": "READY" if chunks else "INGESTION_FAILED",
+        "error_code": error_code,
+    })
     db_storage.save()
 
     return {
-        "status": "success",
+        "status": "success" if chunks else "WARNING",
         "source_type": "video",
-        "message": "Đã lưu link VIDEO thành công!",
+        "message": "Đã lưu link VIDEO thành công!" if chunks else "Link lưu thành công nhưng không có transcript.",
         "lesson": lesson_data,
         "youtube_transcript_fetched_chunks": len(chunks),
         "parsed_slides_count": 0,
         "parsed_chunks_count": len(chunks),
         "warnings": warnings,
     }
+
 
 
 def _create_slide_lesson(slide_url: str, title: Optional[str] = None, lesson_id: Optional[str] = None):

@@ -13,7 +13,7 @@ CONCEPT_PATTERNS = {
     "clustering": ["clustering"],
     "decision_tree": ["decision tree"],
     "k_means": ["k-means", "k means"],
-    "feature_vector": ["feature vector"],
+    "feature_vector": ["feature vector", "feature vectors"],
     "weight_vector": ["weight vector"],
     "training_data": ["training data"],
     "testing_data": ["testing data"],
@@ -41,10 +41,13 @@ def _match_concepts(text: str) -> List[Dict[str, Any]]:
 
     found: List[Dict[str, Any]] = []
     text_lower = cleaned.lower()
-    for concept_id, aliases in CONCEPT_PATTERNS.items():
+    aliases_by_length = sorted(CONCEPT_PATTERNS.items(), key=lambda item: max(map(len, item[1])), reverse=True)
+    matched_spans: List[tuple[int, int]] = []
+    for concept_id, aliases in aliases_by_length:
         for alias in aliases:
             alias_lower = alias.lower()
-            if alias_lower in text_lower:
+            match = re.search(rf"(?<![a-z0-9]){re.escape(alias_lower)}(?![a-z0-9])", text_lower)
+            if match and not any(start <= match.start() and match.end() <= end for start, end in matched_spans):
                 label = alias if alias_lower == alias_lower else alias
                 found.append({
                     "id": concept_id,
@@ -52,6 +55,7 @@ def _match_concepts(text: str) -> List[Dict[str, Any]]:
                     "description": _describe_concept(concept_id, cleaned),
                     "source": {},
                 })
+                matched_spans.append((match.start(), match.end()))
                 break
     return found
 
@@ -102,7 +106,8 @@ def extract_concepts_from_chunk(chunk: Dict[str, Any]) -> List[Dict[str, Any]]:
             "page": (chunk.get("source") or {}).get("page"),
             "start_time": (chunk.get("source") or {}).get("start_time"),
             "end_time": (chunk.get("source") or {}).get("end_time"),
+            "text": text,
         }
-        concept["id"] = canonical_concept_id(concept.get("label", concept["id"]))
+        concept["id"] = canonical_concept_id(concept["id"])
         concepts.append(concept)
     return concepts

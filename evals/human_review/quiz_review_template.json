@@ -1,0 +1,16 @@
+{
+  "quiz_id": "QUIZ_001",
+  "reviewer_role": "lecturer_or_student",
+  "concept_id": "",
+  "ratings": {
+    "correctness": null,
+    "clarity": null,
+    "usefulness": null,
+    "difficulty_appropriateness": null,
+    "distractor_quality": null,
+    "explanation_quality": null,
+    "source_citation_trust": null
+  },
+  "decision": "YES | EDIT | REJECT",
+  "reason": ""
+}

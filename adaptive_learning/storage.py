@@ -1,5 +1,6 @@
 import os
 import json
+import tempfile
 from typing import Dict, List, Any, Optional
 from .mock_data import MOCK_CONCEPTS, MOCK_PREREQUISITES, MOCK_SOURCE_MAPPING, MOCK_STUDENT_ATTEMPTS
 
@@ -50,10 +51,22 @@ class StorageManager:
 
     def save(self):
         try:
-            with open(self.filepath, "w", encoding="utf-8") as f:
+            # Replace the JSON atomically so an interrupted ingestion cannot
+            # leave a partially-written storage file.
+            directory = os.path.dirname(self.filepath) or "."
+            fd, temp_path = tempfile.mkstemp(prefix="storage_", suffix=".json", dir=directory)
+            with os.fdopen(fd, "w", encoding="utf-8") as f:
                 json.dump(self.data, f, ensure_ascii=False, indent=2)
+                f.flush()
+                os.fsync(f.fileno())
+            os.replace(temp_path, self.filepath)
         except Exception as e:
             print(f"[StorageManager] Error saving storage: {e}")
+            try:
+                if 'temp_path' in locals() and os.path.exists(temp_path):
+                    os.unlink(temp_path)
+            except OSError:
+                pass
 
     # --- Student Attempts ---
     def get_student_attempts(self, student_id: str) -> List[Dict[str, Any]]:
