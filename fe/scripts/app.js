@@ -6,7 +6,7 @@
  *   video timeupdate  ──► graph.setActiveConcept + revealUpTo + panel chi tiết
  *   click node graph  ──► hiện popup "Chi tiết khái niệm" ngay trong panel Graph
  *                         (KHÔNG tua video — node vẽ nhỏ, bấm vào mới xem hết nội dung)
- *   mở quiz           ──► quiz.open(concept đang active)
+ *   mở quiz           ──► nút trong thẻ chi tiết node -> quiz.open(node đó)
  *   nộp quiz đúng     ──► cập nhật mastery trên graph + tính lại gợi ý ôn tập
  *   dán link video mới ──► ingestVideoAndGenerateGraph() (data-loader.js): BE
  *                          ingest thật + AI phân tích thật ra graph MỚI, rồi
@@ -19,11 +19,6 @@
     lessonTitle: document.getElementById("lesson-title"),
     videoContainer: document.getElementById("video-container"),
     graphSvg: document.getElementById("graph-svg"),
-    conceptName: document.getElementById("concept-name"),
-    conceptDesc: document.getElementById("concept-desc"),
-    conceptFormula: document.getElementById("concept-formula"),
-    conceptMastery: document.getElementById("concept-mastery"),
-    btnOpenQuiz: document.getElementById("btn-open-quiz"),
     recommendationBox: document.getElementById("recommendation-box"),
     quizModal: document.getElementById("quiz-modal"),
     nodeDetailCard: document.getElementById("node-detail-card"),
@@ -33,6 +28,12 @@
     nodeDetailSource: document.getElementById("node-detail-source"),
     nodeDetailMastery: document.getElementById("node-detail-mastery"),
     nodeDetailClose: document.getElementById("node-detail-close"),
+    conceptName: document.getElementById("concept-name"),
+    conceptDesc: document.getElementById("concept-desc"),
+    conceptFormula: document.getElementById("concept-formula"),
+    conceptMastery: document.getElementById("concept-mastery"),
+    btnOpenQuiz: document.getElementById("btn-open-quiz"),
+    nodeDetailQuiz: document.getElementById("node-detail-quiz"),
     nodeDetailEvidenceBlock: document.getElementById("node-detail-evidence-block"),
     nodeDetailEvidence: document.getElementById("node-detail-evidence"),
     nodeDetailLinksBlock: document.getElementById("node-detail-links-block"),
@@ -55,6 +56,9 @@
 
   // State thay đổi mỗi lần nạp 1 lesson khác — "let" chứ không "const".
   let data, nodeById, graph, player;
+  let lastConceptId = null; // node đang xem gần nhất — giữ lại khi video ra ngoài mọi đoạn đã gắn khái niệm
+  let shownConcept = null; // khái niệm đang hiện ở khung dưới video (và là khái niệm nút Quiz ở đó sẽ hỏi)
+  let detailNode = null; // node đang mở trong thẻ chi tiết (để làm quiz đúng node đó)
 
   // quiz_bank hiện luôn lấy từ mock (BE chưa có endpoint sinh quiz) nên không
   // đổi theo lesson -> tạo modal quiz đúng 1 lần duy nhất, không tạo lại mỗi
@@ -93,7 +97,10 @@
     graph = renderGraph(els.graphSvg, data.nodes, data.edges);
     graph.onNodeClick(conceptId => {
       const node = nodeById.get(conceptId);
-      if (node) renderNodeDetailCard(node); // chỉ hiện chi tiết, KHÔNG tua video
+      if (node) {
+        renderNodeDetailCard(node); // chỉ hiện chi tiết, KHÔNG tua video
+        showConcept(node); // khung dưới video đi theo node vừa chọn, không đứng yên ở khái niệm cũ
+      }
     });
     els.nodeDetailCard.hidden = true;
 
@@ -164,6 +171,12 @@
     if (evt.key === "Enter") loadVideoFromInput();
   });
 
+  els.btnOpenQuiz.addEventListener("click", () => {
+    if (shownConcept) quiz.open(shownConcept);
+  });
+  els.nodeDetailQuiz.addEventListener("click", () => {
+    if (detailNode) quiz.open(detailNode);
+  });
   els.nodeDetailClose.addEventListener("click", () => {
     els.nodeDetailCard.hidden = true;
   });
@@ -234,16 +247,15 @@
   });
   els.slideLinkClear.addEventListener("click", clearSlidePdf);
 
-  els.btnOpenQuiz.addEventListener("click", () => {
-    const activeId = graph.getActiveConcept();
-    const concept = nodeById.get(activeId);
-    if (concept) quiz.open(concept);
-  });
-
   // ---------------------------------------------------------------------
 
   function findConceptAtTime(sec) {
-    return data.nodes.find(n => n.start_time != null && sec >= n.start_time && sec < n.end_time) || data.nodes[0];
+    const hit = data.nodes.find(n => n.start_time != null && sec >= n.start_time && sec < n.end_time);
+    if (hit) return hit;
+    // Backend chỉ gắn mỗi khái niệm vào 1 đoạn ~30s (lần xuất hiện đầu), nên phần
+    // lớn video không khớp đoạn nào. Khi đó GIỮ node vừa xem, không nhảy về node đầu.
+    if (lastConceptId && nodeById.has(lastConceptId)) return nodeById.get(lastConceptId);
+    return data.nodes[0];
   }
 
   function handleTimeUpdate(sec) {
@@ -253,6 +265,7 @@
     // không khớp từ khoá nào trong video này) — không được để văng lỗi ở đây.
     if (!concept) {
       graph.setActiveConcept(null);
+      shownConcept = null;
       els.conceptName.textContent = "Chưa có khái niệm nào";
       els.conceptDesc.textContent = "Video này chưa khớp từ khoá nào trong bộ trích xuất khái niệm.";
       els.conceptFormula.hidden = true;
@@ -261,11 +274,13 @@
       els.recommendationBox.hidden = true;
       return;
     }
+    // Chỉ đổi khung dưới video khi video THỰC SỰ sang khái niệm mới — nếu cập
+    // nhật mỗi nhịp thời gian thì node người dùng vừa bấm chọn sẽ bị đè ngay lập tức.
+    if (concept.concept_id !== lastConceptId || !shownConcept) showConcept(concept);
+    lastConceptId = concept.concept_id;
     graph.setActiveConcept(concept.concept_id);
-    renderConceptDetail(concept);
     renderSlideView(concept); // cùng dữ liệu, phòng khi đang ở tab Slide thì nội dung vẫn theo kịp đúng khái niệm
     renderRecommendation(concept);
-    updateQuizButtonState(concept); // mỗi khái niệm tự có trạng thái nút riêng, không dùng chung 1 cờ toàn cục
   }
 
   /** Nội dung tab Slide — CÙNG dữ liệu concept, chỉ khác cách trình bày (dạng slide trình chiếu). */
@@ -277,28 +292,32 @@
     els.slideDesc.textContent = concept.description || "";
   }
 
-  /**
-   * Khái niệm đang active đã đạt 100% (đã "xong") -> disable nút Làm Quiz cho ĐÚNG
-   * khái niệm đó. Video chạy sang khái niệm khác (chưa đạt 100%) thì hàm này được
-   * gọi lại (từ handleTimeUpdate) với concept mới -> nút tự hiện lại bình thường.
-   *
-   * quiz_bank hiện chỉ có sẵn cho 5 khái niệm mock (c1-c5) — khái niệm lấy từ
-   * backend thật CHƯA có câu hỏi nào khớp id, nên % không thể tăng được (không
-   * phải lỗi hiển thị, mà là chưa có endpoint sinh quiz/lưu mastery ở backend —
-   * xem phân công việc.md). Disable nút + nói rõ lý do thay vì để bấm vào rồi
-   * không thấy gì xảy ra.
-   */
-  function updateQuizButtonState(concept) {
+  /** Khung dưới video: hiện 1 khái niệm + nút Quiz của ĐÚNG khái niệm đó. */
+  function showConcept(concept) {
+    shownConcept = concept;
+    els.conceptName.textContent = concept.name;
+    els.conceptDesc.textContent = concept.description || "";
+    els.conceptFormula.textContent = concept.formula || "";
+    els.conceptFormula.hidden = !concept.formula;
+    if (concept.mastery_score != null) {
+      els.conceptMastery.textContent = `Độ hiểu: ${Math.round(concept.mastery_score * 100)}%`;
+      els.conceptMastery.className = `mastery-pill mastery-pill--${concept.mastery_state}`;
+      els.conceptMastery.hidden = false;
+    } else {
+      els.conceptMastery.hidden = true;
+    }
     const isDone = concept.mastery_score != null && concept.mastery_score >= 1;
     els.btnOpenQuiz.disabled = isDone || !!data?.isMock;
     els.btnOpenQuiz.textContent = isDone
       ? "✅ Đã hoàn thành khái niệm này"
-      : data?.isMock ? "⏳ Cần lesson thật để tạo quiz" : "🧠 Tạo Quiz grounded (Gemini)";
+      : data?.isMock ? "⏳ Cần lesson thật để tạo quiz" : "🧠 Làm Quiz kiểm tra (AI)";
   }
 
   /** Hiện chi tiết khái niệm ngay trong panel Graph khi bấm 1 node — không đụng tới video. */
   function renderNodeDetailCard(node) {
+    detailNode = node;
     els.nodeDetailCard.hidden = false;
+    updateNodeQuizButton(node);
     els.nodeDetailName.textContent = node.name;
     els.nodeDetailFormula.textContent = node.formula || "";
     els.nodeDetailFormula.hidden = !node.formula;
@@ -320,6 +339,15 @@
     } else {
       els.nodeDetailMastery.hidden = true;
     }
+  }
+
+  /** Nút quiz trong thẻ chi tiết: làm quiz ĐÚNG node đang xem, không phụ thuộc video đang ở đoạn nào. */
+  function updateNodeQuizButton(node) {
+    const isDone = node.mastery_score != null && node.mastery_score >= 1;
+    els.nodeDetailQuiz.disabled = isDone || !!data?.isMock;
+    els.nodeDetailQuiz.textContent = isDone
+      ? "✅ Đã hoàn thành khái niệm này"
+      : data?.isMock ? "⏳ Cần lesson thật để tạo quiz" : "🧠 Làm quiz node này";
   }
 
   /**
@@ -402,20 +430,6 @@
     return `${m < 10 ? "0" : ""}${m}:${s < 10 ? "0" : ""}${s}`;
   }
 
-  function renderConceptDetail(concept) {
-    els.conceptName.textContent = concept.name;
-    els.conceptDesc.textContent = concept.description || "";
-    els.conceptFormula.textContent = concept.formula || "";
-    els.conceptFormula.hidden = !concept.formula;
-    if (concept.mastery_score != null) {
-      els.conceptMastery.textContent = `Độ hiểu: ${Math.round(concept.mastery_score * 100)}%`;
-      els.conceptMastery.className = `mastery-pill mastery-pill--${concept.mastery_state}`;
-      els.conceptMastery.hidden = false;
-    } else {
-      els.conceptMastery.hidden = true;
-    }
-  }
-
   /** Duyệt ngược đồ thị (BFS trên prerequisite) tìm khái niệm gốc rễ yếu nhất. */
   function findWeakestPrerequisite(conceptId) {
     const parentsOf = new Map();
@@ -477,8 +491,10 @@
     concept.mastery_score = newScore;
     concept.mastery_state = newState;
     graph.updateNodeMastery(concept.concept_id, newScore, newState);
-    renderConceptDetail(concept);
-    renderRecommendation(concept);
-    updateQuizButtonState(concept); // vừa đạt 100% -> disable nút ngay, không cần đợi video nhích tiếp
+    if (graph.getActiveConcept() === concept.concept_id) renderRecommendation(concept);
+    if (shownConcept && shownConcept.concept_id === concept.concept_id) showConcept(concept);
+    if (detailNode && detailNode.concept_id === concept.concept_id && !els.nodeDetailCard.hidden) {
+      renderNodeDetailCard(concept);
+    }
   }
 })();
