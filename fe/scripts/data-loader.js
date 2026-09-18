@@ -54,11 +54,21 @@ function rememberLessonId(lessonId) {
   location.hash = lessonId; // đổi hash KHÔNG nạp lại trang, chỉ để copy/chia sẻ được đúng bài
 }
 
+/**
+ * Quên hẳn bài đã nhớ. Phải xoá CẢ hash trên URL, không chỉ localStorage: hash
+ * được ưu tiên hơn localStorage trong getInitialLessonId(), nên nếu chỉ xoá
+ * localStorage thì lần nạp trang sau vẫn đọc lại đúng id đã chết từ hash.
+ */
 function forgetLessonId() {
   try {
     localStorage.removeItem(LESSON_STORAGE_KEY);
   } catch (err) {
     // như trên
+  }
+  if (location.hash) {
+    // replaceState thay vì gán location.hash="" để không để lại dấu "#" thừa
+    // và không thêm một mục mới vào lịch sử trình duyệt.
+    history.replaceState(null, "", location.pathname + location.search);
   }
 }
 
@@ -79,8 +89,11 @@ async function loadLessonData(lessonId = LESSON_ID, { allowMockFallback = true }
         fetch(`${BACKEND_BASE_URL}/knowledge-graph/${lessonId}`),
         fetch(`${BACKEND_BASE_URL}/mastery/${STUDENT_ID}`)
       ]);
-      if (!lessonRes.ok) throw new Error(`GET /lessons/${lessonId} lỗi ${lessonRes.status}`);
-      if (!graphRes.ok) throw new Error(`GET /knowledge-graph/${lessonId} lỗi ${graphRes.status}`);
+      // Gắn kèm .status để nơi gọi phân biệt được "bài học không còn tồn tại" (404)
+      // với "backend chưa bật" (lỗi mạng, không có status) — hai tình huống cần
+      // xử lý khác hẳn nhau, xem chỗ khởi động trong app.js.
+      if (!lessonRes.ok) throw Object.assign(new Error(`GET /lessons/${lessonId} lỗi ${lessonRes.status}`), { status: lessonRes.status });
+      if (!graphRes.ok) throw Object.assign(new Error(`GET /knowledge-graph/${lessonId} lỗi ${graphRes.status}`), { status: graphRes.status });
       const lesson = await lessonRes.json();
       const graph = await graphRes.json();
       const mastery = masteryRes.ok ? await masteryRes.json() : null;
@@ -97,6 +110,30 @@ async function loadLessonData(lessonId = LESSON_ID, { allowMockFallback = true }
     throw new Error('Chưa nạp data/lesson-mock.js — kiểm tra thẻ <script> trong index.html');
   }
   return normalizeMockData(window.__LESSON_MOCK__);
+}
+
+/**
+ * Lấy lesson_id từ response ingest của backend.
+ *
+ * api.py có cơ chế chống trùng nguồn: mỗi video YouTube / mỗi file được gắn
+ * `source_key`; nếu nguồn đó đã ingest rồi thì backend KHÔNG tạo bài mới nữa
+ * mà trả về {status: "DUPLICATE_SOURCE", existing_lesson_id: "..."} — không có
+ * field `lesson`. Đây là hành vi cố ý, không phải lỗi: dán lại đúng link cũ thì
+ * ta mở lại bài đã phân tích sẵn (nhanh hơn, khỏi phân tích lại từ đầu).
+ *
+ * Hiện backend trả dạng này kèm HTTP 200; phòng khi sau này đổi sang 409 (mã
+ * chuẩn cho "đã tồn tại") thì hàm này vẫn đọc được cả hai.
+ */
+async function readIngestedLessonId(res, kind) {
+  if (!res.ok && res.status !== 409) {
+    throw new Error(`Ingest ${kind} thất bại (${res.status})`);
+  }
+  const data = await res.json().catch(() => ({}));
+  const lessonId = data?.lesson?.lesson_id || data?.existing_lesson_id;
+  if (!lessonId) {
+    throw new Error(data?.message || data?.detail || `Backend không trả về lesson_id sau khi ingest ${kind}.`);
+  }
+  return lessonId;
 }
 
 /**
@@ -119,10 +156,7 @@ async function ingestVideoAndGenerateGraph(videoUrl) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ video_url: videoUrl })
   });
-  if (!ingestRes.ok) throw new Error(`Ingest video thất bại (${ingestRes.status})`);
-  const ingestData = await ingestRes.json();
-  const newLessonId = ingestData?.lesson?.lesson_id;
-  if (!newLessonId) throw new Error("Backend không trả về lesson_id sau khi ingest.");
+  const newLessonId = await readIngestedLessonId(ingestRes, "video");
 
   const generateRes = await fetch(`${BACKEND_BASE_URL}/lessons/${newLessonId}/generate-graph`, {
     method: "POST"
@@ -153,10 +187,7 @@ async function ingestSlideAndGenerateGraph(slideUrl) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ slide_url: slideUrl })
   });
-  if (!ingestRes.ok) throw new Error(`Ingest slide thất bại (${ingestRes.status})`);
-  const ingestData = await ingestRes.json();
-  const newLessonId = ingestData?.lesson?.lesson_id;
-  if (!newLessonId) throw new Error("Backend không trả về lesson_id sau khi ingest.");
+  const newLessonId = await readIngestedLessonId(ingestRes, "slide");
 
   const generateRes = await fetch(`${BACKEND_BASE_URL}/lessons/${newLessonId}/generate-graph`, {
     method: "POST"
