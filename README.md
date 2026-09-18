@@ -4,14 +4,14 @@
 
 ## 👥 Thành viên nhóm & Phân công vai trò
 
-**Lớp:** 3A · **Phòng:** ____ · **Cụm:** ____ · **Track:** ____
+**Lớp:** 3A · **Phòng:** E402 · **Cụm:** ____ · **Track:** ____
 
 | Họ và Tên | Mã Học Viên | Vai trò chính | Phần việc đảm nhiệm trong dự án |
 |---|---|---|---|
-| Nguyễn Đức Anh | 2A202602508 | Leader | ... |
-| Nguyễn Như Tài | 2A202602976 | Backend dev | ... |
-| Lò Văn Long | 2A202602541 | Frontend dev | ... |
-| Nguyễn Công Vinh | 2A202602519 | Fullstack dev | ... |
+| Nguyễn Đức Anh | 2A202602508 | Leader | Điều phối dự án; phụ trách AI & Knowledge Graph: Concept Extraction, Relationship Extraction, Knowledge Graph, Source Grounding, Grounded Quiz, prompt, Golden Set và AI Evaluation. |
+| Nguyễn Như Tài | 2A202602976 | Backend dev | Phụ trách Data/Backend: document ingestion, chunking, source metadata, database, API, lưu trữ Knowledge Graph và Concept ↔ Slide/Timestamp mapping. |
+| Lò Văn Long | 2A202602541 | Frontend dev | Phụ trách Lesson Studio UI, Slide/Video Viewer, Knowledge Graph visualization, đồng bộ Slide/Video ⇄ Graph, Citation, Quiz và Lecturer Review UI. |
+| Nguyễn Công Vinh | 2A202602519 | Fullstack dev | Phụ trách tích hợp Frontend–Backend, Concept Mastery, prerequisite-based recommendation, Adaptive Learning và integration/end-to-end testing.|
 
 > Nhóm copy nguyên file README này về repo của mình, rồi điền bảng trên. Cột **Phần việc đảm nhiệm** ghi càng cụ thể càng tốt.
 
