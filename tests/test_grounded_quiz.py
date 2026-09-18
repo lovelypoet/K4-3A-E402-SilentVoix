@@ -44,9 +44,9 @@ def valid_draft():
     )
 
 
-def test_supported_evidence_calls_provider_and_resolves_pdf_citation():
+def test_supported_evidence_calls_provider_and_resolves_pdf_citation(tmp_path):
     provider = FakeProvider(valid_draft())
-    result = generate_grounded_quiz(graph(), "lesson_pdf", "gradient_descent", "easy", provider)
+    result = generate_grounded_quiz(graph(), "lesson_pdf", "gradient_descent", "easy", provider, cache=QuizCache(tmp_path / "cache.json"))
     assert provider.calls == 1
     assert result.decision == "GENERATE_QUIZ"
     assert result.validation.passed is True
@@ -55,28 +55,28 @@ def test_supported_evidence_calls_provider_and_resolves_pdf_citation():
     assert result.citations[0].page == 7
 
 
-def test_unsupported_evidence_does_not_call_provider():
+def test_unsupported_evidence_does_not_call_provider(tmp_path):
     provider = FakeProvider(valid_draft())
-    result = generate_grounded_quiz(graph("This source mentions gradient descent."), "lesson_pdf", "gradient_descent", "medium", provider)
+    result = generate_grounded_quiz(graph("This source mentions gradient descent."), "lesson_pdf", "gradient_descent", "medium", provider, cache=QuizCache(tmp_path / "cache.json"))
     assert provider.calls == 0
     assert result.decision == "REFUSE_UNGROUNDED"
 
 
-def test_provider_failure_is_explicit():
+def test_provider_failure_is_explicit(tmp_path):
     provider = FakeProvider(error=RuntimeError("offline"))
-    result = generate_grounded_quiz(graph(), "lesson_pdf", "gradient_descent", "medium", provider)
+    result = generate_grounded_quiz(graph(), "lesson_pdf", "gradient_descent", "medium", provider, cache=QuizCache(tmp_path / "cache.json"))
     assert result.decision == "GENERATION_FAILED"
     assert result.validation.passed is False
 
 
-def test_video_timestamp_is_preserved():
+def test_video_timestamp_is_preserved(tmp_path):
     source_graph = graph()
     source_graph["nodes"][0]["sources"][0] = {
         "document_id": "doc_video", "chunk_id": "chunk_v", "start_time": 132.4,
         "end_time": 158.7, "text": "Gradient descent minimizes a loss function during model training.",
     }
     draft = valid_draft().model_copy(update={"used_evidence_ids": ["E1"]})
-    result = generate_grounded_quiz(source_graph, "lesson_video", "gradient_descent", "medium", FakeProvider(draft))
+    result = generate_grounded_quiz(source_graph, "lesson_video", "gradient_descent", "medium", FakeProvider(draft), cache=QuizCache(tmp_path / "cache.json"))
     assert result.validation.passed is True
     assert result.citations[0].start_time == 132.4
     assert result.citations[0].end_time == 158.7
