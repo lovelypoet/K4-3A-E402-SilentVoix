@@ -1,0 +1,999 @@
+{
+  "total_cases": 22,
+  "pass_rate": 100.0,
+  "metrics": {
+    "Graph API": {
+      "PASS": 22,
+      "FAIL": 0,
+      "ERROR": 0
+    },
+    "Video Sync": {
+      "PASS": 21,
+      "FAIL": 0,
+      "ERROR": 0
+    },
+    "Quiz Generation": {
+      "PASS": 22,
+      "FAIL": 0,
+      "ERROR": 0
+    },
+    "Answer API": {
+      "PASS": 19,
+      "FAIL": 0,
+      "ERROR": 0
+    },
+    "Mastery Update": {
+      "PASS": 19,
+      "FAIL": 0,
+      "ERROR": 0
+    },
+    "Recommendation": {
+      "PASS": 19,
+      "FAIL": 0,
+      "ERROR": 0
+    },
+    "UI Click Mock": {
+      "PASS": 19,
+      "FAIL": 0,
+      "ERROR": 0
+    }
+  },
+  "results": [
+    {
+      "case_id": "case_01",
+      "checks": {
+        "Graph API": {
+          "status": "PASS",
+          "expected": 200,
+          "actual": 200,
+          "reason": "Fetch graph successfully"
+        },
+        "Video Sync": {
+          "status": "PASS",
+          "expected": 200,
+          "actual": 200,
+          "reason": "Slide to concept mapping"
+        },
+        "Quiz Generation": {
+          "status": "PASS",
+          "expected": "GENERATE_QUIZ",
+          "actual": "GENERATE_QUIZ",
+          "reason": "Quiz decision match"
+        },
+        "Answer API": {
+          "status": "PASS",
+          "expected": 200,
+          "actual": 200,
+          "reason": "Submit wrong answer"
+        },
+        "Mastery Update": {
+          "status": "PASS",
+          "expected": "weak",
+          "actual": "weak",
+          "reason": "Concept should be weak after wrong answer"
+        },
+        "Recommendation": {
+          "status": "PASS",
+          "expected": "loss_function",
+          "actual": "loss_function",
+          "reason": "Recommend correct weak prerequisite"
+        },
+        "UI Click Mock": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true,
+          "reason": "Clicking recommendation goes to valid slide/timestamp"
+        }
+      }
+    },
+    {
+      "case_id": "case_02",
+      "checks": {
+        "Graph API": {
+          "status": "PASS",
+          "expected": 200,
+          "actual": 200,
+          "reason": "Fetch graph successfully"
+        },
+        "Video Sync": {
+          "status": "PASS",
+          "expected": 200,
+          "actual": 200,
+          "reason": "Slide to concept mapping"
+        },
+        "Quiz Generation": {
+          "status": "PASS",
+          "expected": "GENERATE_QUIZ",
+          "actual": "GENERATE_QUIZ",
+          "reason": "Quiz decision match"
+        },
+        "Answer API": {
+          "status": "PASS",
+          "expected": 200,
+          "actual": 200,
+          "reason": "Submit wrong answer"
+        },
+        "Mastery Update": {
+          "status": "PASS",
+          "expected": "weak",
+          "actual": "weak",
+          "reason": "Concept should be weak after wrong answer"
+        },
+        "Recommendation": {
+          "status": "PASS",
+          "expected": "regression",
+          "actual": "regression",
+          "reason": "Recommend correct weak prerequisite"
+        },
+        "UI Click Mock": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true,
+          "reason": "Clicking recommendation goes to valid slide/timestamp"
+        }
+      }
+    },
+    {
+      "case_id": "case_03",
+      "checks": {
+        "Graph API": {
+          "status": "PASS",
+          "expected": 200,
+          "actual": 200,
+          "reason": "Fetch graph successfully"
+        },
+        "Video Sync": {
+          "status": "PASS",
+          "expected": 200,
+          "actual": 200,
+          "reason": "Slide to concept mapping"
+        },
+        "Quiz Generation": {
+          "status": "PASS",
+          "expected": "GENERATE_QUIZ",
+          "actual": "GENERATE_QUIZ",
+          "reason": "Quiz decision match"
+        },
+        "Answer API": {
+          "status": "PASS",
+          "expected": 200,
+          "actual": 200,
+          "reason": "Submit wrong answer"
+        },
+        "Mastery Update": {
+          "status": "PASS",
+          "expected": "weak",
+          "actual": "weak",
+          "reason": "Concept should be weak after wrong answer"
+        },
+        "Recommendation": {
+          "status": "PASS",
+          "expected": "loss_function",
+          "actual": "loss_function",
+          "reason": "Recommend correct weak prerequisite"
+        },
+        "UI Click Mock": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true,
+          "reason": "Clicking recommendation goes to valid slide/timestamp"
+        }
+      }
+    },
+    {
+      "case_id": "case_04",
+      "checks": {
+        "Graph API": {
+          "status": "PASS",
+          "expected": 200,
+          "actual": 200,
+          "reason": "Fetch graph successfully"
+        },
+        "Video Sync": {
+          "status": "PASS",
+          "expected": 200,
+          "actual": 200,
+          "reason": "Slide to concept mapping"
+        },
+        "Quiz Generation": {
+          "status": "PASS",
+          "expected": "GENERATE_QUIZ",
+          "actual": "GENERATE_QUIZ",
+          "reason": "Quiz decision match"
+        },
+        "Answer API": {
+          "status": "PASS",
+          "expected": 200,
+          "actual": 200,
+          "reason": "Submit wrong answer"
+        },
+        "Mastery Update": {
+          "status": "PASS",
+          "expected": "weak",
+          "actual": "weak",
+          "reason": "Concept should be weak after wrong answer"
+        },
+        "Recommendation": {
+          "status": "PASS",
+          "expected": "gradient_descent",
+          "actual": "gradient_descent",
+          "reason": "Recommend correct weak prerequisite"
+        },
+        "UI Click Mock": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true,
+          "reason": "Clicking recommendation goes to valid slide/timestamp"
+        }
+      }
+    },
+    {
+      "case_id": "case_05",
+      "checks": {
+        "Graph API": {
+          "status": "PASS",
+          "expected": 200,
+          "actual": 200,
+          "reason": "Fetch graph successfully"
+        },
+        "Video Sync": {
+          "status": "PASS",
+          "expected": 200,
+          "actual": 200,
+          "reason": "Slide to concept mapping"
+        },
+        "Quiz Generation": {
+          "status": "PASS",
+          "expected": "GENERATE_QUIZ",
+          "actual": "GENERATE_QUIZ",
+          "reason": "Quiz decision match"
+        },
+        "Answer API": {
+          "status": "PASS",
+          "expected": 200,
+          "actual": 200,
+          "reason": "Submit wrong answer"
+        },
+        "Mastery Update": {
+          "status": "PASS",
+          "expected": "weak",
+          "actual": "weak",
+          "reason": "Concept should be weak after wrong answer"
+        },
+        "Recommendation": {
+          "status": "PASS",
+          "expected": "decision_tree",
+          "actual": "decision_tree",
+          "reason": "Recommend correct weak prerequisite"
+        },
+        "UI Click Mock": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true,
+          "reason": "Clicking recommendation goes to valid slide/timestamp"
+        }
+      }
+    },
+    {
+      "case_id": "case_06",
+      "checks": {
+        "Graph API": {
+          "status": "PASS",
+          "expected": 200,
+          "actual": 200,
+          "reason": "Fetch graph successfully"
+        },
+        "Video Sync": {
+          "status": "PASS",
+          "expected": 200,
+          "actual": 200,
+          "reason": "Slide to concept mapping"
+        },
+        "Quiz Generation": {
+          "status": "PASS",
+          "expected": "GENERATE_QUIZ",
+          "actual": "GENERATE_QUIZ",
+          "reason": "Quiz decision match"
+        },
+        "Answer API": {
+          "status": "PASS",
+          "expected": 200,
+          "actual": 200,
+          "reason": "Submit wrong answer"
+        },
+        "Mastery Update": {
+          "status": "PASS",
+          "expected": "weak",
+          "actual": "weak",
+          "reason": "Concept should be weak after wrong answer"
+        },
+        "Recommendation": {
+          "status": "PASS",
+          "expected": "classification",
+          "actual": "classification",
+          "reason": "Recommend correct weak prerequisite"
+        },
+        "UI Click Mock": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true,
+          "reason": "Clicking recommendation goes to valid slide/timestamp"
+        }
+      }
+    },
+    {
+      "case_id": "case_07",
+      "checks": {
+        "Graph API": {
+          "status": "PASS",
+          "expected": 200,
+          "actual": 200,
+          "reason": "Fetch graph successfully"
+        },
+        "Video Sync": {
+          "status": "PASS",
+          "expected": 200,
+          "actual": 200,
+          "reason": "Slide to concept mapping"
+        },
+        "Quiz Generation": {
+          "status": "PASS",
+          "expected": "GENERATE_QUIZ",
+          "actual": "GENERATE_QUIZ",
+          "reason": "Quiz decision match"
+        },
+        "Answer API": {
+          "status": "PASS",
+          "expected": 200,
+          "actual": 200,
+          "reason": "Submit wrong answer"
+        },
+        "Mastery Update": {
+          "status": "PASS",
+          "expected": "weak",
+          "actual": "weak",
+          "reason": "Concept should be weak after wrong answer"
+        },
+        "Recommendation": {
+          "status": "PASS",
+          "expected": "clustering",
+          "actual": "clustering",
+          "reason": "Recommend correct weak prerequisite"
+        },
+        "UI Click Mock": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true,
+          "reason": "Clicking recommendation goes to valid slide/timestamp"
+        }
+      }
+    },
+    {
+      "case_id": "case_08",
+      "checks": {
+        "Graph API": {
+          "status": "PASS",
+          "expected": 200,
+          "actual": 200,
+          "reason": "Fetch graph successfully"
+        },
+        "Video Sync": {
+          "status": "PASS",
+          "expected": 200,
+          "actual": 200,
+          "reason": "Slide to concept mapping"
+        },
+        "Quiz Generation": {
+          "status": "PASS",
+          "expected": "GENERATE_QUIZ",
+          "actual": "GENERATE_QUIZ",
+          "reason": "Quiz decision match"
+        },
+        "Answer API": {
+          "status": "PASS",
+          "expected": 200,
+          "actual": 200,
+          "reason": "Submit wrong answer"
+        },
+        "Mastery Update": {
+          "status": "PASS",
+          "expected": "weak",
+          "actual": "weak",
+          "reason": "Concept should be weak after wrong answer"
+        },
+        "Recommendation": {
+          "status": "PASS",
+          "expected": "k_means",
+          "actual": "k_means",
+          "reason": "Recommend correct weak prerequisite"
+        },
+        "UI Click Mock": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true,
+          "reason": "Clicking recommendation goes to valid slide/timestamp"
+        }
+      }
+    },
+    {
+      "case_id": "case_09",
+      "checks": {
+        "Graph API": {
+          "status": "PASS",
+          "expected": 200,
+          "actual": 200,
+          "reason": "Fetch graph successfully"
+        },
+        "Video Sync": {
+          "status": "PASS",
+          "expected": 200,
+          "actual": 200,
+          "reason": "Slide to concept mapping"
+        },
+        "Quiz Generation": {
+          "status": "PASS",
+          "expected": "GENERATE_QUIZ",
+          "actual": "GENERATE_QUIZ",
+          "reason": "Quiz decision match"
+        },
+        "Answer API": {
+          "status": "PASS",
+          "expected": 200,
+          "actual": 200,
+          "reason": "Submit wrong answer"
+        },
+        "Mastery Update": {
+          "status": "PASS",
+          "expected": "weak",
+          "actual": "weak",
+          "reason": "Concept should be weak after wrong answer"
+        },
+        "Recommendation": {
+          "status": "PASS",
+          "expected": "feature_vector",
+          "actual": "feature_vector",
+          "reason": "Recommend correct weak prerequisite"
+        },
+        "UI Click Mock": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true,
+          "reason": "Clicking recommendation goes to valid slide/timestamp"
+        }
+      }
+    },
+    {
+      "case_id": "case_10",
+      "checks": {
+        "Graph API": {
+          "status": "PASS",
+          "expected": 200,
+          "actual": 200,
+          "reason": "Fetch graph successfully"
+        },
+        "Video Sync": {
+          "status": "PASS",
+          "expected": 200,
+          "actual": 200,
+          "reason": "Slide to concept mapping"
+        },
+        "Quiz Generation": {
+          "status": "PASS",
+          "expected": "GENERATE_QUIZ",
+          "actual": "GENERATE_QUIZ",
+          "reason": "Quiz decision match"
+        },
+        "Answer API": {
+          "status": "PASS",
+          "expected": 200,
+          "actual": 200,
+          "reason": "Submit wrong answer"
+        },
+        "Mastery Update": {
+          "status": "PASS",
+          "expected": "weak",
+          "actual": "weak",
+          "reason": "Concept should be weak after wrong answer"
+        },
+        "Recommendation": {
+          "status": "PASS",
+          "expected": "training_data",
+          "actual": "training_data",
+          "reason": "Recommend correct weak prerequisite"
+        },
+        "UI Click Mock": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true,
+          "reason": "Clicking recommendation goes to valid slide/timestamp"
+        }
+      }
+    },
+    {
+      "case_id": "case_11",
+      "checks": {
+        "Graph API": {
+          "status": "PASS",
+          "expected": 200,
+          "actual": 200,
+          "reason": "Fetch graph successfully"
+        },
+        "Video Sync": {
+          "status": "PASS",
+          "expected": 200,
+          "actual": 200,
+          "reason": "Slide to concept mapping"
+        },
+        "Quiz Generation": {
+          "status": "PASS",
+          "expected": "GENERATE_QUIZ",
+          "actual": "GENERATE_QUIZ",
+          "reason": "Quiz decision match"
+        },
+        "Answer API": {
+          "status": "PASS",
+          "expected": 200,
+          "actual": 200,
+          "reason": "Submit wrong answer"
+        },
+        "Mastery Update": {
+          "status": "PASS",
+          "expected": "weak",
+          "actual": "weak",
+          "reason": "Concept should be weak after wrong answer"
+        },
+        "Recommendation": {
+          "status": "PASS",
+          "expected": "gradient_descent",
+          "actual": "gradient_descent",
+          "reason": "Recommend correct weak prerequisite"
+        },
+        "UI Click Mock": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true,
+          "reason": "Clicking recommendation goes to valid slide/timestamp"
+        }
+      }
+    },
+    {
+      "case_id": "case_12",
+      "checks": {
+        "Graph API": {
+          "status": "PASS",
+          "expected": 200,
+          "actual": 200,
+          "reason": "Fetch graph successfully"
+        },
+        "Video Sync": {
+          "status": "PASS",
+          "expected": 200,
+          "actual": 200,
+          "reason": "Slide to concept mapping"
+        },
+        "Quiz Generation": {
+          "status": "PASS",
+          "expected": "GENERATE_QUIZ",
+          "actual": "GENERATE_QUIZ",
+          "reason": "Quiz decision match"
+        },
+        "Answer API": {
+          "status": "PASS",
+          "expected": 200,
+          "actual": 200,
+          "reason": "Submit wrong answer"
+        },
+        "Mastery Update": {
+          "status": "PASS",
+          "expected": "weak",
+          "actual": "weak",
+          "reason": "Concept should be weak after wrong answer"
+        },
+        "Recommendation": {
+          "status": "PASS",
+          "expected": "neural_network",
+          "actual": "neural_network",
+          "reason": "Recommend correct weak prerequisite"
+        },
+        "UI Click Mock": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true,
+          "reason": "Clicking recommendation goes to valid slide/timestamp"
+        }
+      }
+    },
+    {
+      "case_id": "case_13",
+      "checks": {
+        "Graph API": {
+          "status": "PASS",
+          "expected": 200,
+          "actual": 200,
+          "reason": "Fetch graph successfully"
+        },
+        "Video Sync": {
+          "status": "PASS",
+          "expected": 200,
+          "actual": 200,
+          "reason": "Slide to concept mapping"
+        },
+        "Quiz Generation": {
+          "status": "PASS",
+          "expected": "GENERATE_QUIZ",
+          "actual": "GENERATE_QUIZ",
+          "reason": "Quiz decision match"
+        },
+        "Answer API": {
+          "status": "PASS",
+          "expected": 200,
+          "actual": 200,
+          "reason": "Submit wrong answer"
+        },
+        "Mastery Update": {
+          "status": "PASS",
+          "expected": "weak",
+          "actual": "weak",
+          "reason": "Concept should be weak after wrong answer"
+        },
+        "Recommendation": {
+          "status": "PASS",
+          "expected": "overfitting",
+          "actual": "overfitting",
+          "reason": "Recommend correct weak prerequisite"
+        },
+        "UI Click Mock": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true,
+          "reason": "Clicking recommendation goes to valid slide/timestamp"
+        }
+      }
+    },
+    {
+      "case_id": "case_14",
+      "checks": {
+        "Graph API": {
+          "status": "PASS",
+          "expected": 200,
+          "actual": 200,
+          "reason": "Fetch graph successfully"
+        },
+        "Video Sync": {
+          "status": "PASS",
+          "expected": 200,
+          "actual": 200,
+          "reason": "Slide to concept mapping"
+        },
+        "Quiz Generation": {
+          "status": "PASS",
+          "expected": "GENERATE_QUIZ",
+          "actual": "GENERATE_QUIZ",
+          "reason": "Quiz decision match"
+        },
+        "Answer API": {
+          "status": "PASS",
+          "expected": 200,
+          "actual": 200,
+          "reason": "Submit wrong answer"
+        },
+        "Mastery Update": {
+          "status": "PASS",
+          "expected": "weak",
+          "actual": "weak",
+          "reason": "Concept should be weak after wrong answer"
+        },
+        "Recommendation": {
+          "status": "PASS",
+          "expected": "underfitting",
+          "actual": "underfitting",
+          "reason": "Recommend correct weak prerequisite"
+        },
+        "UI Click Mock": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true,
+          "reason": "Clicking recommendation goes to valid slide/timestamp"
+        }
+      }
+    },
+    {
+      "case_id": "case_15",
+      "checks": {
+        "Graph API": {
+          "status": "PASS",
+          "expected": 200,
+          "actual": 200,
+          "reason": "Fetch graph successfully"
+        },
+        "Video Sync": {
+          "status": "PASS",
+          "expected": 200,
+          "actual": 200,
+          "reason": "Slide to concept mapping"
+        },
+        "Quiz Generation": {
+          "status": "PASS",
+          "expected": "REFUSE_UNGROUNDED",
+          "actual": "REFUSE_UNGROUNDED",
+          "reason": "Quiz decision match"
+        }
+      }
+    },
+    {
+      "case_id": "case_16",
+      "checks": {
+        "Graph API": {
+          "status": "PASS",
+          "expected": 200,
+          "actual": 200,
+          "reason": "Fetch graph successfully"
+        },
+        "Video Sync": {
+          "status": "PASS",
+          "expected": 200,
+          "actual": 200,
+          "reason": "Slide to concept mapping"
+        },
+        "Quiz Generation": {
+          "status": "PASS",
+          "expected": "GENERATE_QUIZ",
+          "actual": "GENERATE_QUIZ",
+          "reason": "Quiz decision match"
+        },
+        "Answer API": {
+          "status": "PASS",
+          "expected": 200,
+          "actual": 200,
+          "reason": "Submit wrong answer"
+        },
+        "Mastery Update": {
+          "status": "PASS",
+          "expected": "weak",
+          "actual": "weak",
+          "reason": "Concept should be weak after wrong answer"
+        },
+        "Recommendation": {
+          "status": "PASS",
+          "expected": "linear_regression",
+          "actual": "linear_regression",
+          "reason": "Recommend correct weak prerequisite"
+        },
+        "UI Click Mock": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true,
+          "reason": "Clicking recommendation goes to valid slide/timestamp"
+        }
+      }
+    },
+    {
+      "case_id": "case_17",
+      "checks": {
+        "Graph API": {
+          "status": "PASS",
+          "expected": 200,
+          "actual": 200,
+          "reason": "Fetch graph successfully"
+        },
+        "Video Sync": {
+          "status": "PASS",
+          "expected": 200,
+          "actual": 200,
+          "reason": "Slide to concept mapping"
+        },
+        "Quiz Generation": {
+          "status": "PASS",
+          "expected": "DISAMBIGUATE",
+          "actual": "DISAMBIGUATE",
+          "reason": "Quiz decision match"
+        }
+      }
+    },
+    {
+      "case_id": "case_18",
+      "checks": {
+        "Graph API": {
+          "status": "PASS",
+          "expected": 200,
+          "actual": 200,
+          "reason": "Fetch graph successfully"
+        },
+        "Quiz Generation": {
+          "status": "PASS",
+          "expected": "REFUSE_UNGROUNDED",
+          "actual": "REFUSE_UNGROUNDED",
+          "reason": "Quiz decision match"
+        }
+      }
+    },
+    {
+      "case_id": "case_19",
+      "checks": {
+        "Graph API": {
+          "status": "PASS",
+          "expected": 200,
+          "actual": 200,
+          "reason": "Fetch graph successfully"
+        },
+        "Video Sync": {
+          "status": "PASS",
+          "expected": 200,
+          "actual": 200,
+          "reason": "Slide to concept mapping"
+        },
+        "Quiz Generation": {
+          "status": "PASS",
+          "expected": "GENERATE_QUIZ",
+          "actual": "GENERATE_QUIZ",
+          "reason": "Quiz decision match"
+        },
+        "Answer API": {
+          "status": "PASS",
+          "expected": 200,
+          "actual": 200,
+          "reason": "Submit wrong answer"
+        },
+        "Mastery Update": {
+          "status": "PASS",
+          "expected": "weak",
+          "actual": "weak",
+          "reason": "Concept should be weak after wrong answer"
+        },
+        "Recommendation": {
+          "status": "PASS",
+          "expected": "embedding",
+          "actual": "embedding",
+          "reason": "Recommend correct weak prerequisite"
+        },
+        "UI Click Mock": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true,
+          "reason": "Clicking recommendation goes to valid slide/timestamp"
+        }
+      }
+    },
+    {
+      "case_id": "case_20",
+      "checks": {
+        "Graph API": {
+          "status": "PASS",
+          "expected": 200,
+          "actual": 200,
+          "reason": "Fetch graph successfully"
+        },
+        "Video Sync": {
+          "status": "PASS",
+          "expected": 200,
+          "actual": 200,
+          "reason": "Slide to concept mapping"
+        },
+        "Quiz Generation": {
+          "status": "PASS",
+          "expected": "GENERATE_QUIZ",
+          "actual": "GENERATE_QUIZ",
+          "reason": "Quiz decision match"
+        },
+        "Answer API": {
+          "status": "PASS",
+          "expected": 200,
+          "actual": 200,
+          "reason": "Submit wrong answer"
+        },
+        "Mastery Update": {
+          "status": "PASS",
+          "expected": "weak",
+          "actual": "weak",
+          "reason": "Concept should be weak after wrong answer"
+        },
+        "Recommendation": {
+          "status": "PASS",
+          "expected": "transformer",
+          "actual": "transformer",
+          "reason": "Recommend correct weak prerequisite"
+        },
+        "UI Click Mock": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true,
+          "reason": "Clicking recommendation goes to valid slide/timestamp"
+        }
+      }
+    },
+    {
+      "case_id": "case_21",
+      "checks": {
+        "Graph API": {
+          "status": "PASS",
+          "expected": 200,
+          "actual": 200,
+          "reason": "Fetch graph successfully"
+        },
+        "Video Sync": {
+          "status": "PASS",
+          "expected": 200,
+          "actual": 200,
+          "reason": "Slide to concept mapping"
+        },
+        "Quiz Generation": {
+          "status": "PASS",
+          "expected": "GENERATE_QUIZ",
+          "actual": "GENERATE_QUIZ",
+          "reason": "Quiz decision match"
+        },
+        "Answer API": {
+          "status": "PASS",
+          "expected": 200,
+          "actual": 200,
+          "reason": "Submit wrong answer"
+        },
+        "Mastery Update": {
+          "status": "PASS",
+          "expected": "weak",
+          "actual": "weak",
+          "reason": "Concept should be weak after wrong answer"
+        },
+        "Recommendation": {
+          "status": "PASS",
+          "expected": "loss_function",
+          "actual": "loss_function",
+          "reason": "Recommend correct weak prerequisite"
+        },
+        "UI Click Mock": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true,
+          "reason": "Clicking recommendation goes to valid slide/timestamp"
+        }
+      }
+    },
+    {
+      "case_id": "case_22",
+      "checks": {
+        "Graph API": {
+          "status": "PASS",
+          "expected": 200,
+          "actual": 200,
+          "reason": "Fetch graph successfully"
+        },
+        "Video Sync": {
+          "status": "PASS",
+          "expected": 200,
+          "actual": 200,
+          "reason": "Slide to concept mapping"
+        },
+        "Quiz Generation": {
+          "status": "PASS",
+          "expected": "GENERATE_QUIZ",
+          "actual": "GENERATE_QUIZ",
+          "reason": "Quiz decision match"
+        },
+        "Answer API": {
+          "status": "PASS",
+          "expected": 200,
+          "actual": 200,
+          "reason": "Submit wrong answer"
+        },
+        "Mastery Update": {
+          "status": "PASS",
+          "expected": "weak",
+          "actual": "weak",
+          "reason": "Concept should be weak after wrong answer"
+        },
+        "Recommendation": {
+          "status": "PASS",
+          "expected": "softmax",
+          "actual": "softmax",
+          "reason": "Recommend correct weak prerequisite"
+        },
+        "UI Click Mock": {
+          "status": "PASS",
+          "expected": true,
+          "actual": true,
+          "reason": "Clicking recommendation goes to valid slide/timestamp"
+        }
+      }
+    }
+  ]
+}
