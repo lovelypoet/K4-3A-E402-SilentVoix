@@ -1,0 +1,23 @@
+{
+    // Backend GHI FILE vào ngay trong thư mục Live Server đang theo dõi mỗi lần
+    // ingest: tải tài liệu về "uploads/" và ghi đè "data/storage.json" (~2MB).
+    // Live Server thấy file đổi là ép trình duyệt nạp lại trang — mà việc đó xảy
+    // ra NGAY GIỮA LÚC đang phân tích: mất slide/video đang xem, tab nhảy về mặc
+    // định, Knowledge Graph reset về bài mặc định, trông y như lỗi của frontend.
+    // Bỏ qua các đường dẫn backend ghi ra thì trang chỉ nạp lại khi thật sự sửa
+    // code giao diện (.html/.css/.js), đúng như mong muốn khi phát triển.
+    "liveServer.settings.ignoreFiles": [
+        "**/uploads/**",
+        "**/data/**",
+        "**/*.json",
+        "**/*.py",
+        "**/*.pdf",
+        "**/*.pptx",
+        "**/*.docx",
+        "**/__pycache__/**",
+        "**/.git/**",
+        "**/venv/**",
+        "**/.venv/**",
+        "**/node_modules/**"
+    ]
+}

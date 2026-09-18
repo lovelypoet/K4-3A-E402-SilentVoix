@@ -817,6 +817,28 @@
       padding: 20px;
     }
 
+    .ai-spinner {
+      width: 18px; height: 18px;
+      border: 3px solid #bfdbfe;
+      border-top-color: var(--blue-primary);
+      border-radius: 50%;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 8px;
+      animation: ai-spin 0.7s linear infinite;
+    }
+    @keyframes ai-spin { to { transform: rotate(360deg); } }
+
+    .ai-error-box {
+      background: var(--rose-light);
+      border: 1px solid #fecdd3;
+      border-radius: 6px;
+      padding: 10px 12px;
+      font-size: 12px;
+      color: #9f1239;
+      margin-bottom: 12px;
+    }
+
     .quiz-question-text {
       font-size: 15px;
       font-weight: 600;
@@ -1186,17 +1208,17 @@
           📌 <strong>Semantic Navigation:</strong> Click vào bất kỳ ô nào ở đồ thị trên để điều hướng Video và Slide tương ứng.
         </div>
 
-        <!-- Hộp phân tích lỗ hổng kiến thức tiên quyết -->
+        <!-- Hộp phân tích lỗ hổng kiến thức tiên quyết (Khớp 100% với Adaptive Engine của anh Vinh) -->
         <div class="prerequisite-card" id="alert-prerequisite-box" style="display: none;">
           <div class="prerequisite-title">
-            ⚠️ Phát hiện Lỗ hổng Kiến thức Tiên quyết (Prerequisite Gap)
+            ⚠️ Phát hiện Lỗ hổng Kiến thức Tiên quyết (Weak prerequisite)
           </div>
-          <div class="prerequisite-body">
-            Học viên làm bài <strong>Gradient Descent đạt điểm kém (31%)</strong> vì chưa nắm vững công thức nền tảng của <strong>Loss Function (43%)</strong>.
+          <div class="prerequisite-body" id="prerequisite-body-text">
+            Học viên làm bài <strong>Gradient Descent đạt điểm kém (31%)</strong> do gặp lỗ hổng kiến thức tiên quyết (<strong>Weak prerequisite</strong>) tại <strong>Loss Function</strong>.
           </div>
           <div class="prerequisite-actions">
-            <button class="btn-remedy" onclick="seekToSegment(4)">
-              1. Xem lại Slide 4 (Loss Function)
+            <button class="btn-remedy" id="btn-remedy-source" onclick="seekToAdaptiveSource(601, 4, 17)">
+              👉 1. Xem lại Loss Function (Slide 17 · 10:01)
             </button>
             <button class="btn-remedy" onclick="openQuizModal()">
               2. Làm Quiz chẩn đoán lại
@@ -1216,27 +1238,9 @@
         <button style="border:none; background:transparent; font-size:18px; cursor:pointer;" onclick="closeQuizModal()">✕</button>
       </div>
 
-      <div class="quiz-content">
-        <!-- Trích dẫn nguồn kiểm chứng -->
-        <div class="citation-box">
-          <strong>Nguồn xác thực (Grounding):</strong> Slide 4 & Video Lecture 04 (09:41) · <em>AI cam kết 100% không bịa đặt ngoài tài liệu</em>.
-        </div>
-
-        <div class="quiz-question-text">
-          Nếu đạo hàm của Loss Function theo trọng số bằng 0 (Gradient = 0), thuật toán Gradient Descent sẽ thế nào?
-        </div>
-
-        <div class="options-group">
-          <div class="quiz-option" onclick="chooseOption(this, false)">
-            <span>A.</span> Bước nhảy đạt cực đại và nhảy vọt khỏi hàm.
-          </div>
-          <div class="quiz-option" id="opt-correct" onclick="chooseOption(this, true)">
-            <span>B.</span> Trọng số dừng cập nhật vì đã đạt điểm cực trị (Cực tiểu hoặc điểm yên ngựa).
-          </div>
-          <div class="quiz-option" onclick="chooseOption(this, false)">
-            <span>C.</span> Learning rate tự động nhân đôi.
-          </div>
-        </div>
+      <div class="quiz-content" id="quiz-body-content">
+        <!-- Nội dung được điền động bởi generateGroundedQuiz() — gọi AI thật (Gemini) -->
+        <div class="citation-box">Đang gọi AI để sinh câu hỏi có căn cứ nguồn...</div>
       </div>
 
       <div class="modal-footer">
@@ -1364,6 +1368,33 @@
       updateVideoProgressBar(currentVideoSec);
       goToSlide(segNum, false);
       updateSyncBanner(currentVideoSec, segNum);
+    }
+
+    // Dữ liệu Gợi ý Thích ứng (Adaptive Recommendation) do anh Vinh gửi
+    const vinhAdaptivePayload = {
+      weak_concept: "Gradient Descent",
+      recommended_concept: "Loss Function",
+      reason: "Weak prerequisite",
+      source: {
+        slide: 17,
+        start_time: 601, // 10 phút 01 giây
+        end_time: 750
+      }
+    };
+
+    // Hàm điều hướng theo đề xuất của AI Adaptive Engine (Khớp 100% với anh Vinh)
+    function seekToAdaptiveSource(sec = 601, slidePage = 4, originalSlide = 17) {
+      currentVideoSec = sec;
+      updateVideoProgressBar(currentVideoSec);
+      goToSlide(slidePage, false);
+      
+      const m = Math.floor(sec / 60);
+      const s = sec % 60;
+      const timeStr = `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
+      const banner = document.getElementById('sync-stage-desc');
+      if (banner) {
+        banner.textContent = `Đang ở ${timeStr} → Đề xuất ôn tập từ AI: Slide ${originalSlide} (${vinhAdaptivePayload.recommended_concept})`;
+      }
     }
 
     // Chuyển trực tiếp đến Slide cụ thể
@@ -1534,7 +1565,7 @@
       "👉 <strong>Bước 2 (Semantic Navigation):</strong> Thử nhấp chuột vào Node <strong>'Gradient Descent'</strong> (vòng vàng) ở đồ thị: Video sẽ tự tua đến 12:00 và Slide tự lật về Trang 5!",
       "👉 <strong>Bước 3 (AI Tạo Quiz có nguồn):</strong> Bấm nút <strong>'Làm Quiz Kiểm Tra'</strong>: AI sẽ sinh câu hỏi kèm bằng chứng xác thực từ Slide 4 và Video (không bịa thông tin).",
       "👉 <strong>Bước 4 (Cập nhật Mastery):</strong> Khi học viên làm đúng câu hỏi, độ hiểu của Gradient Descent sẽ tăng từ 31% lên 82% và đổi màu xanh trên Semantic Map!",
-      "👉 <strong>Bước 5 (Học tập thích ứng):</strong> Nếu điểm Gradient Descent kém, hệ thống chỉ ra lý do do kiến thức nền tảng 'Loss Function' còn yếu, và đề xuất lộ trình ôn tập."
+      "👉 <strong>Bước 5 (Học tập thích ứng):</strong> Nếu điểm Gradient Descent kém, hệ thống chỉ ra lý do do kiến thức nền tảng 'Loss Function' còn yếu, và đề xuất lộ trình ôn tập (Slide 17 tại 10:01 theo gợi ý của AI)."
     ];
 
     function runTourStep(stepNum) {
@@ -1589,9 +1620,120 @@
       runTourStep(next);
     }
 
+    // ===== GỌI AI THẬT (Gemini) ĐỂ SINH QUIZ CÓ TRÍCH DẪN NGUỒN =====
+    // Nguồn grounding: đúng nội dung slide 4 (Loss Function) + slide 5 (Gradient Descent),
+    // khớp với citation "Slide 4 & Video Lecture 04 (09:41)" của bản demo gốc.
+    const GEMINI_MODEL = 'gemini-3.6-flash';
+
+    // Lấy API key TỪ NGƯỜI DÙNG lúc chạy — KHÔNG bao giờ hardcode/commit key vào file này.
+    // Key chỉ nằm trong sessionStorage của trình duyệt (mất khi đóng tab), không lưu ổ đĩa, không lên Git.
+    function getGeminiApiKey() {
+      let key = sessionStorage.getItem('demo_gemini_api_key');
+      if (!key) {
+        key = prompt('Nhập Gemini API key để demo AI call thật (chỉ lưu tạm trong tab này, không lưu vào file/Git):');
+        if (key) sessionStorage.setItem('demo_gemini_api_key', key.trim());
+      }
+      return key ? key.trim() : null;
+    }
+
+    async function callGeminiForQuiz(sourceText, citationLabel) {
+      const apiKey = getGeminiApiKey();
+      if (!apiKey) throw new Error('Chưa có API key.');
+
+      const prompt = `Bạn là trợ lý ra đề kiểm tra bám sát tài liệu. CHỈ được dùng thông tin trong đoạn tài liệu dưới đây, không được bịa thêm kiến thức ngoài phạm vi.
+
+Tài liệu (nguồn: ${citationLabel}):
+"""
+${sourceText}
+"""
+
+Hãy sinh đúng 1 câu hỏi trắc nghiệm 4 đáp án (A-D, chỉ 1 đáp án đúng) bằng tiếng Việt, kiểm tra hiểu đúng khái niệm trong tài liệu trên. Trả lời đúng định dạng JSON.`;
+
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${apiKey}`;
+      const body = {
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: {
+          responseMimeType: 'application/json',
+          responseSchema: {
+            type: 'OBJECT',
+            properties: {
+              question: { type: 'STRING' },
+              options: { type: 'ARRAY', items: { type: 'STRING' } },
+              correctIndex: { type: 'INTEGER' },
+              explanation: { type: 'STRING' }
+            },
+            required: ['question', 'options', 'correctIndex', 'explanation']
+          }
+        }
+      };
+
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+
+      if (!res.ok) {
+        const errText = await res.text().catch(() => '');
+        throw new Error(`Gemini API lỗi ${res.status}: ${errText.slice(0, 200)}`);
+      }
+
+      const data = await res.json();
+      const raw = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+      if (!raw) throw new Error('Response không có nội dung câu hỏi.');
+      return JSON.parse(raw);
+    }
+
+    function renderQuizLoading() {
+      document.getElementById('quiz-body-content').innerHTML = `
+        <div class="citation-box"><span class="ai-spinner"></span>Đang gọi Gemini API để sinh câu hỏi thật (grounded)...</div>
+      `;
+    }
+
+    function renderQuizError(message) {
+      document.getElementById('quiz-body-content').innerHTML = `
+        <div class="ai-error-box">⚠️ Gọi AI thất bại: ${message}<br>Kiểm tra lại API key hoặc mạng, rồi bấm "Thử lại".</div>
+        <button class="btn-submit-quiz" style="margin-top:8px;" onclick="generateGroundedQuiz()">Thử lại</button>
+      `;
+    }
+
+    function renderQuizQuestion(quiz, citationLabel) {
+      selectedOption = null;
+      const optionLetters = ['A', 'B', 'C', 'D'];
+      const optionsHtml = quiz.options.map((opt, i) => `
+        <div class="quiz-option" onclick="chooseOption(this, ${i === quiz.correctIndex})">
+          <span>${optionLetters[i]}.</span> ${opt}
+        </div>
+      `).join('');
+
+      document.getElementById('quiz-body-content').innerHTML = `
+        <div class="citation-box">
+          <strong>Nguồn xác thực (Grounding):</strong> ${citationLabel} · <em>Câu hỏi do AI sinh thật (Gemini), bám theo tài liệu trên</em>.
+        </div>
+        <div class="quiz-question-text">${quiz.question}</div>
+        <div class="options-group">${optionsHtml}</div>
+      `;
+      // lưu lại để hiện giải thích khi nộp bài
+      window.__currentQuizExplanation = quiz.explanation || '';
+    }
+
+    async function generateGroundedQuiz() {
+      renderQuizLoading();
+      const citationLabel = 'Slide 4 & Slide 5 (Loss Function → Gradient Descent)';
+      const sourceText = `${slideData[3].title}: ${slideData[3].description} (Công thức: ${slideData[3].formula}). ${slideData[4].title}: ${slideData[4].description} (Công thức: ${slideData[4].formula}).`;
+      try {
+        const quiz = await callGeminiForQuiz(sourceText, citationLabel);
+        renderQuizQuestion(quiz, citationLabel);
+      } catch (err) {
+        console.error(err);
+        renderQuizError(err.message || String(err));
+      }
+    }
+
     // Modal Quiz Logic
     function openQuizModal() {
       document.getElementById('quiz-modal').classList.add('show');
+      generateGroundedQuiz(); // gọi AI thật mỗi lần mở quiz
     }
 
     function closeQuizModal() {
@@ -1643,13 +1785,17 @@
           `;
         }
         alert('🎉 Chính xác! Độ hiểu (Mastery) của Gradient Descent đã được cập nhật tăng lên 82% trên Knowledge Graph!');
+        // Chỉ tự đóng modal khi trả lời ĐÚNG — giữ nguyên câu hỏi này (không gọi AI lại) để demo/quay video.
+        setTimeout(() => {
+          closeQuizModal();
+          goToSlide(currentSlide, false);
+        }, 800);
       } else {
-        alert('⚠️ Chưa chính xác! Lỗ hổng nằm ở điều kiện dừng của Loss Function.');
+        // Sai thì giữ nguyên modal + câu hỏi hiện tại, cho chọn lại đến khi đúng — không sinh câu hỏi mới.
+        alert('⚠️ Chưa chính xác! ' + (window.__currentQuizExplanation || 'Xem lại nguồn được trích dẫn ở trên.') + ' Chọn lại đáp án khác nhé.');
+        selectedOption.elem.classList.remove('selected');
+        selectedOption = null;
       }
-      setTimeout(() => {
-        closeQuizModal();
-        goToSlide(currentSlide, false);
-      }, 800);
     }
 
     // Khởi động mặc định ở Đoạn 1 (Slide 1)

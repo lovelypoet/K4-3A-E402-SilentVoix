@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lesson Studio — Video ⇄ Knowledge Graph</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="./styles/main.css" />
+</head>
+<body>
+  <header class="app-header">
+    <h1>Lesson Studio</h1>
+    <span class="app-subtitle">Video bài giảng ⇄ Knowledge Graph — đồng bộ thời gian thực</span>
+  </header>
+
+  <main class="workspace">
+    <!-- TRÁI: Video (rộng ngang) -->
+    <section class="panel video-panel">
+      <div class="panel-header">
+        <span id="lesson-title">Đang tải bài học...</span>
+      </div>
+      <!-- Ô dán link để đổi video đang xem — công cụ test/demo, không phải tính năng AI -->
+      <div class="video-link-bar">
+        <input type="text" id="video-link-input" placeholder="Dán link video (YouTube hoặc .mp4) rồi bấm Tải..." />
+        <button type="button" id="video-link-load">Tải</button>
+      </div>
+
+      <!-- Toggle Video / Slide — cùng 1 timeline, chỉ đổi CÁCH xem nội dung -->
+      <div class="media-tabs">
+        <button type="button" class="media-tab active" data-tab="video" id="tab-btn-video">🎥 Video</button>
+        <button type="button" class="media-tab" data-tab="slide" id="tab-btn-slide">📄 Slide</button>
+      </div>
+
+      <div class="video-container" id="video-container"></div>
+
+      <!-- Chế độ Slide: hiện nội dung của ĐÚNG khái niệm đang active, dạng slide trình chiếu.
+           Có thêm ô dán link PDF thật (công cụ test, giống ô link video) -->
+      <div class="slide-view" id="slide-view" hidden>
+        <div class="slide-link-bar">
+          <input type="text" id="slide-link-input" placeholder="Dán link file PDF slide rồi bấm Tải..." />
+          <button type="button" id="slide-link-load">Tải</button>
+          <button type="button" id="slide-link-clear" hidden>Bỏ PDF, xem lại thẻ mô tả</button>
+        </div>
+        <div class="slide-generated" id="slide-generated">
+          <div class="slide-page-badge" id="slide-page-badge"></div>
+          <h2 id="slide-title"></h2>
+          <div class="slide-formula" id="slide-formula"></div>
+          <p id="slide-desc"></p>
+        </div>
+        <iframe class="slide-pdf-frame" id="slide-pdf-frame" hidden></iframe>
+      </div>
+      <div class="concept-detail">
+        <h2 id="concept-name">—</h2>
+        <div id="concept-formula" class="concept-formula"></div>
+        <p id="concept-desc"></p>
+        <span id="concept-mastery" class="mastery-pill" hidden></span>
+        <div>
+          <button class="btn-open-quiz" id="btn-open-quiz">🧠 Làm Quiz kiểm tra (AI)</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- PHẢI: Knowledge Graph real-time -->
+    <section class="panel graph-panel">
+      <div class="panel-header">
+        <span>Knowledge Graph (Semantic Map)</span>
+      </div>
+      <!-- graph-stage: bấm 1 node -> nội dung chi tiết ĐÈ LÊN đúng chỗ graph-svg
+           (thay vì hiện thêm bên dưới), có nút quay lại để xem graph tiếp -->
+      <div class="graph-stage">
+        <svg id="graph-svg"></svg>
+        <div class="node-detail-card" id="node-detail-card" hidden>
+          <div class="node-detail-header">
+            <strong id="node-detail-name"></strong>
+            <button type="button" id="node-detail-close">← Quay lại Graph</button>
+          </div>
+          <div id="node-detail-formula" class="concept-formula"></div>
+          <p id="node-detail-desc"></p>
+          <div class="node-detail-block" id="node-detail-evidence-block" hidden>
+            <h4>Trích dẫn thật trong video</h4>
+            <div id="node-detail-evidence" class="node-detail-evidence"></div>
+          </div>
+          <div class="node-detail-block" id="node-detail-links-block" hidden>
+            <h4>Liên hệ với khái niệm khác</h4>
+            <div id="node-detail-links" class="node-detail-links"></div>
+          </div>
+          <div id="node-detail-source" class="node-detail-source"></div>
+          <span id="node-detail-mastery" class="mastery-pill" hidden></span>
+        </div>
+      </div>
+      <div class="legend">
+        <span class="legend-item"><span class="legend-dot legend-dot--current"></span>Đang xem</span>
+        <span class="legend-item"><span class="legend-dot legend-dot--mastered"></span>Đã vững</span>
+        <span class="legend-item"><span class="legend-dot legend-dot--learning"></span>Đang học</span>
+        <span class="legend-item"><span class="legend-dot legend-dot--weak"></span>Yếu</span>
+        <span class="legend-item"><span class="legend-dot legend-dot--not_learned"></span>Chưa học</span>
+      </div>
+      <!-- Chú thích loại quan hệ giữa các khái niệm (màu mũi tên trên graph) -->
+      <div class="legend legend--relations">
+        <span class="legend-item"><span class="legend-line legend-line--prerequisite"></span>Cần học trước</span>
+        <span class="legend-item"><span class="legend-line legend-line--part_of"></span>Là thành phần của</span>
+        <span class="legend-item"><span class="legend-line legend-line--leads_to"></span>Dẫn tới</span>
+        <span class="legend-item"><span class="legend-line legend-line--contrast"></span>Đối lập</span>
+        <span class="legend-item"><span class="legend-dot legend-dot--isolated"></span>Chưa rõ liên kết</span>
+      </div>
+      <div class="recommendation-box" id="recommendation-box" hidden></div>
+    </section>
+  </main>
+
+  <!-- Modal Quiz -->
+  <div class="modal-overlay" id="quiz-modal">
+    <div class="quiz-modal">
+      <div class="modal-header">
+        <strong>Grounded Quiz</strong>
+        <button type="button" data-quiz-close>✕</button>
+      </div>
+      <div class="quiz-body"></div>
+      <div class="modal-footer">
+        <button class="btn-secondary" type="button" data-quiz-close>Đóng</button>
+        <button class="btn-submit-quiz" type="button" data-quiz-submit>Nộp bài kiểm tra</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="./data/lesson-mock.js?v=20260918g"></script>
+  <script src="./scripts/data-loader.js?v=20260918g"></script>
+  <script src="./scripts/graph.js?v=20260918g"></script>
+  <script src="./scripts/video-player.js?v=20260918g"></script>
+  <script src="./scripts/quiz.js?v=20260918g"></script>
+  <script src="./scripts/app.js?v=20260918g"></script>
+</body>
+</html>
