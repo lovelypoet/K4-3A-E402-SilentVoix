@@ -1,0 +1,184 @@
+{
+  "lesson_id": "lesson_59",
+  "origin": "AI_PRELABEL",
+  "human_status": "UNREVIEWED",
+  "concepts": [
+    {
+      "item_id": "concept_neural_network",
+      "concept_id": "neural_network",
+      "candidate_label": "Neural Network",
+      "evidence_chunk_id": "chunk_video_lesson_59_010",
+      "page": null,
+      "excerpt": "In terms of deep learning, this structure is called an artificial neural network.",
+      "confidence": "MEDIUM",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_25"
+    },
+    {
+      "item_id": "concept_neuron",
+      "concept_id": "neuron",
+      "candidate_label": "Neurons",
+      "evidence_chunk_id": "chunk_video_lesson_59_026",
+      "page": null,
+      "excerpt": "Neurons, the core entity of a neural network, is where the information processing takes place.",
+      "confidence": "MEDIUM",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_25"
+    },
+    {
+      "item_id": "concept_layer",
+      "concept_id": "layer",
+      "candidate_label": "Layer",
+      "evidence_chunk_id": "chunk_video_lesson_59_027",
+      "page": null,
+      "excerpt": "Each of the 784 pixels is fed to a neuron in the first layer of our neural network.",
+      "confidence": "MEDIUM",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_25"
+    }
+  ],
+  "relations": [],
+  "grounding": [
+    {
+      "item_id": "grounding_1",
+      "claim": "Ever wondered how Google translates an entire webpage to a different language in a matter",
+      "evidence_chunk_id": "chunk_video_lesson_59_001",
+      "page": null,
+      "excerpt": "Ever wondered how Google translates an entire webpage to a different language in a matter",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_25"
+    },
+    {
+      "item_id": "grounding_2",
+      "claim": "of seconds?",
+      "evidence_chunk_id": "chunk_video_lesson_59_002",
+      "page": null,
+      "excerpt": "of seconds?",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_25"
+    },
+    {
+      "item_id": "grounding_3",
+      "claim": "Or your phone gallery groups' images based on their location?",
+      "evidence_chunk_id": "chunk_video_lesson_59_003",
+      "page": null,
+      "excerpt": "Or your phone gallery groups' images based on their location?",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_25"
+    },
+    {
+      "item_id": "grounding_4",
+      "claim": "All of this is a product of deep learning.",
+      "evidence_chunk_id": "chunk_video_lesson_59_004",
+      "page": null,
+      "excerpt": "All of this is a product of deep learning.",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_25"
+    },
+    {
+      "item_id": "grounding_5",
+      "claim": "But what exactly is deep learning?",
+      "evidence_chunk_id": "chunk_video_lesson_59_005",
+      "page": null,
+      "excerpt": "But what exactly is deep learning?",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_25"
+    },
+    {
+      "item_id": "grounding_6",
+      "claim": "Deep learning is a subset of machine learning, which in turn is a subset of artificial intelligence.",
+      "evidence_chunk_id": "chunk_video_lesson_59_006",
+      "page": null,
+      "excerpt": "Deep learning is a subset of machine learning, which in turn is a subset of artificial intelligence.",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_25"
+    },
+    {
+      "item_id": "grounding_7",
+      "claim": "Artificial intelligence is a technique that enables a machine to mimic human behavior.",
+      "evidence_chunk_id": "chunk_video_lesson_59_007",
+      "page": null,
+      "excerpt": "Artificial intelligence is a technique that enables a machine to mimic human behavior.",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_25"
+    },
+    {
+      "item_id": "grounding_8",
+      "claim": "Machine learning is a technique to achieve AI through algorithms trained with data.",
+      "evidence_chunk_id": "chunk_video_lesson_59_008",
+      "page": null,
+      "excerpt": "Machine learning is a technique to achieve AI through algorithms trained with data.",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_25"
+    },
+    {
+      "item_id": "grounding_9",
+      "claim": "And finally, deep learning is a type of machine learning inspired by the structure of the human brain.",
+      "evidence_chunk_id": "chunk_video_lesson_59_009",
+      "page": null,
+      "excerpt": "And finally, deep learning is a type of machine learning inspired by the structure of the human brain.",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_25"
+    },
+    {
+      "item_id": "grounding_10",
+      "claim": "In terms of deep learning, this structure is called an artificial neural network.",
+      "evidence_chunk_id": "chunk_video_lesson_59_010",
+      "page": null,
+      "excerpt": "In terms of deep learning, this structure is called an artificial neural network.",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_25"
+    }
+  ],
+  "quiz": [
+    {
+      "item_id": "quiz_1",
+      "concept_id": "neural_network",
+      "requested_difficulty": "MEDIUM",
+      "expected_decision": "VALIDATION_FAILED",
+      "evidence_chunk_id": "chunk_video_lesson_59_010",
+      "page": null,
+      "excerpt": "In terms of deep learning, this structure is called an artificial neural network.",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_25"
+    },
+    {
+      "item_id": "quiz_2",
+      "concept_id": "neuron",
+      "requested_difficulty": "MEDIUM",
+      "expected_decision": "VALIDATION_FAILED",
+      "evidence_chunk_id": "chunk_video_lesson_59_026",
+      "page": null,
+      "excerpt": "Neurons, the core entity of a neural network, is where the information processing takes place.",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_25"
+    },
+    {
+      "item_id": "quiz_3",
+      "concept_id": "layer",
+      "requested_difficulty": "MEDIUM",
+      "expected_decision": "VALIDATION_FAILED",
+      "evidence_chunk_id": "chunk_video_lesson_59_027",
+      "page": null,
+      "excerpt": "Each of the 784 pixels is fed to a neuron in the first layer of our neural network.",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_25"
+    }
+  ]
+}

@@ -1,117 +1,56 @@
-/**
- * quiz.js
- * -----------------------------------------------------------------------
- * Modal "Grounded Quiz" — câu hỏi luôn kèm trích dẫn nguồn (slide/giây).
- *
- * HIỆN TẠI: lấy câu hỏi từ quiz_bank trong file mock (đáng tin cậy, không
- * phụ thuộc mạng/API key — hợp cho việc dựng UI trước).
- *
- * SAU NÀY KHI NỐI AI/BACKEND THẬT: sửa hàm getQuizForConcept() bên dưới để
- * gọi API sinh quiz thật (ví dụ POST {BACKEND_BASE_URL}/quiz/generate) thay
- * vì đọc quizBank — phần render modal / retry-logic không cần đổi gì.
- */
-
-function createQuizController({ modalEl, quizBank, onAnswered }) {
+/** Grounded quiz client. Quiz content comes from the server API for real lessons. */
+function createQuizController({ modalEl, onAnswered, apiBaseUrl, getLessonId }) {
   const bodyEl = modalEl.querySelector(".quiz-body");
-  const closeButtons = modalEl.querySelectorAll("[data-quiz-close]");
-  let currentConcept = null;
-  let currentQuiz = null;
-  let selected = null;
+  let currentConcept = null, currentQuiz = null, selected = null, difficulty = "medium";
+  modalEl.querySelectorAll("[data-quiz-close]").forEach(btn => btn.addEventListener("click", close));
 
-  closeButtons.forEach(btn => btn.addEventListener("click", close));
-
-  function open(concept) {
-    currentConcept = concept;
-    currentQuiz = getQuizForConcept(concept);
-    selected = null;
+  async function open(concept) {
+    currentConcept = concept; currentQuiz = null; selected = null;
     modalEl.classList.add("show");
-    render();
-  }
-
-  function close() {
-    modalEl.classList.remove("show");
-  }
-
-  /** Nguồn câu hỏi — đổi chỗ này khi nối AI/backend thật (xem docstring trên đầu file). */
-  function getQuizForConcept(concept) {
-    const list = quizBank[concept.concept_id];
-    if (list && list.length) return list[Math.floor(Math.random() * list.length)];
-    return null;
-  }
-
-  /**
-   * quiz_bank hiện chỉ có sẵn cho 5 khái niệm mock (c1-c5) — khái niệm lấy từ
-   * backend thật (ai_lesson_XX_..., c_lesson_XX_...) chưa có câu hỏi nào khớp
-   * id. app.js dùng hàm này để tắt hẳn nút "Làm Quiz" và nói rõ lý do, thay vì
-   * để bấm vào rồi mới biết là không có gì xảy ra.
-   */
-  function hasQuizFor(conceptId) {
-    return !!(quizBank[conceptId] && quizBank[conceptId].length);
-  }
-
-  function render() {
-    if (!currentQuiz) {
-      bodyEl.innerHTML = `
-        <div class="quiz-empty">Chưa có câu hỏi mẫu cho khái niệm này trong bộ mock. Hãy thử một node khác (Regression, Loss Function, Gradient Descent).</div>
-      `;
-      return;
-    }
-    const citation = `Slide ${currentConcept.slide ?? "?"}${
-      currentConcept.start_time != null ? " · " + formatTime(currentConcept.start_time) : ""
-    }`;
-    const optionsHtml = currentQuiz.options
-      .map(
-        (opt, i) => `
-        <div class="quiz-option" data-index="${i}">
-          <span>${String.fromCharCode(65 + i)}.</span> ${opt}
-        </div>`
-      )
-      .join("");
-
-    bodyEl.innerHTML = `
-      <div class="citation-box">
-        <strong>Nguồn xác thực (Grounding):</strong> ${citation} · <em>${currentConcept.name}</em>
-      </div>
-      <div class="quiz-question-text">${currentQuiz.question}</div>
-      <div class="options-group">${optionsHtml}</div>
-    `;
-
-    bodyEl.querySelectorAll(".quiz-option").forEach(el => {
-      el.addEventListener("click", () => {
-        bodyEl.querySelectorAll(".quiz-option").forEach(o => o.classList.remove("selected"));
-        el.classList.add("selected");
-        selected = Number(el.dataset.index);
+    bodyEl.innerHTML = `<div class="quiz-empty">Đang tạo quiz grounded từ nguồn bài học...</div>`;
+    try {
+      const response = await fetch(`${apiBaseUrl}/quiz/generate`, {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ lesson_id: getLessonId(), concept_id: concept.concept_id, difficulty })
       });
-    });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.detail || `Quiz API lỗi ${response.status}`);
+      currentQuiz = result; render();
+    } catch (error) {
+      bodyEl.innerHTML = `<div class="quiz-empty">Quiz generation is temporarily unavailable. Please try again.</div>`;
+    }
   }
-
-  function submit() {
-    if (selected == null) {
-      alert("Vui lòng chọn 1 đáp án!");
+  function close() { modalEl.classList.remove("show"); }
+  function render() {
+    if (!currentQuiz || currentQuiz.decision !== "GENERATE_QUIZ" || !currentQuiz.validation?.passed) {
+      const message = currentQuiz?.decision === "REFUSE_UNGROUNDED" || currentQuiz?.decision === "DISAMBIGUATE"
+        ? "No sufficiently supported source evidence was found for this quiz."
+        : "Quiz generation is temporarily unavailable. Please try again.";
+      bodyEl.innerHTML = `<div class="quiz-empty">${message}</div>`;
       return;
     }
-    const isCorrect = selected === currentQuiz.correct_option;
-    const selectedEl = bodyEl.querySelector(`.quiz-option[data-index="${selected}"]`);
-
-    if (isCorrect) {
-      selectedEl.classList.add("correct");
-      onAnswered({ concept: currentConcept, quiz: currentQuiz, isCorrect: true });
-      setTimeout(close, 800);
-    } else {
-      // Sai thì GIỮ NGUYÊN modal + câu hỏi để chọn lại, không đóng, không đổi câu hỏi mới.
-      selectedEl.classList.add("wrong");
-      onAnswered({ concept: currentConcept, quiz: currentQuiz, isCorrect: false });
-      selected = null;
-    }
+    const citationText = (currentQuiz.citations || []).map(c => c.page != null ? `Trang ${c.page}` : c.slide != null ? `Slide ${c.slide}` : c.start_time != null ? `Video ${formatTime(c.start_time)}–${formatTime(c.end_time || c.start_time)}` : c.chunk_id).join(" · ");
+    bodyEl.innerHTML = `<label class="quiz-difficulty">Độ khó:
+      <select id="quiz-difficulty-select"><option value="easy" ${difficulty === "easy" ? "selected" : ""}>Easy</option><option value="medium" ${difficulty === "medium" ? "selected" : ""}>Medium</option><option value="hard" ${difficulty === "hard" ? "selected" : ""}>Hard</option></select></label>
+      <div class="citation-box"><strong>Nguồn:</strong> ${escapeHtml(citationText)} · <em>${escapeHtml(currentQuiz.concept_label)}</em></div>
+      <div class="quiz-question-text">${escapeHtml(currentQuiz.question)}</div>
+      <div class="options-group">${currentQuiz.options.map(o => `<div class="quiz-option" data-id="${escapeHtml(o.id)}"><span>${escapeHtml(o.id)}.</span> ${escapeHtml(o.text)}</div>`).join("")}</div>
+      <div class="quiz-explanation" hidden></div>`;
+    bodyEl.querySelector("#quiz-difficulty-select").addEventListener("change", e => { difficulty = e.target.value; });
+    bodyEl.querySelectorAll(".quiz-option").forEach(el => el.addEventListener("click", () => {
+      bodyEl.querySelectorAll(".quiz-option").forEach(o => o.classList.remove("selected")); el.classList.add("selected"); selected = el.dataset.id;
+    }));
   }
-
+  function submit() {
+    if (!currentQuiz || selected == null) { alert("Vui lòng chọn 1 đáp án!"); return; }
+    const correct = selected === currentQuiz.correct_option;
+    bodyEl.querySelector(`.quiz-option[data-id="${selected}"]`).classList.add(correct ? "correct" : "wrong");
+    const explanation = bodyEl.querySelector(".quiz-explanation"); explanation.textContent = currentQuiz.explanation || ""; explanation.hidden = false;
+    onAnswered({ concept: currentConcept, quiz: currentQuiz, isCorrect: correct });
+    if (correct) setTimeout(close, 1200);
+  }
   modalEl.querySelector("[data-quiz-submit]").addEventListener("click", submit);
-
-  return { open, close, hasQuizFor };
+  return { open, close, hasQuizFor: () => true };
 }
-
-function formatTime(totalSec) {
-  const m = Math.floor(totalSec / 60);
-  const s = Math.floor(totalSec % 60);
-  return `${m < 10 ? "0" : ""}${m}:${s < 10 ? "0" : ""}${s}`;
-}
+function formatTime(totalSec) { const value = Number(totalSec || 0), m = Math.floor(value / 60), s = Math.floor(value % 60); return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`; }
+function escapeHtml(value) { return String(value ?? "").replace(/[&<>'"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"}[c])); }

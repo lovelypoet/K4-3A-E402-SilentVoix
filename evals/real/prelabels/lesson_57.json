@@ -1,0 +1,232 @@
+{
+  "lesson_id": "lesson_57",
+  "origin": "AI_PRELABEL",
+  "human_status": "UNREVIEWED",
+  "concepts": [
+    {
+      "item_id": "concept_classification",
+      "concept_id": "classification",
+      "candidate_label": "Classification",
+      "evidence_chunk_id": "chunk_pdf_lesson_57_001",
+      "page": 1,
+      "excerpt": "CNN for Image Classification\nIntroduction to Deep Learning",
+      "confidence": "MEDIUM",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_23"
+    },
+    {
+      "item_id": "concept_layer",
+      "concept_id": "layer",
+      "candidate_label": "Layer",
+      "evidence_chunk_id": "chunk_pdf_lesson_57_010",
+      "page": 10,
+      "excerpt": "CNN model for Image Classification\n10\n•Input data are images àchoose CNN model\n•General progress: input image àConvolutional layer (Conv) + Pooling Layer \n(Pool) àFully Connected Layer (FC) àOutput",
+      "confidence": "MEDIUM",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_23"
+    },
+    {
+      "item_id": "concept_loss_function",
+      "concept_id": "loss_function",
+      "candidate_label": "Loss Function",
+      "evidence_chunk_id": "chunk_pdf_lesson_57_017",
+      "page": 17,
+      "excerpt": "Loss function\n17\n•Cross-entropy loss is used as default loss function \nfor both binary and multi-class classification",
+      "confidence": "MEDIUM",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_23"
+    },
+    {
+      "item_id": "concept_vector",
+      "concept_id": "vector",
+      "candidate_label": "Vector",
+      "evidence_chunk_id": "chunk_pdf_lesson_57_020",
+      "page": 20,
+      "excerpt": "Categorical cross-entropy loss\n20\n•Categorical cross-entropy loss:\n•In multi-class classification, the labels are one-hot, so \nonly the positive class Cp  keeps its term in the loss: \nOnly 1 element of the output vector is not zero\nWhere Spis the CNN score for the positive class",
+      "confidence": "MEDIUM",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_23"
+    },
+    {
+      "item_id": "concept_training_data",
+      "concept_id": "training_data",
+      "candidate_label": "Training Data",
+      "evidence_chunk_id": "chunk_pdf_lesson_57_036",
+      "page": 36,
+      "excerpt": "Data augmentation\n36\n•Data augmentation is a technique to generate more \ntraining data from our dataset",
+      "confidence": "MEDIUM",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_23"
+    }
+  ],
+  "relations": [],
+  "grounding": [
+    {
+      "item_id": "grounding_1",
+      "claim": "CNN for Image Classification\nIntroduction to Deep Learning",
+      "evidence_chunk_id": "chunk_pdf_lesson_57_001",
+      "page": 1,
+      "excerpt": "CNN for Image Classification\nIntroduction to Deep Learning",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_23"
+    },
+    {
+      "item_id": "grounding_2",
+      "claim": "Image Classification\n2\n•Imageclassificationisthetaskofassigningalabel\norclasstoanentireimage",
+      "evidence_chunk_id": "chunk_pdf_lesson_57_002",
+      "page": 2,
+      "excerpt": "Image Classification\n2\n•Imageclassificationisthetaskofassigningalabel\norclasstoanentireimage",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_23"
+    },
+    {
+      "item_id": "grounding_3",
+      "claim": "Image Classification\n3\n•Imagesareexpectedtohaveonlyoneclassfor\neachimage",
+      "evidence_chunk_id": "chunk_pdf_lesson_57_003",
+      "page": 3,
+      "excerpt": "Image Classification\n3\n•Imagesareexpectedtohaveonlyoneclassfor\neachimage",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_23"
+    },
+    {
+      "item_id": "grounding_4",
+      "claim": "Image Classification\n4\n•Imageclassificationmodelstakeanimageas\ninputandreturnapredictionaboutwhichclass\ntheimagebelongsto",
+      "evidence_chunk_id": "chunk_pdf_lesson_57_004",
+      "page": 4,
+      "excerpt": "Image Classification\n4\n•Imageclassificationmodelstakeanimageas\ninputandreturnapredictionaboutwhichclass\ntheimagebelongsto",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_23"
+    },
+    {
+      "item_id": "grounding_5",
+      "claim": "Image Classification\n5\n•“Dogvs.cat”classificationisoneproblemofthe\nso-calledbinaryclassificationofimages",
+      "evidence_chunk_id": "chunk_pdf_lesson_57_005",
+      "page": 5,
+      "excerpt": "Image Classification\n5\n•“Dogvs.cat”classificationisoneproblemofthe\nso-calledbinaryclassificationofimages",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_23"
+    },
+    {
+      "item_id": "grounding_6",
+      "claim": "Image Classification\n6\n•Having a grey scale image with size 28 * 28 presenting a \nnumber from 0-9\n•Predict which number the image is presenting ?\n•àProblem of multi-class classification of images",
+      "evidence_chunk_id": "chunk_pdf_lesson_57_006",
+      "page": 6,
+      "excerpt": "Image Classification\n6\n•Having a grey scale image with size 28 * 28 presenting a \nnumber from 0-9\n•Predict which number the image is presenting ?\n•àProblem of multi-class classification of images",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_23"
+    },
+    {
+      "item_id": "grounding_7",
+      "claim": "Image Classification\n7\nMulti-class vs. Multi-label classification",
+      "evidence_chunk_id": "chunk_pdf_lesson_57_007",
+      "page": 7,
+      "excerpt": "Image Classification\n7\nMulti-class vs. Multi-label classification",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_23"
+    },
+    {
+      "item_id": "grounding_8",
+      "claim": "Image Datasets\n8\nYou can visit this website to get information of the \ndataset: https://paperswithcode.com/datasets\nUse in this lecture: \n•“Dogs vs. Cats” dataset downloaded from Kaggle \nhttps://www.kaggle.com/c/dogs-vs-cats/data\n•“MNIST Dataset of handwritten digits” downloaded \nfrom Kaggle \nhttps:",
+      "evidence_chunk_id": "chunk_pdf_lesson_57_008",
+      "page": 8,
+      "excerpt": "Image Datasets\n8\nYou can visit this website to get information of the \ndataset: https://paperswithcode.com/datasets\nUse in this lecture: \n•“Dogs vs. Cats” dataset downloaded from Kaggle \nhttps://www.kaggle.com/c/dogs-vs-cats/data\n•“MNIST Dataset of handwritten digits” downloaded \nfrom Kaggle \nhttps://www.kaggle.com/datasets/hojjatk/mnist-dataset",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_23"
+    },
+    {
+      "item_id": "grounding_9",
+      "claim": "Dataset Preparation\n9\n•Standardize images prior to the model requirement\n•Standardize directories for training set, validation set and test set",
+      "evidence_chunk_id": "chunk_pdf_lesson_57_009",
+      "page": 9,
+      "excerpt": "Dataset Preparation\n9\n•Standardize images prior to the model requirement\n•Standardize directories for training set, validation set and test set",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_23"
+    },
+    {
+      "item_id": "grounding_10",
+      "claim": "CNN model for Image Classification\n10\n•Input data are images àchoose CNN model\n•General progress: input image àConvolutional layer (Conv) + Pooling Layer \n(Pool) àFully Connected Layer (FC) àOutput",
+      "evidence_chunk_id": "chunk_pdf_lesson_57_010",
+      "page": 10,
+      "excerpt": "CNN model for Image Classification\n10\n•Input data are images àchoose CNN model\n•General progress: input image àConvolutional layer (Conv) + Pooling Layer \n(Pool) àFully Connected Layer (FC) àOutput",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_23"
+    }
+  ],
+  "quiz": [
+    {
+      "item_id": "quiz_1",
+      "concept_id": "classification",
+      "requested_difficulty": "MEDIUM",
+      "expected_decision": "VALIDATION_FAILED",
+      "evidence_chunk_id": "chunk_pdf_lesson_57_001",
+      "page": 1,
+      "excerpt": "CNN for Image Classification\nIntroduction to Deep Learning",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_23"
+    },
+    {
+      "item_id": "quiz_2",
+      "concept_id": "layer",
+      "requested_difficulty": "MEDIUM",
+      "expected_decision": "VALIDATION_FAILED",
+      "evidence_chunk_id": "chunk_pdf_lesson_57_010",
+      "page": 10,
+      "excerpt": "CNN model for Image Classification\n10\n•Input data are images àchoose CNN model\n•General progress: input image àConvolutional layer (Conv) + Pooling Layer \n(Pool) àFully Connected Layer (FC) àOutput",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_23"
+    },
+    {
+      "item_id": "quiz_3",
+      "concept_id": "loss_function",
+      "requested_difficulty": "MEDIUM",
+      "expected_decision": "VALIDATION_FAILED",
+      "evidence_chunk_id": "chunk_pdf_lesson_57_017",
+      "page": 17,
+      "excerpt": "Loss function\n17\n•Cross-entropy loss is used as default loss function \nfor both binary and multi-class classification",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_23"
+    },
+    {
+      "item_id": "quiz_4",
+      "concept_id": "vector",
+      "requested_difficulty": "MEDIUM",
+      "expected_decision": "VALIDATION_FAILED",
+      "evidence_chunk_id": "chunk_pdf_lesson_57_020",
+      "page": 20,
+      "excerpt": "Categorical cross-entropy loss\n20\n•Categorical cross-entropy loss:\n•In multi-class classification, the labels are one-hot, so \nonly the positive class Cp  keeps its term in the loss: \nOnly 1 element of the output vector is not zero\nWhere Spis the CNN score for the positive class",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_23"
+    },
+    {
+      "item_id": "quiz_5",
+      "concept_id": "training_data",
+      "requested_difficulty": "MEDIUM",
+      "expected_decision": "VALIDATION_FAILED",
+      "evidence_chunk_id": "chunk_pdf_lesson_57_036",
+      "page": 36,
+      "excerpt": "Data augmentation\n36\n•Data augmentation is a technique to generate more \ntraining data from our dataset",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_23"
+    }
+  ]
+}

@@ -1,0 +1,208 @@
+{
+  "lesson_id": "lesson_55",
+  "origin": "AI_PRELABEL",
+  "human_status": "UNREVIEWED",
+  "concepts": [
+    {
+      "item_id": "concept_neural_network",
+      "concept_id": "neural_network",
+      "candidate_label": "Neural Network",
+      "evidence_chunk_id": "chunk_pdf_lesson_55_003",
+      "page": 3,
+      "excerpt": "Neural Network Model for XOR\n3\nNeural Network Model for XOR problem",
+      "confidence": "MEDIUM",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_21"
+    },
+    {
+      "item_id": "concept_layer",
+      "concept_id": "layer",
+      "candidate_label": "Layer",
+      "evidence_chunk_id": "chunk_pdf_lesson_55_004",
+      "page": 4,
+      "excerpt": "Neural Network Model for XOR\n4\nNeural Network for XOR problem:\n•Model: 2-2-1: 2 nodes in input layer, 2 nodes in hidden \nlayers, 1 node in output layer\n•Nodes 1 are added to calculate bias in next layers\n•Each node in hidden layers and output layer are \nperformed two steps: \n (1) Linear sum\n (2) Apply activation function",
+      "confidence": "MEDIUM",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_21"
+    },
+    {
+      "item_id": "concept_loss_function",
+      "concept_id": "loss_function",
+      "candidate_label": "Loss Function",
+      "evidence_chunk_id": "chunk_pdf_lesson_55_008",
+      "page": 8,
+      "excerpt": "Loss Function\n8\nFor each data point (x[i], yi), the loss function L is \ndefined as follows:\nIn which: yi is the actual value of data, !𝑦𝑖  is the \nvalue predicted by the model:",
+      "confidence": "MEDIUM",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_21"
+    },
+    {
+      "item_id": "concept_gradient_descent",
+      "concept_id": "gradient_descent",
+      "candidate_label": "Gradient Descent",
+      "evidence_chunk_id": "chunk_pdf_lesson_55_010",
+      "page": 10,
+      "excerpt": "Gradient Descent\n10\n•To apply gradient descent, we need to calculate the \nderivative of the coefficient W and bias b of the loss \nfunction: \n•Step 1, calculate L’ with W(2), b(2)  ,we have:  \nIn which:",
+      "confidence": "MEDIUM",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_21"
+    }
+  ],
+  "relations": [],
+  "grounding": [
+    {
+      "item_id": "grounding_1",
+      "claim": "Backpropagation\nIntroduction to Deep Learning",
+      "evidence_chunk_id": "chunk_pdf_lesson_55_001",
+      "page": 1,
+      "excerpt": "Backpropagation\nIntroduction to Deep Learning",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_21"
+    },
+    {
+      "item_id": "grounding_2",
+      "claim": "XOR problem\n2\nx1 XOR x2",
+      "evidence_chunk_id": "chunk_pdf_lesson_55_002",
+      "page": 2,
+      "excerpt": "XOR problem\n2\nx1 XOR x2",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_21"
+    },
+    {
+      "item_id": "grounding_3",
+      "claim": "Neural Network Model for XOR\n3\nNeural Network Model for XOR problem",
+      "evidence_chunk_id": "chunk_pdf_lesson_55_003",
+      "page": 3,
+      "excerpt": "Neural Network Model for XOR\n3\nNeural Network Model for XOR problem",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_21"
+    },
+    {
+      "item_id": "grounding_4",
+      "claim": "Neural Network Model for XOR\n4\nNeural Network for XOR problem:\n•Model: 2-2-1: 2 nodes in input layer, 2 nodes in hidden \nlayers, 1 node in output layer\n•Nodes 1 are added to calculate bias in next layers\n•Each node in hidden layers and output layer are \nperformed two steps: \n (1) Linear sum\n (2) App",
+      "evidence_chunk_id": "chunk_pdf_lesson_55_004",
+      "page": 4,
+      "excerpt": "Neural Network Model for XOR\n4\nNeural Network for XOR problem:\n•Model: 2-2-1: 2 nodes in input layer, 2 nodes in hidden \nlayers, 1 node in output layer\n•Nodes 1 are added to calculate bias in next layers\n•Each node in hidden layers and output layer are \nperformed two steps: \n (1) Linear sum\n (2) Apply activation function",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_21"
+    },
+    {
+      "item_id": "grounding_5",
+      "claim": "Feedforward\n5",
+      "evidence_chunk_id": "chunk_pdf_lesson_55_005",
+      "page": 5,
+      "excerpt": "Feedforward\n5",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_21"
+    },
+    {
+      "item_id": "grounding_6",
+      "claim": "In Matrix form\n6",
+      "evidence_chunk_id": "chunk_pdf_lesson_55_006",
+      "page": 6,
+      "excerpt": "In Matrix form\n6",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_21"
+    },
+    {
+      "item_id": "grounding_7",
+      "claim": "In Matrix form\n7",
+      "evidence_chunk_id": "chunk_pdf_lesson_55_007",
+      "page": 7,
+      "excerpt": "In Matrix form\n7",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_21"
+    },
+    {
+      "item_id": "grounding_8",
+      "claim": "Loss Function\n8\nFor each data point (x[i], yi), the loss function L is \ndefined as follows:\nIn which: yi is the actual value of data, !𝑦𝑖  is the \nvalue predicted by the model:",
+      "evidence_chunk_id": "chunk_pdf_lesson_55_008",
+      "page": 8,
+      "excerpt": "Loss Function\n8\nFor each data point (x[i], yi), the loss function L is \ndefined as follows:\nIn which: yi is the actual value of data, !𝑦𝑖  is the \nvalue predicted by the model:",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_21"
+    },
+    {
+      "item_id": "grounding_9",
+      "claim": "Loss Function\n9\nFor all data points, the loss function J is defined \nas follows:",
+      "evidence_chunk_id": "chunk_pdf_lesson_55_009",
+      "page": 9,
+      "excerpt": "Loss Function\n9\nFor all data points, the loss function J is defined \nas follows:",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_21"
+    },
+    {
+      "item_id": "grounding_10",
+      "claim": "Gradient Descent\n10\n•To apply gradient descent, we need to calculate the \nderivative of the coefficient W and bias b of the loss \nfunction: \n•Step 1, calculate L’ with W(2), b(2)  ,we have:  \nIn which:",
+      "evidence_chunk_id": "chunk_pdf_lesson_55_010",
+      "page": 10,
+      "excerpt": "Gradient Descent\n10\n•To apply gradient descent, we need to calculate the \nderivative of the coefficient W and bias b of the loss \nfunction: \n•Step 1, calculate L’ with W(2), b(2)  ,we have:  \nIn which:",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_21"
+    }
+  ],
+  "quiz": [
+    {
+      "item_id": "quiz_1",
+      "concept_id": "neural_network",
+      "requested_difficulty": "MEDIUM",
+      "expected_decision": "VALIDATION_FAILED",
+      "evidence_chunk_id": "chunk_pdf_lesson_55_003",
+      "page": 3,
+      "excerpt": "Neural Network Model for XOR\n3\nNeural Network Model for XOR problem",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_21"
+    },
+    {
+      "item_id": "quiz_2",
+      "concept_id": "layer",
+      "requested_difficulty": "MEDIUM",
+      "expected_decision": "VALIDATION_FAILED",
+      "evidence_chunk_id": "chunk_pdf_lesson_55_004",
+      "page": 4,
+      "excerpt": "Neural Network Model for XOR\n4\nNeural Network for XOR problem:\n•Model: 2-2-1: 2 nodes in input layer, 2 nodes in hidden \nlayers, 1 node in output layer\n•Nodes 1 are added to calculate bias in next layers\n•Each node in hidden layers and output layer are \nperformed two steps: \n (1) Linear sum\n (2) Apply activation function",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_21"
+    },
+    {
+      "item_id": "quiz_3",
+      "concept_id": "loss_function",
+      "requested_difficulty": "MEDIUM",
+      "expected_decision": "VALIDATION_FAILED",
+      "evidence_chunk_id": "chunk_pdf_lesson_55_008",
+      "page": 8,
+      "excerpt": "Loss Function\n8\nFor each data point (x[i], yi), the loss function L is \ndefined as follows:\nIn which: yi is the actual value of data, !𝑦𝑖  is the \nvalue predicted by the model:",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_21"
+    },
+    {
+      "item_id": "quiz_4",
+      "concept_id": "gradient_descent",
+      "requested_difficulty": "MEDIUM",
+      "expected_decision": "DISAMBIGUATE",
+      "evidence_chunk_id": "chunk_pdf_lesson_55_010",
+      "page": 10,
+      "excerpt": "Gradient Descent\n10\n•To apply gradient descent, we need to calculate the \nderivative of the coefficient W and bias b of the loss \nfunction: \n•Step 1, calculate L’ with W(2), b(2)  ,we have:  \nIn which:",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_21"
+    }
+  ]
+}

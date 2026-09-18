@@ -1,0 +1,57 @@
+[
+  {
+    "lesson_id": "lesson_05",
+    "document_id": "doc_20",
+    "source_type": "document",
+    "source_group": "file:671f536b2582035bff08c654a2beeb6d235f3af252cbf7f14080eb222c425042",
+    "chunk_count": 26,
+    "page_count": 26,
+    "duration_seconds": 0.0,
+    "selection_reason": "PDF: compact neural-network lesson with 26 page chunks.",
+    "annotation_scope": "full lesson"
+  },
+  {
+    "lesson_id": "lesson_55",
+    "document_id": "doc_21",
+    "source_type": "document",
+    "source_group": "file:af003baca65806097f7c614cc422612892df1966ae9a60d24b40790376f02fe8",
+    "chunk_count": 22,
+    "page_count": 22,
+    "duration_seconds": 0.0,
+    "selection_reason": "PDF: compact backpropagation lesson with 22 page chunks.",
+    "annotation_scope": "full lesson"
+  },
+  {
+    "lesson_id": "lesson_57",
+    "document_id": "doc_23",
+    "source_type": "document",
+    "source_group": "file:ce10e7a6e7a8599107917393354752a63cc09abe0a6c550575d6d2a83c42dc24",
+    "chunk_count": 43,
+    "page_count": 43,
+    "duration_seconds": 0.0,
+    "selection_reason": "PDF: CNN image-classification lesson with 43 page chunks.",
+    "annotation_scope": "full lesson"
+  },
+  {
+    "lesson_id": "lesson_59",
+    "document_id": "doc_25",
+    "source_type": "video",
+    "source_group": "file:f59f63d67fa9691558e7e49f6f31cb69fc746e83843d331b2683ae0c6e6109b6",
+    "chunk_count": 82,
+    "page_count": 0,
+    "duration_seconds": 341.88,
+    "selection_reason": "Video: shorter deep-learning lesson with full timestamp scope.",
+    "annotation_scope": "full lesson"
+  },
+  {
+    "lesson_id": "lesson_60",
+    "document_id": "doc_26",
+    "source_type": "video",
+    "source_group": "file:710da227b186e754040953f8e478bb8b5de35ec2f07774d9926c5f235dcb6c4b",
+    "chunk_count": 735,
+    "page_count": 0,
+    "duration_seconds": 2094.25,
+    "selection_reason": "Video: long machine-learning lesson sampled at beginning, middle, and end.",
+    "annotation_scope": "00:00-05:00; 15:00-20:00; final 05:00 window"
+  }
+]

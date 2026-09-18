@@ -1,0 +1,256 @@
+{
+  "lesson_id": "lesson_60",
+  "origin": "AI_PRELABEL",
+  "human_status": "UNREVIEWED",
+  "concepts": [
+    {
+      "item_id": "concept_linear_regression",
+      "concept_id": "linear_regression",
+      "candidate_label": "Linear Regression",
+      "evidence_chunk_id": "chunk_video_lesson_60_014",
+      "page": null,
+      "excerpt": "wherein we'll be predicting the price of a house using linear regression. Let's",
+      "confidence": "MEDIUM",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_26"
+    },
+    {
+      "item_id": "concept_classification",
+      "concept_id": "classification",
+      "candidate_label": "Classification",
+      "evidence_chunk_id": "chunk_video_lesson_60_334",
+      "page": null,
+      "excerpt": "neighbour classification is done. Linear",
+      "confidence": "MEDIUM",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_26"
+    },
+    {
+      "item_id": "concept_regression",
+      "concept_id": "regression",
+      "candidate_label": "Regression",
+      "evidence_chunk_id": "chunk_video_lesson_60_335",
+      "page": null,
+      "excerpt": "regression is again a type of",
+      "confidence": "MEDIUM",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_26"
+    },
+    {
+      "item_id": "concept_supervised_learning",
+      "concept_id": "supervised_learning",
+      "candidate_label": "Supervised Learning",
+      "evidence_chunk_id": "chunk_video_lesson_60_336",
+      "page": null,
+      "excerpt": "supervised learning algorithm. This",
+      "confidence": "MEDIUM",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_26"
+    },
+    {
+      "item_id": "concept_decision_tree",
+      "concept_id": "decision_tree",
+      "candidate_label": "Decision Tree",
+      "evidence_chunk_id": "chunk_video_lesson_60_390",
+      "page": null,
+      "excerpt": "This algorithm that is decision tree is",
+      "confidence": "MEDIUM",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_26"
+    },
+    {
+      "item_id": "concept_clustering",
+      "concept_id": "clustering",
+      "candidate_label": "Clustering",
+      "evidence_chunk_id": "chunk_video_lesson_60_722",
+      "page": null,
+      "excerpt": "clustering algorithms. Finally we did a",
+      "confidence": "MEDIUM",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_26"
+    }
+  ],
+  "relations": [],
+  "grounding": [
+    {
+      "item_id": "grounding_1",
+      "claim": "Hi guys, I am Anirvan from SimplyLearn and today I will be giving you a tutorial on one",
+      "evidence_chunk_id": "chunk_video_lesson_60_001",
+      "page": null,
+      "excerpt": "Hi guys, I am Anirvan from SimplyLearn and today I will be giving you a tutorial on one",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_26"
+    },
+    {
+      "item_id": "grounding_2",
+      "claim": "of the most talked about topics in the world of technology and that is machine learning.",
+      "evidence_chunk_id": "chunk_video_lesson_60_002",
+      "page": null,
+      "excerpt": "of the most talked about topics in the world of technology and that is machine learning.",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_26"
+    },
+    {
+      "item_id": "grounding_3",
+      "claim": "I am sure that if you are watching this video, you must have heard about machine learning",
+      "evidence_chunk_id": "chunk_video_lesson_60_003",
+      "page": null,
+      "excerpt": "I am sure that if you are watching this video, you must have heard about machine learning",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_26"
+    },
+    {
+      "item_id": "grounding_4",
+      "claim": "somewhere or the other and yes, it is quite an intriguing topic.",
+      "evidence_chunk_id": "chunk_video_lesson_60_004",
+      "page": null,
+      "excerpt": "somewhere or the other and yes, it is quite an intriguing topic.",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_26"
+    },
+    {
+      "item_id": "grounding_5",
+      "claim": "This video will act as a supplement for the ones who know the basics of machine learning",
+      "evidence_chunk_id": "chunk_video_lesson_60_005",
+      "page": null,
+      "excerpt": "This video will act as a supplement for the ones who know the basics of machine learning",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_26"
+    },
+    {
+      "item_id": "grounding_6",
+      "claim": "and are aware of where it is being used and how it is being used.",
+      "evidence_chunk_id": "chunk_video_lesson_60_006",
+      "page": null,
+      "excerpt": "and are aware of where it is being used and how it is being used.",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_26"
+    },
+    {
+      "item_id": "grounding_7",
+      "claim": "For the ones who are completely new to this, you don't have to worry, we will be",
+      "evidence_chunk_id": "chunk_video_lesson_60_007",
+      "page": null,
+      "excerpt": "For the ones who are completely new to this, you don't have to worry, we will be",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_26"
+    },
+    {
+      "item_id": "grounding_8",
+      "claim": "brushing up the basics as well. So to start off with, let's have a look at the agenda.",
+      "evidence_chunk_id": "chunk_video_lesson_60_008",
+      "page": null,
+      "excerpt": "brushing up the basics as well. So to start off with, let's have a look at the agenda.",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_26"
+    },
+    {
+      "item_id": "grounding_9",
+      "claim": "First, we'll look into a life without machine learning. Then we'll move into a",
+      "evidence_chunk_id": "chunk_video_lesson_60_009",
+      "page": null,
+      "excerpt": "First, we'll look into a life without machine learning. Then we'll move into a",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_26"
+    },
+    {
+      "item_id": "grounding_10",
+      "claim": "life with machine learning. Then we'll try to understand what is machine",
+      "evidence_chunk_id": "chunk_video_lesson_60_010",
+      "page": null,
+      "excerpt": "life with machine learning. Then we'll try to understand what is machine",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_26"
+    }
+  ],
+  "quiz": [
+    {
+      "item_id": "quiz_1",
+      "concept_id": "linear_regression",
+      "requested_difficulty": "MEDIUM",
+      "expected_decision": "DISAMBIGUATE",
+      "evidence_chunk_id": "chunk_video_lesson_60_014",
+      "page": null,
+      "excerpt": "wherein we'll be predicting the price of a house using linear regression. Let's",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_26"
+    },
+    {
+      "item_id": "quiz_2",
+      "concept_id": "classification",
+      "requested_difficulty": "MEDIUM",
+      "expected_decision": "VALIDATION_FAILED",
+      "evidence_chunk_id": "chunk_video_lesson_60_334",
+      "page": null,
+      "excerpt": "neighbour classification is done. Linear",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_26"
+    },
+    {
+      "item_id": "quiz_3",
+      "concept_id": "regression",
+      "requested_difficulty": "MEDIUM",
+      "expected_decision": "DISAMBIGUATE",
+      "evidence_chunk_id": "chunk_video_lesson_60_335",
+      "page": null,
+      "excerpt": "regression is again a type of",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_26"
+    },
+    {
+      "item_id": "quiz_4",
+      "concept_id": "supervised_learning",
+      "requested_difficulty": "MEDIUM",
+      "expected_decision": "VALIDATION_FAILED",
+      "evidence_chunk_id": "chunk_video_lesson_60_336",
+      "page": null,
+      "excerpt": "supervised learning algorithm. This",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_26"
+    },
+    {
+      "item_id": "quiz_5",
+      "concept_id": "decision_tree",
+      "requested_difficulty": "MEDIUM",
+      "expected_decision": "VALIDATION_FAILED",
+      "evidence_chunk_id": "chunk_video_lesson_60_390",
+      "page": null,
+      "excerpt": "This algorithm that is decision tree is",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_26"
+    },
+    {
+      "item_id": "quiz_6",
+      "concept_id": "clustering",
+      "requested_difficulty": "MEDIUM",
+      "expected_decision": "VALIDATION_FAILED",
+      "evidence_chunk_id": "chunk_video_lesson_60_722",
+      "page": null,
+      "excerpt": "clustering algorithms. Finally we did a",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_26"
+    }
+  ]
+}

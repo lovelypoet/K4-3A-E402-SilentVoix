@@ -1,0 +1,232 @@
+{
+  "lesson_id": "lesson_05",
+  "origin": "AI_PRELABEL",
+  "human_status": "UNREVIEWED",
+  "concepts": [
+    {
+      "item_id": "concept_neural_network",
+      "concept_id": "neural_network",
+      "candidate_label": "Neural Network",
+      "evidence_chunk_id": "chunk_pdf_lesson_05_001",
+      "page": 1,
+      "excerpt": "Neural Network\nIntroduction to Deep Learning",
+      "confidence": "MEDIUM",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_20"
+    },
+    {
+      "item_id": "concept_regression",
+      "concept_id": "regression",
+      "candidate_label": "Regression",
+      "evidence_chunk_id": "chunk_pdf_lesson_05_002",
+      "page": 2,
+      "excerpt": "Simple Neural Network Model\n•Logistic regression model:\n2\n•Two steps:\n(1) Linear sum:\n(2) Apply sigmoid function:",
+      "confidence": "MEDIUM",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_20"
+    },
+    {
+      "item_id": "concept_layer",
+      "concept_id": "layer",
+      "candidate_label": "Layer",
+      "evidence_chunk_id": "chunk_pdf_lesson_05_005",
+      "page": 5,
+      "excerpt": "General Neural Network Model\n5\n•Input layer and output \nlayer are required\n•Hidden layers are \noptional\n•Total layers = # layers – 1\n•Each circle is called one \nnode",
+      "confidence": "MEDIUM",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_20"
+    },
+    {
+      "item_id": "concept_gradient_descent",
+      "concept_id": "gradient_descent",
+      "candidate_label": "Gradient Descent",
+      "evidence_chunk_id": "chunk_pdf_lesson_05_014",
+      "page": 14,
+      "excerpt": "Loss function\n14\n•Gradient descent algorithm\n•Step of derivative calculation of \ncoefficients of loss function is done with \nthe backpropagation algorithm  \nà Will be taught in the next lecture",
+      "confidence": "MEDIUM",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_20"
+    },
+    {
+      "item_id": "concept_loss_function",
+      "concept_id": "loss_function",
+      "candidate_label": "Loss Function",
+      "evidence_chunk_id": "chunk_pdf_lesson_05_014",
+      "page": 14,
+      "excerpt": "Loss function\n14\n•Gradient descent algorithm\n•Step of derivative calculation of \ncoefficients of loss function is done with \nthe backpropagation algorithm  \nà Will be taught in the next lecture",
+      "confidence": "MEDIUM",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_20"
+    }
+  ],
+  "relations": [],
+  "grounding": [
+    {
+      "item_id": "grounding_1",
+      "claim": "Neural Network\nIntroduction to Deep Learning",
+      "evidence_chunk_id": "chunk_pdf_lesson_05_001",
+      "page": 1,
+      "excerpt": "Neural Network\nIntroduction to Deep Learning",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_20"
+    },
+    {
+      "item_id": "grounding_2",
+      "claim": "Simple Neural Network Model\n•Logistic regression model:\n2\n•Two steps:\n(1) Linear sum:\n(2) Apply sigmoid function:",
+      "evidence_chunk_id": "chunk_pdf_lesson_05_002",
+      "page": 2,
+      "excerpt": "Simple Neural Network Model\n•Logistic regression model:\n2\n•Two steps:\n(1) Linear sum:\n(2) Apply sigmoid function:",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_20"
+    },
+    {
+      "item_id": "grounding_3",
+      "claim": "Simple Neural Network Model\n3\nFlow chat of logistic regression model",
+      "evidence_chunk_id": "chunk_pdf_lesson_05_003",
+      "page": 3,
+      "excerpt": "Simple Neural Network Model\n3\nFlow chat of logistic regression model",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_20"
+    },
+    {
+      "item_id": "grounding_4",
+      "claim": "Simple Neural Network Model\n4\nFlow chat of logistic regression model\n•W0 is called bias coefficient, or free coefficient\n•Sigmoid function is called activation function",
+      "evidence_chunk_id": "chunk_pdf_lesson_05_004",
+      "page": 4,
+      "excerpt": "Simple Neural Network Model\n4\nFlow chat of logistic regression model\n•W0 is called bias coefficient, or free coefficient\n•Sigmoid function is called activation function",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_20"
+    },
+    {
+      "item_id": "grounding_5",
+      "claim": "General Neural Network Model\n5\n•Input layer and output \nlayer are required\n•Hidden layers are \noptional\n•Total layers = # layers – 1\n•Each circle is called one \nnode",
+      "evidence_chunk_id": "chunk_pdf_lesson_05_005",
+      "page": 5,
+      "excerpt": "General Neural Network Model\n5\n•Input layer and output \nlayer are required\n•Hidden layers are \noptional\n•Total layers = # layers – 1\n•Each circle is called one \nnode",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_20"
+    },
+    {
+      "item_id": "grounding_6",
+      "claim": "General Neural Network Model\n6\nEach node in hidden layer and output layer:\n•Is connected with all nodes with previous layer with the coefficents w\n•Has a bias coefficient w0\n•Follows two steps of linear sum and appliance of activation function (sigmoid)",
+      "evidence_chunk_id": "chunk_pdf_lesson_05_006",
+      "page": 6,
+      "excerpt": "General Neural Network Model\n6\nEach node in hidden layer and output layer:\n•Is connected with all nodes with previous layer with the coefficents w\n•Has a bias coefficient w0\n•Follows two steps of linear sum and appliance of activation function (sigmoid)",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_20"
+    },
+    {
+      "item_id": "grounding_7",
+      "claim": "General Neural Network Model\n7\nThe neural network has: 3 layers, 2 nodes in input layer, 3 nodes in \nhidden layer 1, 3 nodes in hidden layer 2, 1 node in output layer",
+      "evidence_chunk_id": "chunk_pdf_lesson_05_007",
+      "page": 7,
+      "excerpt": "General Neural Network Model\n7\nThe neural network has: 3 layers, 2 nodes in input layer, 3 nodes in \nhidden layer 1, 3 nodes in hidden layer 2, 1 node in output layer",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_20"
+    },
+    {
+      "item_id": "grounding_8",
+      "claim": "General Neural Network Model\n8\nNote: node 1 is not considered as a node since it is used to calculate \nbias of the node in the next layer",
+      "evidence_chunk_id": "chunk_pdf_lesson_05_008",
+      "page": 8,
+      "excerpt": "General Neural Network Model\n8\nNote: node 1 is not considered as a node since it is used to calculate \nbias of the node in the next layer",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_20"
+    },
+    {
+      "item_id": "grounding_9",
+      "claim": "General Neural Network Model\n9\n•Node i in layer l with bias bi(l) has 2 steps: \n(1) Linear sum: \n(2) Apply activation function:",
+      "evidence_chunk_id": "chunk_pdf_lesson_05_009",
+      "page": 9,
+      "excerpt": "General Neural Network Model\n9\n•Node i in layer l with bias bi(l) has 2 steps: \n(1) Linear sum: \n(2) Apply activation function:",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_20"
+    },
+    {
+      "item_id": "grounding_10",
+      "claim": "General Neural Network Model\n10\n•At node 2 of layer 1, we have:  \n•At node 3 of layer 2, we have:",
+      "evidence_chunk_id": "chunk_pdf_lesson_05_010",
+      "page": 10,
+      "excerpt": "General Neural Network Model\n10\n•At node 2 of layer 1, we have:  \n•At node 3 of layer 2, we have:",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_20"
+    }
+  ],
+  "quiz": [
+    {
+      "item_id": "quiz_1",
+      "concept_id": "neural_network",
+      "requested_difficulty": "MEDIUM",
+      "expected_decision": "VALIDATION_FAILED",
+      "evidence_chunk_id": "chunk_pdf_lesson_05_001",
+      "page": 1,
+      "excerpt": "Neural Network\nIntroduction to Deep Learning",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_20"
+    },
+    {
+      "item_id": "quiz_2",
+      "concept_id": "regression",
+      "requested_difficulty": "MEDIUM",
+      "expected_decision": "VALIDATION_FAILED",
+      "evidence_chunk_id": "chunk_pdf_lesson_05_002",
+      "page": 2,
+      "excerpt": "Simple Neural Network Model\n•Logistic regression model:\n2\n•Two steps:\n(1) Linear sum:\n(2) Apply sigmoid function:",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_20"
+    },
+    {
+      "item_id": "quiz_3",
+      "concept_id": "layer",
+      "requested_difficulty": "MEDIUM",
+      "expected_decision": "VALIDATION_FAILED",
+      "evidence_chunk_id": "chunk_pdf_lesson_05_005",
+      "page": 5,
+      "excerpt": "General Neural Network Model\n5\n•Input layer and output \nlayer are required\n•Hidden layers are \noptional\n•Total layers = # layers – 1\n•Each circle is called one \nnode",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_20"
+    },
+    {
+      "item_id": "quiz_4",
+      "concept_id": "gradient_descent",
+      "requested_difficulty": "MEDIUM",
+      "expected_decision": "GENERATE_QUIZ",
+      "evidence_chunk_id": "chunk_pdf_lesson_05_014",
+      "page": 14,
+      "excerpt": "Loss function\n14\n•Gradient descent algorithm\n•Step of derivative calculation of \ncoefficients of loss function is done with \nthe backpropagation algorithm  \nà Will be taught in the next lecture",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_20"
+    },
+    {
+      "item_id": "quiz_5",
+      "concept_id": "loss_function",
+      "requested_difficulty": "MEDIUM",
+      "expected_decision": "VALIDATION_FAILED",
+      "evidence_chunk_id": "chunk_pdf_lesson_05_014",
+      "page": 14,
+      "excerpt": "Loss function\n14\n•Gradient descent algorithm\n•Step of derivative calculation of \ncoefficients of loss function is done with \nthe backpropagation algorithm  \nà Will be taught in the next lecture",
+      "origin": "AI_PRELABEL",
+      "human_status": "UNREVIEWED",
+      "document_id": "doc_20"
+    }
+  ]
+}

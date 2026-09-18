@@ -1,8 +1,11 @@
 import os
 from fastapi import FastAPI
+from fastapi.responses import HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from adaptive_learning.api import adaptive_router, UPLOAD_DIR
+from annotation_api import router as annotation_router, annotation_page
+from ai.quiz.api import router as quiz_router
 
 app = FastAPI(
     title="Lesson Studio — Adaptive Learning & Knowledge Mapping API",
@@ -25,6 +28,12 @@ app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
 
 # Tích hợp Router
 app.include_router(adaptive_router)
+app.include_router(annotation_router)
+app.include_router(quiz_router)
+
+@app.get("/annotation", response_class=HTMLResponse)
+def annotation():
+    return annotation_page()
 
 @app.get("/")
 def root():

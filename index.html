@@ -1620,69 +1620,8 @@
       runTourStep(next);
     }
 
-    // ===== GỌI AI THẬT (Gemini) ĐỂ SINH QUIZ CÓ TRÍCH DẪN NGUỒN =====
-    // Nguồn grounding: đúng nội dung slide 4 (Loss Function) + slide 5 (Gradient Descent),
-    // khớp với citation "Slide 4 & Video Lecture 04 (09:41)" của bản demo gốc.
-    const GEMINI_MODEL = 'gemini-3.6-flash';
-
-    // Lấy API key TỪ NGƯỜI DÙNG lúc chạy — KHÔNG bao giờ hardcode/commit key vào file này.
-    // Key chỉ nằm trong sessionStorage của trình duyệt (mất khi đóng tab), không lưu ổ đĩa, không lên Git.
-    function getGeminiApiKey() {
-      let key = sessionStorage.getItem('demo_gemini_api_key');
-      if (!key) {
-        key = prompt('Nhập Gemini API key để demo AI call thật (chỉ lưu tạm trong tab này, không lưu vào file/Git):');
-        if (key) sessionStorage.setItem('demo_gemini_api_key', key.trim());
-      }
-      return key ? key.trim() : null;
-    }
-
-    async function callGeminiForQuiz(sourceText, citationLabel) {
-      const apiKey = getGeminiApiKey();
-      if (!apiKey) throw new Error('Chưa có API key.');
-
-      const prompt = `Bạn là trợ lý ra đề kiểm tra bám sát tài liệu. CHỈ được dùng thông tin trong đoạn tài liệu dưới đây, không được bịa thêm kiến thức ngoài phạm vi.
-
-Tài liệu (nguồn: ${citationLabel}):
-"""
-${sourceText}
-"""
-
-Hãy sinh đúng 1 câu hỏi trắc nghiệm 4 đáp án (A-D, chỉ 1 đáp án đúng) bằng tiếng Việt, kiểm tra hiểu đúng khái niệm trong tài liệu trên. Trả lời đúng định dạng JSON.`;
-
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${apiKey}`;
-      const body = {
-        contents: [{ parts: [{ text: prompt }] }],
-        generationConfig: {
-          responseMimeType: 'application/json',
-          responseSchema: {
-            type: 'OBJECT',
-            properties: {
-              question: { type: 'STRING' },
-              options: { type: 'ARRAY', items: { type: 'STRING' } },
-              correctIndex: { type: 'INTEGER' },
-              explanation: { type: 'STRING' }
-            },
-            required: ['question', 'options', 'correctIndex', 'explanation']
-          }
-        }
-      };
-
-      const res = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
-      });
-
-      if (!res.ok) {
-        const errText = await res.text().catch(() => '');
-        throw new Error(`Gemini API lỗi ${res.status}: ${errText.slice(0, 200)}`);
-      }
-
-      const data = await res.json();
-      const raw = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-      if (!raw) throw new Error('Response không có nội dung câu hỏi.');
-      return JSON.parse(raw);
-    }
+    // Quiz generation is server-side only. This legacy demo page no longer sends
+    // source text or API keys from the browser; use fe/index.html and /api/quiz/generate.
 
     function renderQuizLoading() {
       document.getElementById('quiz-body-content').innerHTML = `
@@ -1718,16 +1657,7 @@ Hãy sinh đúng 1 câu hỏi trắc nghiệm 4 đáp án (A-D, chỉ 1 đáp á
     }
 
     async function generateGroundedQuiz() {
-      renderQuizLoading();
-      const citationLabel = 'Slide 4 & Slide 5 (Loss Function → Gradient Descent)';
-      const sourceText = `${slideData[3].title}: ${slideData[3].description} (Công thức: ${slideData[3].formula}). ${slideData[4].title}: ${slideData[4].description} (Công thức: ${slideData[4].formula}).`;
-      try {
-        const quiz = await callGeminiForQuiz(sourceText, citationLabel);
-        renderQuizQuestion(quiz, citationLabel);
-      } catch (err) {
-        console.error(err);
-        renderQuizError(err.message || String(err));
-      }
+      renderQuizError('Quiz generation is available through the server-backed lesson view.');
     }
 
     // Modal Quiz Logic

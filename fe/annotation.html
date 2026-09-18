@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lesson Studio — Human Annotation</title>
+  <style>
+    :root { font-family: Inter, system-ui, sans-serif; color: #172033; background: #f4f6fa; }
+    body { margin: 0; } header { background: #172033; color: white; padding: 16px 24px; display:flex; gap:20px; align-items:center; }
+    header h1 { margin:0; font-size:20px; } main { max-width: 1400px; margin: 18px auto; padding: 0 18px; }
+    .toolbar, .tabs, .card { background:white; border:1px solid #dfe4ee; border-radius:10px; padding:14px; margin-bottom:14px; }
+    .toolbar { display:flex; flex-wrap:wrap; gap:10px; align-items:center; } select, input, textarea, button { font: inherit; }
+    select, input, textarea { border:1px solid #cbd3e1; border-radius:6px; padding:8px; } button { border:0; border-radius:6px; padding:9px 13px; cursor:pointer; background:#e8edf7; }
+    button.primary { background:#216e4e; color:white; } button.reject { background:#b42318; color:white; } button.edit { background:#b7791f; color:white; }
+    .tabs button.active { background:#253b80; color:white; } .layout { display:grid; grid-template-columns: 1fr 1fr; gap:14px; }
+    .source { white-space:pre-wrap; max-height:560px; overflow:auto; background:#f8f9fc; padding:14px; border-radius:8px; line-height:1.5; }
+    .meta { color:#596579; font-size:13px; } .candidate { font-size:24px; margin:8px 0 14px; } .actions { display:flex; flex-wrap:wrap; gap:8px; margin-top:16px; }
+    .progress { color:#596579; font-size:13px; } .status { min-height:22px; color:#216e4e; font-weight:600; } .help { color:#596579; font-size:13px; }
+    @media (max-width: 850px) { .layout { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+<header><h1>Lesson Studio — Human Annotation</h1><span>AI suggestions are not ground truth.</span></header>
+<main>
+  <section class="toolbar">
+    <label>Lesson <select id="lesson"></select></label>
+    <label>Reviewer <input id="reviewer" placeholder="name or ID" /></label>
+    <label>Role <select id="role"><option value="DOMAIN_EXPERT">DOMAIN_EXPERT</option><option>LECTURER</option><option>TEAM_MEMBER</option><option>STUDENT</option></select></label>
+    <label><input id="fast" type="checkbox" /> Fast review</label>
+    <span id="progress" class="progress"></span>
+  </section>
+  <section class="tabs">
+    <button data-mode="concepts" class="active">Concepts</button><button data-mode="relations">Relations</button><button data-mode="grounding">Grounding</button><button data-mode="quiz">Quiz Cases</button>
+    <span class="help">Shortcuts: A accept/valid/yes · E edit · R reject/invalid/no · S skip · P partial · U uncertain · N next</span>
+  </section>
+  <div class="layout">
+    <section class="card"><div class="meta" id="source-meta"></div><h2>Source context</h2><div id="source" class="source"></div></section>
+    <section class="card"><div class="meta" id="item-meta"></div><div id="candidate" class="candidate"></div><div id="evidence" class="source"></div><textarea id="edit" rows="3" placeholder="Edit label, notes, or relation when needed" hidden></textarea><div class="actions" id="actions"></div><div id="status" class="status"></div></section>
+  </div>
+</main>
+<script>
+const state={lessons:[],lesson:null,mode:'concepts',items:[],index:0};
+const $=id=>document.getElementById(id);
+async function get(url){const r=await fetch(url); if(!r.ok) throw new Error(await r.text()); return r.json();}
+async function loadLessons(){state.lessons=await get('/annotation/api/lessons'); $('lesson').innerHTML=state.lessons.map(x=>`<option value="${x.lesson_id}">${x.lesson_id} — ${x.source_type}</option>`).join(''); state.lesson=state.lessons[0]?.lesson_id; await loadItems();}
+async function loadItems(){state.items=await get(`/annotation/api/items/${state.lesson}/${state.mode}`); state.index=0; render();}
+function current(){return state.items[state.index];}
+function render(){const l=state.lessons.find(x=>x.lesson_id===state.lesson)||{}; const i=current(); $('progress').textContent=`${state.mode}: ${state.index+1}/${state.items.length||0} · ${l.document_id||''}`; $('source-meta').textContent=`${l.lesson_id||''} · ${l.source_type||''} · ${l.annotation_scope||''}`; $('source').textContent=i?(i.excerpt||'No excerpt in prelabel; use the source pack.'):'No items available.'; $('item-meta').textContent=i?`AI_PRELABEL · confidence ${i.confidence||'not provided'} · ${i.evidence_chunk_id||''} · page/time ${i.page||''}`:''; $('candidate').textContent=i?(i.candidate_label||i.claim||i.source_concept+' → '+i.target_concept||i.concept_id||''):'Complete'; $('evidence').textContent=i?(i.excerpt||''):''; $('edit').hidden=!i||!['concepts','relations'].includes(state.mode); renderActions(i);}
+function renderActions(i){const a=$('actions'); if(!i){a.innerHTML='';return;} let buttons=[]; if(state.mode==='concepts') buttons=[['ACCEPT','primary'],['EDIT','edit'],['REJECT','reject'],['SKIP',''],['+ ADD CONCEPT','']]; if(state.mode==='relations') buttons=[['VALID','primary'],['EDIT RELATION','edit'],['INVALID','reject'],['SKIP','']]; if(state.mode==='grounding') buttons=[['YES','primary'],['PARTIAL','edit'],['NO','reject'],['UNCERTAIN','']]; if(state.mode==='quiz') buttons=[['GENERATE_QUIZ','primary'],['DISAMBIGUATE','edit'],['REFUSE_UNGROUNDED','reject'],['UNCERTAIN','']]; a.innerHTML=buttons.map(x=>`<button class="${x[1]}" data-decision="${x[0]}">${x[0]}</button>`).join(''); a.querySelectorAll('button').forEach(b=>b.onclick=()=>b.dataset.decision==='+ ADD CONCEPT'?addConcept():save(b.dataset.decision));}
+async function addConcept(){const label=prompt('Human concept label:'); if(!label)return; const i=current()||{}; const body={lesson_id:state.lesson,mode:'concepts',item_id:`human_${Date.now()}`,decision:'ADD_NEW',reviewer:$('reviewer').value,role:$('role').value,edited_label:label,evidence_chunk_id:i.evidence_chunk_id||'',page:i.page||'',notes:'Human-origin concept'}; if(!body.reviewer.trim()){alert('Reviewer name or ID is required.');return;} const r=await fetch('/annotation/api/review',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}); if(!r.ok){alert(await r.text());return;} $('status').textContent='Human concept saved.';}
+async function save(decision){const i=current(); if(!i)return; if(decision==='EDIT'||decision==='EDIT RELATION'){ $('edit').hidden=false; $('edit').focus(); if(decision==='EDIT RELATION') $('edit').placeholder='Controlled relation type'; return;} const body={lesson_id:state.lesson,mode:state.mode,item_id:i.item_id,decision,reviewer:$('reviewer').value,role:$('role').value,edited_label:state.mode==='concepts'?$('edit').value:null,edited_relation:state.mode==='relations'?$('edit').value:null,notes:''}; if(!body.reviewer.trim()){alert('Reviewer name or ID is required.');return;} const r=await fetch('/annotation/api/review',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}); const d=await r.json(); if(!r.ok){alert(d.detail||'Save failed');return;} $('status').textContent=d.message||'Saved.'; state.index++; $('edit').value=''; render();}
+document.querySelectorAll('.tabs button').forEach(b=>b.onclick=async()=>{document.querySelectorAll('.tabs button').forEach(x=>x.classList.remove('active'));b.classList.add('active');state.mode=b.dataset.mode;await loadItems();}); $('lesson').onchange=async e=>{state.lesson=e.target.value;await loadItems();};
+document.addEventListener('keydown',e=>{if(['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName))return; const k=e.key.toUpperCase(); const map={A:'ACCEPT',E:'EDIT',R:'REJECT',S:'SKIP',P:'PARTIAL',U:'UNCERTAIN',N:'NEXT'}; if(k==='N'){state.index++;render();} else if(map[k]){const d=map[k]; if(state.mode==='relations'&&d==='ACCEPT')save('VALID'); else if(state.mode==='relations'&&d==='REJECT')save('INVALID'); else if(state.mode==='grounding'&&d==='ACCEPT')save('YES'); else if(state.mode==='grounding'&&d==='REJECT')save('NO'); else if(state.mode==='quiz'&&d==='ACCEPT')save('GENERATE_QUIZ'); else save(d);}});
+loadLessons().catch(e=>{$('status').textContent=e.message;});
+</script>
+</body></html>

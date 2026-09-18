@@ -3,6 +3,10 @@ adaptive-learning-eval-plan-v2.md
 __pycache__/
 *.pyc
 .env
+local_api_keys.md
+MEMORIES.md
+memories.md
+data/quiz_cache.json
 .venv/
 .pytest_cache/
 *.egg-info/

@@ -61,7 +61,8 @@
   // lần đổi lesson (tạo lại sẽ gắn listener trùng lặp lên cùng 1 nút bấm).
   const quiz = createQuizController({
     modalEl: els.quizModal,
-    quizBank: (window.__LESSON_MOCK__ && window.__LESSON_MOCK__.quiz_bank) || {},
+    apiBaseUrl: "http://127.0.0.1:8000/api",
+    getLessonId: () => data?.lessonId,
     onAnswered: handleQuizAnswered
   });
 
@@ -283,13 +284,10 @@
    */
   function updateQuizButtonState(concept) {
     const isDone = concept.mastery_score != null && concept.mastery_score >= 1;
-    const hasQuiz = quiz.hasQuizFor(concept.concept_id);
-    els.btnOpenQuiz.disabled = isDone || !hasQuiz;
+    els.btnOpenQuiz.disabled = isDone || !!data?.isMock;
     els.btnOpenQuiz.textContent = isDone
       ? "✅ Đã hoàn thành khái niệm này"
-      : hasQuiz
-      ? "🧠 Làm Quiz kiểm tra (AI)"
-      : "⏳ Chưa có câu hỏi cho khái niệm này";
+      : data?.isMock ? "⏳ Cần lesson thật để tạo quiz" : "🧠 Tạo Quiz grounded (Gemini)";
   }
 
   /** Hiện chi tiết khái niệm ngay trong panel Graph khi bấm 1 node — không đụng tới video. */
@@ -462,7 +460,11 @@
     });
   }
 
-  function handleQuizAnswered({ concept, isCorrect }) {
+  function handleQuizAnswered({ concept, quiz: answeredQuiz, isCorrect }) {
+    fetch("http://127.0.0.1:8000/adaptive/quiz/answer", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ quiz_id: answeredQuiz?.quiz_id, concept_id: concept.concept_id, is_correct: isCorrect, difficulty: 1.0 })
+    }).catch(() => {});
     if (!isCorrect) return;
     const newScore = Math.min(1, (concept.mastery_score ?? 0) + 0.35);
     const newState = newScore >= 0.85 ? "mastered" : newScore >= 0.5 ? "learning" : "weak";

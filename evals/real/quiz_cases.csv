@@ -1,1 +1,6 @@
 quiz_id,lesson_id,document_id,concept_id,requested_difficulty,expected_decision,evidence_chunk_id,page,reviewer,review_status,notes
+,lesson_05,doc_20,,,,,,,,
+,lesson_55,doc_21,,,,,,,,
+,lesson_57,doc_23,,,,,,,,
+,lesson_59,doc_25,,,,,,,,
+,lesson_60,doc_26,,,,,,,,
